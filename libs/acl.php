@@ -31,27 +31,32 @@
  * @license      http://www.opensource.org/licenses/mit-license.php The MIT License
  */
 
-
 /**
- * Access Control List helper library.
+ * Access Control List factory class.
  * 
- * Long description for class
+ * Looks for ACL implementation class in core config, and returns an instance of that class.
  *
  * @package    cake
- * @subpackage cake.libs.helpers
+ * @subpackage cake.libs
  * @since      CakePHP v 0.9.2
  *
  */
-   class AclHelper
+class Acl
+{  
+   
+   /**
+    * Static function used to gain an instance of the correct ACL class.
+    *
+    * @return MyACL
+    */
+   function getACL() 
    {
+      require_once(CONFIGS.'core.php');
+      require_once(APP.'apis'.DS.ACL_FILENAME);
 
-/**
- * Enter description here...
- *
- * @return AclHelper
- */
-      function AclHelper()
-      {
-      }
+      $myacl = ACL_CLASSNAME;
+      return new $myacl;
    }
+
+}
 ?>
