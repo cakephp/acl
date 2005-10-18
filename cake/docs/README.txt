@@ -8,11 +8,12 @@
 
 This README will be updated
 
-for now visit:
-
-https://trac.cakephp.org/
-
-OR:
-
+For now visit:
 https://www.cakephp.org/
+
+User related documentation
+http://wiki.cakephp.org/
+
+For information on development:
+https://trac.cakephp.org/
  
