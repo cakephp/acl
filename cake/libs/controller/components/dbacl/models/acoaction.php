@@ -31,9 +31,10 @@
 /**
  * Short description.
  */
-
-require_once(CAKE.'app_model.php');
-
+if(!class_exists(AppModel))
+{
+    require_once(CAKE.'app_model.php');
+}
 /**
  * Short description for file.
  *
