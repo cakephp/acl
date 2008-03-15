@@ -43,8 +43,7 @@ class AcoActionFixture extends CakeTestFixture {
 		'lft' => array('type' => 'integer', 'length' => 10, 'null' => true),
 		'rght' => array('type' => 'integer', 'length' => 10, 'null' => true)
 	);
-	var $records = array(
-	);
+	var $records = array();
 }
 
 ?>
