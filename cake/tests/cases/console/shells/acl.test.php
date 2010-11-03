@@ -18,21 +18,9 @@
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 App::import('Shell', 'Shell', false);
+App::import('Shell', 'Acl');
 
-if (!defined('DISABLE_AUTO_DISPATCH')) {
-	define('DISABLE_AUTO_DISPATCH', true);
-}
-
-if (!class_exists('ShellDispatcher')) {
-	ob_start();
-	$argv = false;
-	require CAKE . 'console' .  DS . 'cake.php';
-	ob_end_clean();
-}
-
-if (!class_exists('AclShell')) {
-	require CAKE . 'console' .  DS . 'libs' . DS . 'acl.php';
-}
+require_once CAKE . 'console' .  DS . 'shell_dispatcher.php';
 
 /**
  * AclShellTest class
@@ -61,14 +49,13 @@ class AclShellTest extends CakeTestCase {
 		Configure::write('Acl.database', 'test');
 		Configure::write('Acl.classname', 'DbAcl');
 
-		$this->Dispatcher = $this->getMock(
-			'ShellDispatcher', 
-			array('getInput', 'stdout', 'stderr', '_stop', '_initEnvironment', 'dispatch', 'clear')
-		);
+		$out = $this->getMock('ConsoleOutput', array(), array(), '', false);
+		$in = $this->getMock('ConsoleInput', array(), array(), '', false);
+
 		$this->Task = $this->getMock(
 			'AclShell',
-			array('in', 'out', 'hr', 'createFile', 'error', 'err'),
-			array(&$this->Dispatcher)
+			array('in', 'out', 'hr', 'createFile', 'error', 'err', 'clear', 'dispatchShell'),
+			array($out, $out, $in)
 		);
 		$collection = new ComponentCollection();
 		$this->Task->Acl = new AclComponent($collection);
@@ -145,9 +132,9 @@ class AclShellTest extends CakeTestCase {
  */
 	public function testCreate() {
 		$this->Task->args = array('aro', 'root', 'User.1');
-		$this->Task->expects($this->at(0))->method('out')->with("New Aro 'User.1' created.\n", true);
-		$this->Task->expects($this->at(1))->method('out')->with("New Aro 'User.3' created.\n", true);
-		$this->Task->expects($this->at(2))->method('out')->with("New Aro 'somealias' created.\n", true);
+		$this->Task->expects($this->at(0))->method('out')->with("<success>New Aro</success> 'User.1' created.", 2);
+		$this->Task->expects($this->at(1))->method('out')->with("<success>New Aro</success> 'User.3' created.", 2);
+		$this->Task->expects($this->at(2))->method('out')->with("<success>New Aro</success> 'somealias' created.", 2);
 
 		$this->Task->create();
 
@@ -187,7 +174,7 @@ class AclShellTest extends CakeTestCase {
 	public function testDelete() {
 		$this->Task->args = array('aro', 'AuthUser.1');
 		$this->Task->expects($this->at(0))->method('out')
-			->with("Aro deleted.\n", true);
+			->with("<success>Aro deleted.</success>", 2);
 		$this->Task->delete();
 
 		$Aro = ClassRegistry::init('Aro');
@@ -217,7 +204,7 @@ class AclShellTest extends CakeTestCase {
 	public function testGrant() {
 		$this->Task->args = array('AuthUser.2', 'ROOT/Controller1', 'create');
 		$this->Task->expects($this->at(0))->method('out')
-			->with(new PHPUnit_Framework_Constraint_PCREMatch('/Permission granted/'), true);
+			->with($this->matchesRegularExpression('/granted/'), true);
 		$this->Task->grant();
 
 		$node = $this->Task->Acl->Aro->read(null, 4);
@@ -249,13 +236,13 @@ class AclShellTest extends CakeTestCase {
  */
 	public function testCheck() {
 		$this->Task->expects($this->at(0))->method('out')
-			->with(new PHPUnit_Framework_Constraint_PCREMatch('/not allowed/'), true);
+			->with($this->matchesRegularExpression('/not allowed/'), true);
 		$this->Task->expects($this->at(1))->method('out')
-			->with(new PHPUnit_Framework_Constraint_PCREMatch('/Permission granted/'), true);
+			->with($this->matchesRegularExpression('/granted/'), true);
 		$this->Task->expects($this->at(2))->method('out')
-			->with(new PHPUnit_Framework_Constraint_PCREMatch('/is allowed/'), true);
+			->with($this->matchesRegularExpression('/is.*allowed/'), true);
 		$this->Task->expects($this->at(3))->method('out')
-			->with(new PHPUnit_Framework_Constraint_PCREMatch('/not allowed/'), true);
+			->with($this->matchesRegularExpression('/not.*allowed/'), true);
 
 		$this->Task->args = array('AuthUser.2', 'ROOT/Controller1', '*');
 		$this->Task->check();
@@ -277,9 +264,9 @@ class AclShellTest extends CakeTestCase {
  */
 	public function testInherit() {
 		$this->Task->expects($this->at(0))->method('out')
-			->with(new PHPUnit_Framework_Constraint_PCREMatch('/Permission granted/'), true);
+			->with($this->matchesRegularExpression('/Permission .*granted/'), true);
 		$this->Task->expects($this->at(1))->method('out')
-			->with(new PHPUnit_Framework_Constraint_PCREMatch('/Permission inherited/'), true);
+			->with($this->matchesRegularExpression('/Permission .*inherited/'), true);
 		
 		$this->Task->args = array('AuthUser.2', 'ROOT/Controller1', 'create');
 		$this->Task->grant();
@@ -311,9 +298,9 @@ class AclShellTest extends CakeTestCase {
  * @return void
  */
 	function testInitDb() {
-		$this->Task->Dispatch->expects($this->once())->method('dispatch');
+		$this->Task->expects($this->once())->method('dispatchShell')
+			->with('schema create DbAcl');
+	
 		$this->Task->initdb();
-
-		$this->assertEqual($this->Task->Dispatch->args, array('schema', 'create', 'DbAcl'));
 	}
 }
