@@ -1,7 +1,5 @@
 <?php
 /**
- *
- *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -14,20 +12,22 @@
  * @since         CakePHP(tm) v 0.2.9
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Model;
+namespace Acl\Model\Table;
+
+use Cake\ORM\Table;
 
 /**
  * Action for Access Control Object
  *
  */
-class AcoAction extends Model {
+class AcoActionsTable extends Table {
 
 /**
  * Model name
  *
  * @var string
  */
-	public $name = 'AcoAction';
+	public $name = 'AcoActions';
 
 /**
  * ACO Actions belong to ACOs

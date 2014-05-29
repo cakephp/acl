@@ -14,18 +14,19 @@
  * @since         CakePHP(tm) v 1.2.0.4206
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Test\TestCase\Model;
+namespace Acl\Test\TestCase\Model;
 
-use Cake\Controller\Component\Acl\DbAcl;
+use Acl\Adapter\DbAcl;
+use Acl\Model\Table\AclNodesTable;
+
 use Cake\Core\App;
-use Cake\Model\AclNode;
 use Cake\TestSuite\TestCase;
 
 /**
  * DB ACL wrapper test class
  *
  */
-class DbAclNodeTestBase extends AclNode {
+class DbAclNodeTestBase extends AclNodesTable {
 
 /**
  * useDbConfig property

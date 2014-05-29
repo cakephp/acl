@@ -1,7 +1,5 @@
 <?php
 /**
- *
- *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -14,25 +12,27 @@
  * @since         CakePHP(tm) v 0.2.9
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Model;
+namespace Acl\Model\Table;
+
+use Acl\Model\Table\AclNodesTable;
 
 /**
- * Access Control Object
+ * Access Request Object
  *
  */
-class Aco extends AclNode {
+class ArosTable extends AclNodesTable {
 
 /**
  * Model name
  *
  * @var string
  */
-	public $name = 'Aco';
+	public $name = 'Aros';
 
 /**
- * Binds to ARO nodes through permissions settings
+ * AROs are linked to ACOs by means of Permission
  *
  * @var array
  */
-	public $hasAndBelongsToMany = array('Aro' => array('with' => 'Permission'));
+	public $hasAndBelongsToMany = array('Aco' => array('with' => 'Permission'));
 }

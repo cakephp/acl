@@ -1,7 +1,5 @@
 <?php
 /**
- *
- *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -14,18 +12,19 @@
  * @since         CakePHP(tm) v 0.2.9
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Model;
+namespace Acl\Model\Table;
 
 use Cake\Core\Configure;
 use Cake\Error;
+use Cake\ORM\Table;
 use Cake\Utility\ClassRegistry;
 use Cake\Utility\Inflector;
 
 /**
- * ACL Node
+ * ACL Nodes
  *
  */
-class AclNode extends Model {
+class AclNodesTable extends Table {
 
 /**
  * Explicitly disable in-memory query caching for ACL models
