@@ -29,7 +29,7 @@ define('LOGS', TMP . 'logs' . DS);
 define('CACHE', TMP . 'cache' . DS);
 define('SESSIONS', TMP . 'sessions' . DS);
 
-define('CAKE_CORE_INCLUDE_PATH', ROOT);
+define('CAKE_CORE_INCLUDE_PATH', ROOT . '/vendor/cakephp/cakephp');
 define('CORE_PATH', CAKE_CORE_INCLUDE_PATH . DS);
 define('CAKE', CORE_PATH . 'src' . DS);
 define('CORE_TESTS', CORE_PATH . 'tests' . DS);
@@ -67,7 +67,7 @@ mb_internal_encoding('UTF-8');
 
 Configure::write('debug', true);
 Configure::write('App', [
-	'namespace' => 'App',
+	'namespace' => 'Acl',
 	'encoding' => 'UTF-8',
 	'base' => false,
 	'baseUrl' => false,

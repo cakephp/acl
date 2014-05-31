@@ -25,7 +25,7 @@
 		</testsuite>
 	</testsuites>
 	<listeners>
-		<listener class="\Cake\TestSuite\Fixture\FixtureInjector" file="./src/TestSuite/Fixture/FixtureInjector.php">
+		<listener class="\Cake\TestSuite\Fixture\FixtureInjector" file="./vendor/cakephp/cakephp/src/TestSuite/Fixture/FixtureInjector.php">
 			<arguments>
 				<object class="\Cake\TestSuite\Fixture\FixtureManager" />
 			</arguments>
