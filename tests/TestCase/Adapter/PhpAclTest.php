@@ -12,12 +12,13 @@
  * @since         2.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Test\TestCase\Controller\Component\Acl;
+namespace Acl\Test\TestCase\Adapter;
+
+use Acl\Adapter\PhpAcl;
+use Acl\Adapter\PhpAro;
+use Acl\Controller\Component\AclComponent;
 
 use Cake\Controller\ComponentRegistry;
-use Cake\Controller\Component\AclComponent;
-use Cake\Controller\Component\Acl\PhpAcl;
-use Cake\Controller\Component\Acl\PhpAro;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 

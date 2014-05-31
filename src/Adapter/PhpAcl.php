@@ -14,7 +14,9 @@
  * @since         2.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Controller\Component\Acl;
+namespace Acl\Adapter;
+
+use Acl\AclInterface;
 
 use Cake\Configure\Engine\PhpConfig;
 use Cake\Controller\Component;

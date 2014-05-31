@@ -14,24 +14,25 @@
  * @since         CakePHP(tm) v 2.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Test\TestCase\Controller\Component\Acl;
+namespace Acl\Test\TestCase\Adapter;
+
+use Acl\Adapter\DbAcl;
+use Acl\Controller\Component\AclComponent;
+use Acl\Model\Table\AclNodesTable;
+use Acl\Model\Table\PermissionsTable;
 
 use Cake\Controller\ComponentRegistry;
-use Cake\Controller\Component\AclComponent;
-use Cake\Controller\Component\Acl\DbAcl;
 use Cake\Core\Configure;
-use Cake\Model\AclNode;
-use Cake\Model\Permission;
 use Cake\TestSuite\Fixture\TestModel;
 use Cake\TestSuite\TestCase;
 
-require_once dirname(dirname(dirname(__DIR__))) . DS . 'Model/models.php';
+//require_once dirname(dirname(dirname(__DIR__))) . DS . 'Model/models.php';
 
 /**
  * AclNodeTwoTestBase class
  *
  */
-class AclNodeTwoTestBase extends AclNode {
+class AclNodeTwoTestBase extends AclNodesTable {
 
 /**
  * useDbConfig property
@@ -114,7 +115,7 @@ class AcoTwoTest extends AclNodeTwoTestBase {
  * PermissionTwoTest class
  *
  */
-class PermissionTwoTest extends Permission {
+class PermissionTwoTest extends PermissionsTable {
 
 /**
  * name property
@@ -195,7 +196,7 @@ class DbAclTest extends TestCase {
  *
  * @var array
  */
-	public $fixtures = array('core.aro_two', 'core.aco_two', 'core.aros_aco_two');
+	public $fixtures = array('app.aro_two', 'app.aco_two', 'app.aros_aco_two');
 
 /**
  * setUp method

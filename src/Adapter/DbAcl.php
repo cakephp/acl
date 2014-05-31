@@ -12,10 +12,11 @@
  * @since         CakePHP(tm) v 0.10.0.1076
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Controller\Component\Acl;
+namespace Acl\Adapter;
+
+use Acl\AclInterface;
 
 use Cake\Controller\Component;
-use Cake\Controller\Component\Acl\AclInterface;
 use Cake\Core\Object;
 use Cake\Utility\ClassRegistry;
 use Cake\Utility\Hash;
@@ -38,7 +39,7 @@ use Cake\Utility\Hash;
  * }}}
  *
  */
-class DbAcl extends Object implements AclInterface {
+class DbAcl implements AclInterface {
 
 /**
  * Constructor

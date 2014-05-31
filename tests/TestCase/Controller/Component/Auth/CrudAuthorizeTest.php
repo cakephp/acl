@@ -14,9 +14,9 @@
  * @since         2.0.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Test\TestCase\Controller\Component\Auth;
+namespace Acl\Test\TestCase\Controller\Component\Auth;
 
-use Cake\Controller\Component\Auth\CrudAuthorize;
+use Acl\Controller\Component\Auth\CrudAuthorize;
 use Cake\Core\Configure;
 use Cake\Network\Request;
 use Cake\Routing\Router;
@@ -38,7 +38,7 @@ class CrudAuthorizeTest extends TestCase {
 		Configure::write('Routing.prefixes', array());
 		Router::reload();
 
-		$this->Acl = $this->getMock('Cake\Controller\Component\AclComponent', array(), array(), '', false);
+		$this->Acl = $this->getMock('Cake\Acl\Controller\Component\AclComponent', array(), array(), '', false);
 		$this->Components = $this->getMock('Cake\Controller\ComponentRegistry');
 
 		$this->auth = new CrudAuthorize($this->Components);
