@@ -1,36 +1,32 @@
 {
-	"name": "cakephp/cakephp",
-	"description": "The CakePHP framework",
-	"type": "library",
-	"keywords": ["framework"],
+	"name": "cakephp/acl",
+	"description": "Acl Plugin for CakePHP 3.x framework",
+	"type": "cakephp-plugin",
+	"keywords": ["cakephp", "acl"],
 	"homepage": "http://cakephp.org",
 	"license": "MIT",
 	"authors": [
 		{
 			"name": "CakePHP Community",
-			"homepage": "https://github.com/cakephp/cakephp/graphs/contributors"
+			"homepage": "https://github.com/cakephp/acl/graphs/contributors"
 		}
 	],
 	"support": {
-		"issues": "https://github.com/cakephp/cakephp/issues",
+		"issues": "https://github.com/cakephp/acl/issues",
 		"forum": "http://stackoverflow.com/tags/cakephp",
 		"irc": "irc://irc.freenode.org/cakephp",
-		"source": "https://github.com/cakephp/cakephp"
+		"source": "https://github.com/cakephp/acl"
 	},
 	"require": {
-		"php": ">=5.4.19",
-		"ext-intl": "*",
-		"ext-mcrypt": "*",
-		"ext-mbstring": "*",
-		"nesbot/Carbon": "1.8.*"
+		"cakephp/cakephp": "~3.0"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "*"
 	},
 	"autoload": {
 		"psr-4": {
-			"Cake\\": "src",
-			"Cake\\Test\\": "tests"
+			"Acl\\": "src",
+			"Acl\\Test\\": "tests"
 		}
 	}
 }
