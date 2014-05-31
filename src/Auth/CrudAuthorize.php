@@ -13,8 +13,9 @@
  * @since         2.0.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Acl\Controller\Component\Auth;
+namespace Acl\Auth;
 
+use Cake\Auth\BaseAuthorize;
 use Cake\Controller\ComponentRegistry;
 use Cake\Network\Request;
 use Cake\Routing\Router;

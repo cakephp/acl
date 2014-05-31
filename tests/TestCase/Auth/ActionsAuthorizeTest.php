@@ -14,9 +14,10 @@
  * @since         2.0.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Acl\Test\TestCase\Controller\Component\Auth;
+namespace Acl\Test\TestCase\Auth;
 
-use Acl\Controller\Component\Auth\ActionsAuthorize;
+use Acl\Auth\ActionsAuthorize;
+
 use Cake\Network\Request;
 use Cake\TestSuite\TestCase;
 
@@ -34,7 +35,7 @@ class ActionsAuthorizeTest extends TestCase {
 	public function setUp() {
 		parent::setUp();
 		$this->controller = $this->getMock('Cake\Controller\Controller', array(), array(), '', false);
-		$this->Acl = $this->getMock('Cake\Acl\Controller\Component\AclComponent', array(), array(), '', false);
+		$this->Acl = $this->getMock('Acl\Controller\Component\AclComponent', array(), array(), '', false);
 		$this->Collection = $this->getMock('Cake\Controller\ComponentRegistry');
 
 		$this->auth = new ActionsAuthorize($this->Collection);
