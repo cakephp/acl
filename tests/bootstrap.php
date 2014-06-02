@@ -34,7 +34,7 @@ define('CORE_PATH', CAKE_CORE_INCLUDE_PATH . DS);
 define('CAKE', CORE_PATH . 'src' . DS);
 define('CORE_TESTS', CORE_PATH . 'tests' . DS);
 define('CORE_TEST_CASES', CORE_TESTS . 'TestCase');
-define('TEST_APP', CORE_TESTS . 'test_app' . DS);
+define('TEST_APP', ROOT . DS . 'tests' . DS . 'test_app' . DS);
 define('LOG_ERROR', LOG_ERR);
 
 // Point app constants to the test app.
