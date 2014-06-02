@@ -14,6 +14,7 @@
  */
 namespace Acl\Model\Table;
 
+use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Error;
 use Cake\ORM\Table;
@@ -26,43 +27,16 @@ use Cake\Utility\Hash;
 class PermissionsTable extends AclNodesTable {
 
 /**
- * Explicitly disable in-memory query caching
- *
- * @var boolean
+ * {@inheritDoc}
  */
-	public $cacheQueries = false;
-
-/**
- * Override default table name
- *
- * @var string
- */
-	public $useTable = 'aros_acos';
-
-/**
- * Permissions link AROs with ACOs
- *
- * @var array
- */
-	public $belongsTo = array('Aro', 'Aco');
-
-/**
- * No behaviors for this model
- *
- * @var array
- */
-	public $actsAs = null;
-
-/**
- * Constructor, used to tell this model to use the
- * database configured for ACL
- */
-	public function __construct() {
-		$config = Configure::read('Acl.database');
-		if (!empty($config)) {
-			$this->useDbConfig = $config;
-		}
-		parent::__construct();
+	public function initialize(array $config) {
+		$this->table('aros_acos');
+		$this->belongsTo('ArosTable', [
+			'className' => App::className('ArosTable', 'Model/Table'),
+		]);
+		$this->belongsTo('AcosTable', [
+			'className' => App::className('AcosTable', 'Model/Table'),
+		]);
 	}
 
 /**

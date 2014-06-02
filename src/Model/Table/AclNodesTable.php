@@ -14,10 +14,12 @@
  */
 namespace Acl\Model\Table;
 
+use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Error;
+use Cake\ORM\Entity;
 use Cake\ORM\Table;
-use Cake\Utility\ClassRegistry;
+use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 
 /**
@@ -34,22 +36,10 @@ class AclNodesTable extends Table {
 	public $cacheQueries = false;
 
 /**
- * ACL models use the Tree behavior
- *
- * @var array
+ * {@inheritDoc}
  */
-	public $actsAs = array('Tree' => array('type' => 'nested'));
-
-/**
- * Constructor
- *
- */
-	public function __construct() {
-		$config = Configure::read('Acl.database');
-		if (isset($config)) {
-			$this->useDbConfig = $config;
-		}
-		parent::__construct();
+	public static function defaultConnectionName() {
+		return Configure::read('Acl.database');
 	}
 
 /**
@@ -60,15 +50,10 @@ class AclNodesTable extends Table {
  * @throws Cake\Error\Exception when binding to a model that doesn't exist.
  */
 	public function node($ref = null) {
-		$db = $this->getDataSource();
-		$type = $this->alias;
+		$db = $this->connection();
+		$type = $this->alias();
+		$table = $this->table();
 		$result = null;
-
-		if (!empty($this->useTable)) {
-			$table = $this->useTable;
-		} else {
-			$table = Inflector::pluralize(Inflector::underscore($type));
-		}
 
 		if (empty($ref)) {
 			return null;
@@ -77,68 +62,78 @@ class AclNodesTable extends Table {
 			$start = $path[0];
 			unset($path[0]);
 
-			$queryData = array(
-				'conditions' => array(
-					$db->name("{$type}.lft") . ' <= ' . $db->name("{$type}0.lft"),
-					$db->name("{$type}.rght") . ' >= ' . $db->name("{$type}0.rght")),
-				'fields' => array('id', 'parent_id', 'model', 'foreign_key', 'alias'),
-				'joins' => array(array(
-					'table' => $table,
-					'alias' => "{$type}0",
-					'type' => 'INNER',
-					'conditions' => array("{$type}0.alias" => $start)
-				)),
-				'order' => $db->name("{$type}.lft") . ' DESC'
-			);
+			$queryData = [
+				'conditions' => [
+					"{$type}.lft" . ' <= ' . "{$type}0.lft",
+					"{$type}.rght" . ' >= ' ."{$type}0.rght",
+				],
+				'fields' => ['id', 'parent_id', 'model', 'foreign_key', 'alias'],
+				'join' => [[
+						'table' => $table,
+						'alias' => "{$type}0",
+						'type' => 'INNER',
+						'conditions' => array("{$type}0.alias" => $start)
+				]],
+				'order' => "{$type}.lft" . ' DESC'
+			];
 
 			foreach ($path as $i => $alias) {
 				$j = $i - 1;
 
-				$queryData['joins'][] = array(
+				$queryData['join'][] = [
 					'table' => $table,
 					'alias' => "{$type}{$i}",
 					'type' => 'INNER',
-					'conditions' => array(
-						$db->name("{$type}{$i}.lft") . ' > ' . $db->name("{$type}{$j}.lft"),
-						$db->name("{$type}{$i}.rght") . ' < ' . $db->name("{$type}{$j}.rght"),
-						$db->name("{$type}{$i}.alias") . ' = ' . $db->value($alias, 'string'),
-						$db->name("{$type}{$j}.id") . ' = ' . $db->name("{$type}{$i}.parent_id")
-					)
-				);
+					'conditions' => [
+						"{$type}{$i}.lft" . ' > ' . "{$type}{$j}.lft",
+						"{$type}{$i}.rght" . ' < ' . "{$type}{$j}.rght",
+						"{$type}{$i}.alias" => $alias,
+						"{$type}{$j}.id" . ' = ' . "{$type}{$i}.parent_id"
+					]
+				];
 
-				$queryData['conditions'] = array('or' => array(
-					$db->name("{$type}.lft") . ' <= ' . $db->name("{$type}0.lft") . ' AND ' . $db->name("{$type}.rght") . ' >= ' . $db->name("{$type}0.rght"),
-					$db->name("{$type}.lft") . ' <= ' . $db->name("{$type}{$i}.lft") . ' AND ' . $db->name("{$type}.rght") . ' >= ' . $db->name("{$type}{$i}.rght"))
-				);
+				$queryData['conditions'] = [
+					'or' => [
+						"{$type}.lft" . ' <= ' . "{$type}0.lft" . ' AND ' . "{$type}.rght" . ' >= ' . "{$type}0.rght",
+						"{$type}.lft" . ' <= ' . "{$type}{$i}.lft" . ' AND ' . "{$type}.rght" . ' >= ' . "{$type}{$i}.rght"
+					]
+				];
 			}
-			$result = $db->read($this, $queryData, -1);
+			$query = $this->find('all', $queryData);
+			$result = $query->toArray();
 			$path = array_values($path);
 
 			if (
-				!isset($result[0][$type]) ||
-				(!empty($path) && $result[0][$type]['alias'] != $path[count($path) - 1]) ||
-				(empty($path) && $result[0][$type]['alias'] != $start)
+				!isset($result[0]) ||
+				(!empty($path) && $result[0]->alias != $path[count($path) - 1]) ||
+				(empty($path) && $result[0]->alias != $start)
 			) {
 				return false;
 			}
-		} elseif (is_object($ref) && $ref instanceof Model) {
-			$ref = array('model' => $ref->name, 'foreign_key' => $ref->id);
+		} elseif (is_object($ref) && $ref instanceof Entity) {
+			$ref = array('model' => $ref->source(), 'foreign_key' => $ref->id);
 		} elseif (is_array($ref) && !(isset($ref['model']) && isset($ref['foreign_key']))) {
 			$name = key($ref);
 			list(, $alias) = pluginSplit($name);
 
-			$model = ClassRegistry::init(array('class' => $name, 'alias' => $alias));
+			$entityClass = $this->entityClass();
+			if ($entityClass) {
+				$entity = new $entityClass();
+			}
 
-			if (empty($model)) {
-				throw new Error\Exception('cake_dev', "Model class '%s' not found in AclNode::node() when trying to bind %s object", $type, $this->alias);
+			if (empty($entity)) {
+				throw new Error\Exception(__d('cake_dev', "Entity class '%s' not found in AclNode::node() when trying to bind %s object", $type, $this->alias()));
 			}
 
 			$tmpRef = null;
-			if (method_exists($model, 'bindNode')) {
-				$tmpRef = $model->bindNode($ref);
+			if (method_exists($entity, 'bindNode')) {
+				$tmpRef = $entity->bindNode($ref);
 			}
 			if (empty($tmpRef)) {
-				$ref = array('model' => $alias, 'foreign_key' => $ref[$name][$model->primaryKey]);
+				$ref = [
+					'model' => $alias,
+					'foreign_key' => $ref[$name][$this->primaryKey()]
+				];
 			} else {
 				if (is_string($tmpRef)) {
 					return $this->node($tmpRef);
@@ -157,27 +152,29 @@ class AclNodesTable extends Table {
 					$ref["{$type}0.{$key}"] = $val;
 				}
 			}
-			$queryData = array(
+			$queryData = [
 				'conditions' => $ref,
-				'fields' => array('id', 'parent_id', 'model', 'foreign_key', 'alias'),
-				'joins' => array(array(
-					'table' => $table,
-					'alias' => "{$type}0",
-					'type' => 'INNER',
-					'conditions' => array(
-						$db->name("{$type}.lft") . ' <= ' . $db->name("{$type}0.lft"),
-						$db->name("{$type}.rght") . ' >= ' . $db->name("{$type}0.rght")
-					)
-				)),
-				'order' => $db->name("{$type}.lft") . ' DESC'
-			);
-			$result = $db->read($this, $queryData, -1);
+				'fields' => ['id', 'parent_id', 'model', 'foreign_key', 'alias'],
+				'join' => [
+					[
+						'table' => $table,
+						'alias' => "{$type}0",
+						'type' => 'INNER',
+						'conditions' => [
+							"{$type}.lft" . ' <= ' . "{$type}0.lft",
+							"{$type}.rght" . ' >= ' . "{$type}0.rght",
+						]
+					]
+				],
+				'order' => "{$type}.lft" . ' DESC',
+			];
+			$query = $this->find('all', $queryData);
 
-			if (!$result) {
+			if ($query->count() == 0) {
 				throw new Error\Exception(__d('cake_dev', "AclNode::node() - Couldn't find %s node identified by \"%s\"", $type, print_r($ref, true)));
 			}
 		}
-		return $result;
+		return $query;
 	}
 
 }

@@ -16,6 +16,8 @@ namespace Acl\Model\Table;
 
 use Acl\Model\Table\AclNodesTable;
 
+use Cake\Core\App;
+
 /**
  * Access Request Object
  *
@@ -30,9 +32,15 @@ class ArosTable extends AclNodesTable {
 	public $name = 'Aros';
 
 /**
- * AROs are linked to ACOs by means of Permission
- *
- * @var array
+ * {@inheritDoc}
  */
-	public $hasAndBelongsToMany = array('Aco' => array('with' => 'Permission'));
+	public function initialize(array $config) {
+		parent::initialize($config);
+		$this->table('aros');
+		$this->belongsToMany('AcosTable', [
+			'through' => App::className('PermissionsTable', 'Model/Table'),
+		]);
+		$this->entityClass('Acl\Model\Entity\Aro');
+	}
+
 }
