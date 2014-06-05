@@ -12,9 +12,9 @@
  * @since         CakePHP(tm) v 0.2.9
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Acl\Model\Table;
+namespace Cake\Acl\Model\Table;
 
-use Acl\Model\Table\AclNodesTable;
+use Cake\Acl\Model\Table\AclNodesTable;
 
 use Cake\Core\App;
 
@@ -36,11 +36,16 @@ class AcosTable extends AclNodesTable {
  */
 	public function initialize(array $config) {
 		parent::initialize($config);
+		$this->alias('Acos');
 		$this->table('acos');
+		$this->addBehavior('Tree', ['type' => 'nested']);
+
 		$this->belongsToMany('Aros', [
-			'through' => App::className('PermissionsTable', 'Model/Table'),
+			'through' => App::className('Cake/Acl.PermissionsTable', 'Model/Table'),
+			'className' => App::className('Cake/Acl.ArosTable', 'Model/Table'),
 		]);
-		$this->entityClass('Acl\Model\Entity\Aco');
+
+		$this->entityClass(App::className('Cake/Acl.Aco', 'Model/Entity'));
 	}
 
 }

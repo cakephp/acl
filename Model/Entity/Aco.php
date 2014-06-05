@@ -1,6 +1,6 @@
 <?php
 
-namespace Acl\Model\Entity;
+namespace Cake\Acl\Model\Entity;
 
 use Cake\ORM\Entity;
 

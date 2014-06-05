@@ -12,10 +12,10 @@
  * @since         2.0.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Acl\Test\TestCase\Adapter;
+namespace Cake\Acl\Test\TestCase\Adapter;
 
-use Acl\Adapter\IniAcl;
-use Acl\Controller\Component\AclComponent;
+use Cake\Acl\Adapter\IniAcl;
+use Cake\Acl\Controller\Component\AclComponent;
 
 use Cake\TestSuite\TestCase;
 

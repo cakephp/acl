@@ -14,11 +14,12 @@
  * @since         CakePHP(tm) v 1.2.0.5012
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Console\Command;
+namespace Cake\Acl\Console\Command;
+
+use Cake\Acl\Controller\Component\AclComponent;
 
 use Cake\Console\Shell;
 use Cake\Controller\ComponentRegistry;
-use Cake\Controller\Component\AclComponent;
 use Cake\Controller\Controller;
 use Cake\Core\App;
 use Cake\Core\Configure;
@@ -71,10 +72,10 @@ class AclShell extends Shell {
 		}
 
 		$class = Configure::read('Acl.classname');
-		$className = App::classname($class, 'Controller/Component/Acl');
+		$className = App::classname('Cake/Acl.' . $class, 'Adapter');
 		if (
-			$class !== 'Cake\Controller\Component\Acl\DbAcl' &&
-			!is_subclass_of($className, 'Cake\Controller\Component\Acl\DbAcl')
+			$class !== 'DbAcl' &&
+			!is_subclass_of($className, 'Cake\Acl\Adapter\DbAcl')
 		) {
 			$out = "--------------------------------------------------\n";
 			$out .= __d('cake_console', 'Error: Your current CakePHP configuration is set to an ACL implementation other than DB.') . "\n";
@@ -97,7 +98,6 @@ class AclShell extends Shell {
 				$registry = new ComponentRegistry();
 				$this->Acl = new AclComponent($registry);
 				$controller = new Controller();
-				$this->Acl->startup($controller);
 			}
 		}
 	}
@@ -136,8 +136,8 @@ class AclShell extends Shell {
 		}
 
 		$data['parent_id'] = $parent;
-		$this->Acl->{$class}->create();
-		if ($this->Acl->{$class}->save($data)) {
+		$entity = $this->Acl->{$class}->newEntity($data);
+		if ($this->Acl->{$class}->save($entity)) {
 			$this->out(__d('cake_console', "<success>New %s</success> '%s' created.", $class, $this->args[2]), 2);
 		} else {
 			$this->err(__d('cake_console', "There was a problem creating a new %s '%s'.", $class, $this->args[2]));
@@ -154,8 +154,9 @@ class AclShell extends Shell {
 
 		$identifier = $this->parseIdentifier($this->args[1]);
 		$nodeId = $this->_getNodeId($class, $identifier);
+		$entity = $this->Acl->{$class}->newEntity(['id' => $nodeId]);
 
-		if (!$this->Acl->{$class}->delete($nodeId)) {
+		if (!$this->Acl->{$class}->delete($entity)) {
 			$this->error(__d('cake_console', 'Node Not Deleted') . __d('cake_console', 'There was an error deleting the %s. Check that the node exists.', $class) . "\n");
 		}
 		$this->out(__d('cake_console', '<success>%s deleted.</success>', $class), 2);
@@ -195,9 +196,9 @@ class AclShell extends Shell {
 		$identifier = $this->parseIdentifier($this->args[1]);
 
 		$id = $this->_getNodeId($class, $identifier);
-		$nodes = $this->Acl->{$class}->getPath($id);
+		$nodes = $this->Acl->{$class}->find('path', ['for' => $id]);
 
-		if (empty($nodes)) {
+		if (empty($nodes) || $nodes->count() === 0) {
 			$this->error(
 				__d('cake_console', "Supplied Node '%s' not found", $this->args[1]),
 				__d('cake_console', 'No tree returned.')
@@ -205,8 +206,9 @@ class AclShell extends Shell {
 		}
 		$this->out(__d('cake_console', 'Path:'));
 		$this->hr();
-		for ($i = 0, $len = count($nodes); $i < $len; $i++) {
-			$this->_outputNode($class, $nodes[$i], $i);
+		$rows = $nodes->hydrate(false)->toArray();
+		for ($i = 0, $len = count($rows); $i < $len; $i++) {
+			$this->_outputNode($class, $rows[$i], $i);
 		}
 	}
 
@@ -220,11 +222,10 @@ class AclShell extends Shell {
  */
 	protected function _outputNode($class, $node, $indent) {
 		$indent = str_repeat('  ', $indent);
-		$data = $node[$class];
-		if ($data['alias']) {
-			$this->out($indent . "[" . $data['id'] . "] " . $data['alias']);
+		if ($node['alias']) {
+			$this->out($indent . "[" . $node['id'] . "] " . $node['alias']);
 		} else {
-			$this->out($indent . "[" . $data['id'] . "] " . $data['model'] . '.' . $data['foreign_key']);
+			$this->out($indent . "[" . $node['id'] . "] " . $node['model'] . '.' . $node['foreign_key']);
 		}
 	}
 
@@ -296,25 +297,26 @@ class AclShell extends Shell {
 	public function view() {
 		extract($this->_dataVars());
 
+		$alias = $this->Acl->{$class}->alias();
 		if (isset($this->args[1])) {
 			$identity = $this->parseIdentifier($this->args[1]);
 
-			$topNode = $this->Acl->{$class}->find('first', [
-				'conditions' => [$class . '.id' => $this->_getNodeId($class, $identity)]
-			]);
+			$topNode = $this->Acl->{$alias}->find('all', [
+				'conditions' => [$alias . '.id' => $this->_getNodeId($class, $identity)]
+			])->first();
 
-			$nodes = $this->Acl->{$class}->find('all', [
+			$nodes = $this->Acl->{$alias}->find('all', [
 				'conditions' => [
-					$class . '.lft >=' => $topNode[$class]['lft'],
-					$class . '.lft <=' => $topNode[$class]['rght']
+					$alias . '.lft >=' => $topNode[$class]['lft'],
+					$alias . '.lft <=' => $topNode[$class]['rght']
 				],
 				'order' => $class . '.lft ASC'
 			]);
 		} else {
-			$nodes = $this->Acl->{$class}->find('all', ['order' => $class . '.lft ASC']);
+			$nodes = $this->Acl->{$class}->find('all', ['order' => $alias . '.lft ASC']);
 		}
 
-		if (empty($nodes)) {
+		if ($nodes->count() === 0) {
 			if (isset($this->args[1])) {
 				$this->error(__d('cake_console', '%s not found', $this->args[1]), __d('cake_console', 'No tree returned.'));
 			} elseif (isset($this->args[0])) {
@@ -327,20 +329,21 @@ class AclShell extends Shell {
 		$stack = [];
 		$last = null;
 
-		foreach ($nodes as $n) {
+		$rows = $nodes->hydrate(false)->toArray();
+		foreach ($rows as $n) {
 			$stack[] = $n;
 			if (!empty($last)) {
 				$end = end($stack);
-				if ($end[$class]['rght'] > $last) {
+				if ($end['rght'] > $last) {
 					foreach ($stack as $k => $v) {
 						$end = end($stack);
-						if ($v[$class]['rght'] < $end[$class]['rght']) {
+						if ($v['rght'] < $end['rght']) {
 							unset($stack[$k]);
 						}
 					}
 				}
 			}
-			$last = $n[$class]['rght'];
+			$last = $n['rght'];
 			$count = count($stack);
 
 			$this->_outputNode($class, $n, $count);
@@ -559,14 +562,14 @@ class AclShell extends Shell {
  */
 	protected function _getNodeId($class, $identifier) {
 		$node = $this->Acl->{$class}->node($identifier);
-		if (empty($node)) {
+		if (empty($node) || $node->count() === 0) {
 			if (is_array($identifier)) {
 				$identifier = var_export($identifier, true);
 			}
 			$this->error(__d('cake_console', 'Could not find node using reference "%s"', $identifier));
 			return;
 		}
-		return Hash::get($node, "0.{$class}.id");
+		return $node->first()->id;
 	}
 
 /**

@@ -18,12 +18,12 @@
  */
 namespace Cake\Auth\Test\TestCase\Model\Behavior;
 
-use Acl\Model\Behavior\AclBehavior;
-use Acl\Model\Entity\Aco;
-use Acl\Model\Entity\Aro;
-use Acl\Model\Table\AclNodesTable;
-use Acl\Model\Table\AcosTable;
-use Acl\Model\Table\ArosTable;
+use Cake\Acl\Model\Behavior\AclBehavior;
+use Cake\Acl\Model\Entity\Aco;
+use Cake\Acl\Model\Entity\Aro;
+use Cake\Acl\Model\Table\AclNodesTable;
+use Cake\Acl\Model\Table\AcosTable;
+use Cake\Acl\Model\Table\ArosTable;
 
 use Cake\Core\App;
 use Cake\Core\Configure;
@@ -171,10 +171,10 @@ class AclBehaviorTest extends TestCase {
 
 		TableRegistry::clear();
 		$this->Aco = TableRegistry::get('Acos', [
-			'className' => 'Acl\Model\Table\AcosTable',
+			'className' => App::className('Cake/Acl.AcosTable', 'Model/Table'),
 		]);
 		$this->Aro = TableRegistry::get('Aros', [
-			'className' => 'Acl\Model\Table\ArosTable',
+			'className' => App::className('Cake/Acl.ArosTable', 'Model/Table'),
 		]);
 
 		TableRegistry::get('AclUsers', [

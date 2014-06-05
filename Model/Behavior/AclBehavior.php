@@ -16,7 +16,7 @@
  * @since         CakePHP v 1.2.0.4487
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Acl\Model\Behavior;
+namespace Cake\Acl\Model\Behavior;
 
 use Cake\Core\App;
 use Cake\Error;

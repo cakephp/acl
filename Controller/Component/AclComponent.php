@@ -12,9 +12,9 @@
  * @since         0.10.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Acl\Controller\Component;
+namespace Cake\Acl\Controller\Component;
 
-use Acl\AclInterface;
+use Cake\Acl\AclInterface;
 
 use Cake\Configure\Engine\IniConfig;
 use Cake\Controller\Component;
@@ -68,7 +68,7 @@ class AclComponent extends Component {
 		parent::__construct($collection, $config);
 		$className = $name = Configure::read('Acl.classname');
 		if (!class_exists($className)) {
-			$className = App::className($name, 'Adapter');
+			$className = App::className('Cake/Acl.' . $name, 'Adapter');
 			if (!$className) {
 				throw new Error\Exception(sprintf('Could not find %s.', $name));
 			}

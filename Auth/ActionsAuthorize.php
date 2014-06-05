@@ -13,7 +13,7 @@
  * @since         2.0.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Acl\Auth;
+namespace Cake\Acl\Auth;
 
 use Cake\Auth\BaseAuthorize;
 use Cake\Network\Request;

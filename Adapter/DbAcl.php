@@ -12,10 +12,12 @@
  * @since         CakePHP(tm) v 0.10.0.1076
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Acl\Adapter;
+namespace Cake\Acl\Adapter;
 
-use Acl\AclInterface;
+use Cake\Acl\AclInterface;
+use Cake\Acl\Model\Table\PermissionsTable;
 
+use Cake\Core\App;
 use Cake\Controller\Component;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
@@ -45,10 +47,11 @@ class DbAcl implements AclInterface {
  *
  */
 	public function __construct() {
-		parent::__construct();
-		$this->Permission = TableRegistry::get('Permissions');
-		$this->Aro = $this->Permission->Aro->target();
-		$this->Aco = $this->Permission->Aco->target();
+		$this->Permission = TableRegistry::get('Permissions', [
+			'className' => App::className('Cake/Acl.PermissionsTable', 'Model/Table'),
+		]);
+		$this->Aro = $this->Permission->Aros->target();
+		$this->Aco = $this->Permission->Acos->target();
 	}
 
 /**

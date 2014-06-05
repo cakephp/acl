@@ -14,14 +14,14 @@
  * @since         CakePHP(tm) v 1.2.0.4206
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Acl\Test\TestCase\Model\Table;
+namespace Cake\Acl\Test\TestCase\Model\Table;
 
-use Acl\Adapter\DbAcl;
-use Acl\Model\Table\AclNodesTable;
-use Acl\Model\Table\ArosTable;
-use Acl\Model\Table\AcoActionsTable;
-use Acl\Model\Table\AcosTable;
-use Acl\Model\Table\PermissionsTable;
+use Cake\Acl\Adapter\DbAcl;
+use Cake\Acl\Model\Table\AclNodesTable;
+use Cake\Acl\Model\Table\ArosTable;
+use Cake\Acl\Model\Table\AcoActionsTable;
+use Cake\Acl\Model\Table\AcosTable;
+use Cake\Acl\Model\Table\PermissionsTable;
 
 use Cake\Core\App;
 use Cake\Core\Configure;
@@ -166,10 +166,10 @@ class AclNodeTest extends TestCase {
 
 		TableRegistry::clear();
 		TableRegistry::get('DbAcoTest', [
-			'className' => 'Acl\Test\TestCase\Model\Table\DbAcoTest',
+			'className' => 'Cake\Acl\Test\TestCase\Model\Table\DbAcoTest',
 		]);
 		TableRegistry::get('DbAroTest', [
-			'className' => 'Acl\Test\TestCase\Model\Table\DbAroTest',
+			'className' => 'Cake\Acl\Test\TestCase\Model\Table\DbAroTest',
 		]);
 	}
 
