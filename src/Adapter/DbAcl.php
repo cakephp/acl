@@ -17,8 +17,7 @@ namespace Acl\Adapter;
 use Acl\AclInterface;
 
 use Cake\Controller\Component;
-use Cake\Core\Object;
-use Cake\Utility\ClassRegistry;
+use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
 
 /**
@@ -47,9 +46,9 @@ class DbAcl implements AclInterface {
  */
 	public function __construct() {
 		parent::__construct();
-		$this->Permission = ClassRegistry::init(array('class' => 'Permission', 'alias' => 'Permission'));
-		$this->Aro = $this->Permission->Aro;
-		$this->Aco = $this->Permission->Aco;
+		$this->Permission = TableRegistry::get('Permissions');
+		$this->Aro = $this->Permission->Aro->target();
+		$this->Aco = $this->Permission->Aco->target();
 	}
 
 /**
