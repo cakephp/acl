@@ -16,12 +16,18 @@
  * @since         CakePHP v 1.2.0.4487
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Model\Behavior;
+namespace Acl\Model\Behavior;
 
-use Cake\Model\Model;
-use Cake\Model\ModelBehavior;
+use Cake\Core\App;
+use Cake\Error;
+use Cake\Event\Event;
+use Cake\ORM\Behavior;
+use Cake\ORM\Entity;
+use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 use Cake\Utility\ClassRegistry;
 use Cake\Utility\Hash;
+use Cake\Utility\Inflector;
 
 /**
  * ACL behavior
@@ -30,7 +36,9 @@ use Cake\Utility\Hash;
  *
  * @link http://book.cakephp.org/2.0/en/core-libraries/behaviors/acl.html
  */
-class AclBehavior extends ModelBehavior {
+class AclBehavior extends Behavior {
+
+	protected $_table = null;
 
 /**
  * Maps ACL type options to ACL models
@@ -46,24 +54,34 @@ class AclBehavior extends ModelBehavior {
  * @param array $config
  * @return void
  */
-	public function setup(Model $model, $config = array()) {
+	public function __construct(Table $model, array $config = []) {
+		$this->_table = $model;
 		if (isset($config[0])) {
 			$config['type'] = $config[0];
 			unset($config[0]);
 		}
-		$this->settings[$model->name] = array_merge(array('type' => 'controlled'), $config);
-		$this->settings[$model->name]['type'] = strtolower($this->settings[$model->name]['type']);
+		if (isset($config['type'])) {
+			$config['type'] = strtolower($config['type']);
+		}
+		parent::__construct($model, $config);
 
-		$types = $this->_typeMaps[$this->settings[$model->name]['type']];
+		$types = $this->_typeMaps[$this->config()['type']];
 
 		if (!is_array($types)) {
 			$types = array($types);
 		}
 		foreach ($types as $type) {
-			$model->{$type} = ClassRegistry::init($type);
+			$alias = Inflector::pluralize($type);
+			$className = App::className($alias . 'Table', 'Model/Table');
+			$config = [];
+			if (!TableRegistry::exists($alias)) {
+				$config = ['className' => $className];
+			}
+			$model->{$type} = TableRegistry::get($alias, $config);
 		}
-		if (!method_exists($model, 'parentNode')) {
-			trigger_error(__d('cake_dev', 'Callback %s not defined in %s', 'parentNode()', $model->alias), E_USER_WARNING);
+
+		if (!method_exists($model->entityClass(), 'parentNode')) {
+			trigger_error(__d('cake_dev', 'Callback %s not defined in %s', 'parentNode()', $model->entityClass()), E_USER_WARNING);
 		}
 	}
 
@@ -76,18 +94,18 @@ class AclBehavior extends ModelBehavior {
  * @return array
  * @link http://book.cakephp.org/2.0/en/core-libraries/behaviors/acl.html#node
  */
-	public function node(Model $model, $ref = null, $type = null) {
+	public function node($ref = null, $type = null) {
 		if (empty($type)) {
-			$type = $this->_typeMaps[$this->settings[$model->name]['type']];
+			$type = $this->_typeMaps[$this->config('type')];
 			if (is_array($type)) {
 				trigger_error(__d('cake_dev', 'AclBehavior is setup with more then one type, please specify type parameter for node()'), E_USER_WARNING);
 				return null;
 			}
 		}
 		if (empty($ref)) {
-			$ref = array('model' => $model->name, 'foreign_key' => $model->id);
+			throw new Error\Exception(__d('cake_dev', 'ref parameter must be a string or an Entity'));
 		}
-		return $model->{$type}->node($ref);
+		return $this->_table->{$type}->node($ref);
 	}
 
 /**
@@ -98,27 +116,29 @@ class AclBehavior extends ModelBehavior {
  * @param array $options Options passed from Model::save().
  * @return void
  */
-	public function afterSave(Model $model, $created, $options = array()) {
-		$types = $this->_typeMaps[$this->settings[$model->name]['type']];
+	public function afterSave(Event $event, Entity $entity) {
+		$model = $event->subject();
+		$types = $this->_typeMaps[$this->config('type')];
 		if (!is_array($types)) {
 			$types = array($types);
 		}
 		foreach ($types as $type) {
-			$parent = $model->parentNode();
+			$parent = $entity->parentNode();
 			if (!empty($parent)) {
-				$parent = $this->node($model, $parent, $type);
+				$parent = $this->node($parent, $type)->first();
 			}
 			$data = array(
-				'parent_id' => isset($parent[0][$type]['id']) ? $parent[0][$type]['id'] : null,
-				'model' => $model->name,
-				'foreign_key' => $model->id
+				'parent_id' => isset($parent->id) ? $parent->id : null,
+				'model' => $model->alias(),
+				'foreign_key' => $entity->id,
 			);
-			if (!$created) {
-				$node = $this->node($model, null, $type);
-				$data['id'] = isset($node[0][$type]['id']) ? $node[0][$type]['id'] : null;
+
+			if (!$entity->isNew()) {
+				$node = $this->node($entity, $type)->first();
+				$data['id'] = isset($node->id) ? $node->id : null;
 			}
-			$model->{$type}->create();
-			$model->{$type}->save($data);
+			$newData = $model->{$type}->newEntity($data);
+			$saved = $model->{$type}->save($newData);
 		}
 	}
 
@@ -128,15 +148,15 @@ class AclBehavior extends ModelBehavior {
  * @param Model $model
  * @return void
  */
-	public function afterDelete(Model $model) {
-		$types = $this->_typeMaps[$this->settings[$model->name]['type']];
+	public function afterDelete(Event $event, Entity $entity) {
+		$types = $this->_typeMaps[$this->config('type')];
 		if (!is_array($types)) {
 			$types = array($types);
 		}
 		foreach ($types as $type) {
-			$node = Hash::extract($this->node($model, null, $type), "0.{$type}.id");
+			$node = $this->node($entity, $type)->toArray();
 			if (!empty($node)) {
-				$model->{$type}->delete($node);
+				$event->subject()->{$type}->delete($node[0]);
 			}
 		}
 	}

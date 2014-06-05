@@ -52,7 +52,7 @@ class PermissionsTable extends AclNodesTable {
 			return false;
 		}
 
-		$permKeys = $this->getAcoKeys($this->schema());
+		$permKeys = $this->getAcoKeys($this->schema()->columns());
 		$aroPath = $this->Aro->node($aro);
 		$acoPath = $this->Aco->node($aco);
 
@@ -84,25 +84,26 @@ class PermissionsTable extends AclNodesTable {
 		}
 
 		$inherited = array();
-		$acoIDs = Hash::extract($acoPath, '{n}.' . $this->Aco->alias . '.id');
+		$acoIDs = $acoPath->extract('id')->toArray();
 
-		$count = count($aroPath);
+		$count = $aroPath->count();
+		$aroPaths = $aroPath->toArray();
 		for ($i = 0; $i < $count; $i++) {
-			$permAlias = $this->alias;
+			$permAlias = $this->alias();
 
-			$perms = $this->find('all', array(
-				'conditions' => array(
-					"{$permAlias}.aro_id" => $aroPath[$i][$this->Aro->alias]['id'],
-					"{$permAlias}.aco_id" => $acoIDs
-				),
-				'order' => array($this->Aco->alias . '.lft' => 'desc'),
-				'recursive' => 0
-			));
+			$perms = $this->find('all', [
+				'conditions' => [
+					"{$permAlias}.aro_id" => $aroPaths[$i]->id,
+					"{$permAlias}.aco_id IN" => $acoIDs
+				],
+				'order' => [$this->Aco->alias() . '.lft' => 'desc'],
+				'contain' => $this->Aco->alias(),
+			]);
 
-			if (empty($perms)) {
+			if ($perms->count() == 0) {
 				continue;
 			}
-			$perms = Hash::extract($perms, '{n}.' . $this->alias);
+			$perms = $perms->hydrate(false)->toArray();
 			foreach ($perms as $perm) {
 				if ($action === '*') {
 
@@ -142,11 +143,12 @@ class PermissionsTable extends AclNodesTable {
  * @param string $actions Action (defaults to *) Invalid permissions will result in an exception
  * @param integer $value Value to indicate access type (1 to give access, -1 to deny, 0 to inherit)
  * @return boolean Success
- * @throws Cake\Error\AclException on Invalid permission key.
+ * @throws Cake\Error\Exception on Invalid permission key.
  */
 	public function allow($aro, $aco, $actions = '*', $value = 1) {
 		$perms = $this->getAclLink($aro, $aco);
-		$permKeys = $this->getAcoKeys($this->schema());
+		$permKeys = $this->getAcoKeys($this->schema()->columns());
+		$alias = $this->alias();
 		$save = array();
 
 		if (!$perms) {
@@ -154,7 +156,7 @@ class PermissionsTable extends AclNodesTable {
 			return false;
 		}
 		if (isset($perms[0])) {
-			$save = $perms[0][$this->alias];
+			$save = $perms[0][$alias];
 		}
 
 		if ($actions === '*') {
@@ -168,20 +170,22 @@ class PermissionsTable extends AclNodesTable {
 					$action = '_' . $action;
 				}
 				if (!in_array($action, $permKeys, true)) {
-					throw new Error\AclException(__d('cake_dev', 'Invalid permission key "%s"', $action));
+					throw new Error\Exception(__d('cake_dev', 'Invalid permission key "%s"', $action));
 				}
 				$save[$action] = $value;
 			}
 		}
 		list($save['aro_id'], $save['aco_id']) = array($perms['aro'], $perms['aco']);
 
-		if ($perms['link'] && !empty($perms['link'])) {
-			$save['id'] = $perms['link'][0][$this->alias]['id'];
+		if ($perms['link'] && !empty($perms['link'][$alias])) {
+			$save['id'] = $perms['link'][$alias][0]['id'];
 		} else {
 			unset($save['id']);
 			$this->id = null;
 		}
-		return ($this->save($save) !== false);
+		$entityClass = $this->entityClass();
+		$entity = new $entityClass($save);
+		return ($this->save($entity) !== false);
 	}
 
 /**
@@ -199,19 +203,25 @@ class PermissionsTable extends AclNodesTable {
 		if (empty($obj['Aro']) || empty($obj['Aco'])) {
 			return false;
 		}
-		$aro = Hash::extract($obj, 'Aro.0.' . $this->Aro->alias . '.id');
-		$aco = Hash::extract($obj, 'Aco.0.' . $this->Aco->alias . '.id');
+		$aro = $obj['Aro']->extract('id')->toArray();
+		$aco = $obj['Aco']->extract('id')->toArray();
 		$aro = current($aro);
 		$aco = current($aco);
+		$alias = $this->alias();
 
-		return array(
+		$result = array(
 			'aro' => $aro,
 			'aco' => $aco,
-			'link' => $this->find('all', array('conditions' => array(
-				$this->alias . '.aro_id' => $aro,
-				$this->alias . '.aco_id' => $aco
-			)))
+			'link' => [
+				$alias => $this->find('all', [
+					'conditions' => [
+						$alias . '.aro_id' => $aro,
+						$alias . '.aco_id' => $aco,
+					]
+				])->hydrate(false)->toArray()
+			],
 		);
+		return $result;
 	}
 
 /**
@@ -222,7 +232,6 @@ class PermissionsTable extends AclNodesTable {
  */
 	public function getAcoKeys($keys) {
 		$newKeys = array();
-		$keys = array_keys($keys);
 		foreach ($keys as $key) {
 			if (!in_array($key, array('id', 'aro_id', 'aco_id'))) {
 				$newKeys[] = $key;

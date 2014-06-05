@@ -15,7 +15,6 @@
 	<testsuites>
 		<testsuite name="Acl Plugin Test Suite">
 			<directory>./tests/TestCase/</directory>
-			<exclude>./tests/TestCase/Model/Behavior</exclude>
 		</testsuite>
 	</testsuites>
 	<listeners>
