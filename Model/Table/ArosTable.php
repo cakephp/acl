@@ -19,28 +19,28 @@ use Acl\Model\Table\AclNodesTable;
 use Cake\Core\App;
 
 /**
- * Access Control Object
+ * Access Request Object
  *
  */
-class AcosTable extends AclNodesTable {
+class ArosTable extends AclNodesTable {
 
 /**
  * Model name
  *
  * @var string
  */
-	public $name = 'Acos';
+	public $name = 'Aros';
 
 /**
  * {@inheritDoc}
  */
 	public function initialize(array $config) {
 		parent::initialize($config);
-		$this->table('acos');
-		$this->belongsToMany('ArosTable', [
+		$this->table('aros');
+		$this->belongsToMany('Acos', [
 			'through' => App::className('PermissionsTable', 'Model/Table'),
 		]);
-		$this->entityClass('Acl\Model\Entity\Aco');
+		$this->entityClass('Acl\Model\Entity\Aro');
 	}
 
 }
