@@ -17,6 +17,7 @@
 		"irc": "irc://irc.freenode.org/cakephp",
 		"source": "https://github.com/cakephp/acl"
 	},
+	"minimum-stability": "dev",
 	"require": {
 		"cakephp/cakephp": "~3.0"
 	},
