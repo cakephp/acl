@@ -1,7 +1,5 @@
 <?php
 /**
- * DbAclTest file.
- *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -38,13 +36,19 @@ use Cake\TestSuite\TestCase;
  */
 class AroTwoTest extends ArosTable {
 
+/**
+ * initialize
+ *
+ * @param array $config Configuration array
+ * @return void
+ */
 	public function initialize(array $config) {
 		parent::initialize($config);
 		$this->alias('AroTwoTest');
 		$this->table('aro_twos');
 		$this->associations()->removeAll();
 		$this->belongsToMany('AcoTwoTest', [
-			'through' => __NAMESPACE__ .  '\PermissionTwoTest',
+			'through' => __NAMESPACE__ . '\PermissionTwoTest',
 			'className' => __NAMESPACE__ . '\AroTwoTest',
 		]);
 	}
@@ -57,6 +61,12 @@ class AroTwoTest extends ArosTable {
  */
 class AcoTwoTest extends AcosTable {
 
+/**
+ * initialize
+ *
+ * @param array $config Configuration array
+ * @return void
+ */
 	public function initialize(array $config) {
 		parent::initialize($config);
 		$this->alias('AcoTwoTest');
@@ -76,6 +86,12 @@ class AcoTwoTest extends AcosTable {
  */
 class PermissionTwoTest extends PermissionsTable {
 
+/**
+ * initialize
+ *
+ * @param array $config Configuration array
+ * @return void
+ */
 	public function initialize(array $config) {
 		parent::initialize($config);
 		$this->alias('PermissionTwoTest');
@@ -462,7 +478,7 @@ class DbAclTest extends TestCase {
  * Generates a list of the current aro and aco structures and a grid dump of the permissions that are defined
  * Only designed to work with the db based ACL
  *
- * @param boolean $treesToo
+ * @param boolean $printTreesToo Set to True to output tree data to screen
  * @return void
  */
 	protected function _debug($printTreesToo = false) {
@@ -508,8 +524,8 @@ class DbAclTest extends TestCase {
  * pad function
  * Used by debug to format strings used in the data dump
  *
- * @param string $string
- * @param integer $len
+ * @param string $string String for padding
+ * @param integer $len Padding length
  * @return void
  */
 	protected function _pad($string = '', $len = 14) {

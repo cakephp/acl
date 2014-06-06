@@ -1,7 +1,5 @@
 <?php
 /**
- * Acl Shell provides Acl access in the CLI environment
- *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *

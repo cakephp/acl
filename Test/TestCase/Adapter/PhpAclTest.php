@@ -291,6 +291,11 @@ class PhpAclTest extends TestCase {
 		$this->PhpAcl->build($config);
 	}
 
+/**
+ * test that an invalid config with missing acos
+ *
+ * @return void
+ */
 	public function testInvalidConfigWithAcosMissing() {
 		$this->setExpectedException(
 			'Cake\Error\Exception',

@@ -25,6 +25,9 @@ class AcosTable extends AclNodesTable {
 
 /**
  * {@inheritDoc}
+ *
+ * @param array $config Config
+ * @return void
  */
 	public function initialize(array $config) {
 		parent::initialize($config);

@@ -29,6 +29,8 @@ class AclNodesTable extends Table {
 
 /**
  * {@inheritDoc}
+ *
+ * @return void
  */
 	public static function defaultConnectionName() {
 		return Configure::read('Acl.database');
@@ -57,7 +59,7 @@ class AclNodesTable extends Table {
 			$queryData = [
 				'conditions' => [
 					"{$type}.lft" . ' <= ' . "{$type}0.lft",
-					"{$type}.rght" . ' >= ' ."{$type}0.rght",
+					"{$type}.rght" . ' >= ' . "{$type}0.rght",
 				],
 				'fields' => ['id', 'parent_id', 'model', 'foreign_key', 'alias'],
 				'join' => [[

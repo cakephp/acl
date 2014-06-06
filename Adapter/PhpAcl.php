@@ -413,9 +413,9 @@ class PhpAro {
 /**
  * Constructor
  *
- * @param array $aro
- * @param array $map
- * @param array $aliases
+ * @param array $aro Aro instance
+ * @param array $map Map
+ * @param array $aliases Aliases
  */
 	public function __construct(array $aro = array(), array $map = array(), array $aliases = array()) {
 		if (!empty($map)) {

@@ -1,9 +1,5 @@
 <?php
 /**
- * ACL behavior class.
- *
- * Enables objects to easily tie into an ACL system
- *
  * CakePHP :  Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -37,6 +33,9 @@ use Cake\Utility\Inflector;
  */
 class AclBehavior extends Behavior {
 
+/**
+ * Table instance
+ */
 	protected $_table = null;
 
 /**
@@ -49,8 +48,8 @@ class AclBehavior extends Behavior {
 /**
  * Sets up the configuration for the model, and loads ACL models if they haven't been already
  *
- * @param Model $model
- * @param array $config
+ * @param Table $model Table instance being attached
+ * @param array $config Configuration
  * @return void
  */
 	public function __construct(Table $model, array $config = []) {
@@ -87,11 +86,11 @@ class AclBehavior extends Behavior {
 /**
  * Retrieves the Aro/Aco node for this model
  *
- * @param Model $model
  * @param string|array|Model $ref Array with 'model' and 'foreign_key', model object, or string value
  * @param string $type Only needed when Acl is set up as 'both', specify 'Aro' or 'Aco' to get the correct node
- * @return array
+ * @return Cake\ORM\Query
  * @link http://book.cakephp.org/2.0/en/core-libraries/behaviors/acl.html#node
+ * @throws Cake\Error\Exception
  */
 	public function node($ref = null, $type = null) {
 		if (empty($type)) {
@@ -110,9 +109,8 @@ class AclBehavior extends Behavior {
 /**
  * Creates a new ARO/ACO node bound to this record
  *
- * @param Model $model
- * @param boolean $created True if this is a new record
- * @param array $options Options passed from Model::save().
+ * @param Event $event The afterSave event that was fired
+ * @param Entity $entity The entity being saved
  * @return void
  */
 	public function afterSave(Event $event, Entity $entity) {
@@ -144,7 +142,8 @@ class AclBehavior extends Behavior {
 /**
  * Destroys the ARO/ACO node bound to the deleted record
  *
- * @param Model $model
+ * @param Event $event The afterDelete event that was fired
+ * @param Entity $entity The entity being deleted
  * @return void
  */
 	public function afterDelete(Event $event, Entity $entity) {

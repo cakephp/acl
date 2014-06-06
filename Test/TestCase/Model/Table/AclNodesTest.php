@@ -1,7 +1,5 @@
 <?php
 /**
- * AclNodesTest file
- *
  * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -17,9 +15,9 @@ namespace Cake\Acl\Test\TestCase\Model\Table;
 
 use Cake\Acl\Adapter\DbAcl;
 use Cake\Acl\Model\Table\AclNodesTable;
-use Cake\Acl\Model\Table\ArosTable;
 use Cake\Acl\Model\Table\AcoActionsTable;
 use Cake\Acl\Model\Table\AcosTable;
+use Cake\Acl\Model\Table\ArosTable;
 use Cake\Acl\Model\Table\PermissionsTable;
 
 use Cake\Core\App;
@@ -37,6 +35,12 @@ use Cake\Utility\Hash;
  */
 class DbAroTest extends ArosTable {
 
+/**
+ * initialize
+ *
+ * @param array $config Configuration array
+ * @return void
+ */
 	public function initialize(array $config) {
 		parent::initialize($config);
 		$this->alias('DbAroTest');
@@ -57,6 +61,12 @@ class DbAroTest extends ArosTable {
  */
 class DbAcoTest extends AcosTable {
 
+/**
+ * initialize
+ *
+ * @param array $config Configuration array
+ * @return void
+ */
 	public function initialize(array $config) {
 		parent::initialize($config);
 		$this->alias('DbAcoTest');
@@ -68,6 +78,7 @@ class DbAcoTest extends AcosTable {
 			'foreignKey' => 'aco_id',
 		]);
 	}
+
 }
 
 /**
@@ -76,6 +87,12 @@ class DbAcoTest extends AcosTable {
  */
 class DbPermissionTest extends PermissionsTable {
 
+/**
+ * initialize
+ *
+ * @param array $config Configuration array
+ * @return void
+ */
 	public function initialize(array $config) {
 		parent::initialize($config);
 		$this->alias('DbPermissionTest');
@@ -98,6 +115,12 @@ class DbPermissionTest extends PermissionsTable {
  */
 class DbAcoActionTest extends AcoActionsTable {
 
+/**
+ * initialize
+ *
+ * @param array $config Configuration array
+ * @return void
+ */
 	public function initialize(array $config) {
 		$this->table('aco_actions');
 		$this->belongsTo('DbAcoTest', [
@@ -116,7 +139,7 @@ class DbAroUserTest extends Entity {
 /**
  * bindNode method
  *
- * @param string|array|Model $ref
+ * @param string|array|Model $ref Ref
  * @return void
  */
 	public function bindNode($ref = null) {
@@ -293,7 +316,7 @@ class AclNodeTest extends TestCase {
 		$result = $result->toArray();
 		$expected = [
 			['id' => 1, 'parent_id' => null, 'model' => null, 'foreign_key' => null, 'alias' => 'Application', 'lft' => 1, 'rght' => 4, 'db_aro_test' => []],
-			['id' => 2, 'parent_id' => 1, 'model' => null, 'foreign_key' => null, 'alias' => 'Pages', 'lft' => 2, 'rght' => 3,'db_aro_test' => []],
+			['id' => 2, 'parent_id' => 1, 'model' => null, 'foreign_key' => null, 'alias' => 'Pages', 'lft' => 2, 'rght' => 3, 'db_aro_test' => []],
 		];
 		$this->assertEquals($expected, $result);
 	}

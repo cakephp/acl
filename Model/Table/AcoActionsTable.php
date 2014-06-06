@@ -21,6 +21,12 @@ use Cake\ORM\Table;
  */
 class AcoActionsTable extends Table {
 
+/**
+ * {@inheritDoc}
+ *
+ * @param array $config Configuration
+ * @return void
+ */
 	public function initialize(array $config) {
 		$this->belongsTo('Acos', [
 			'className' => App::className('Cake/Acl.AcosTable', 'Model/Table'),

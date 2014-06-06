@@ -1,9 +1,5 @@
 <?php
 /**
- * AclBehaviorTest file
- *
- * Test the Acl Behavior
- *
  * CakePHP : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -38,6 +34,12 @@ use Cake\TestSuite\TestCase;
  */
 class AclPeople extends Table {
 
+/**
+ * initialize
+ *
+ * @param array $config Configuration array
+ * @return void
+ */
 	public function initialize(array $config) {
 		$this->table('people');
 		$this->entityClass(__NAMESPACE__ . '\AclPerson');
@@ -86,6 +88,12 @@ class AclPerson extends Entity {
  */
 class AclUsers extends Table {
 
+/**
+ * initialize
+ *
+ * @param array $config Configuration array
+ * @return void
+ */
 	public function initialize(array $config) {
 		$this->table('users');
 		$this->entityClass(__NAMESPACE__ . '\AclUser');
@@ -99,6 +107,7 @@ class AclUser extends Entity {
 /**
  * parentNode
  *
+ * @return null|string
  */
 	public function parentNode() {
 		return null;
@@ -110,6 +119,12 @@ class AclUser extends Entity {
  */
 class AclPosts extends Table {
 
+/**
+ * initialize
+ *
+ * @param array $config Configuration array
+ * @return void
+ */
 	public function initialize(array $config) {
 		$this->table('posts');
 		$this->entityClass(__NAMESPACE__ . '\AclPost');
@@ -123,6 +138,7 @@ class AclPost extends Entity {
 /**
  * parentNode
  *
+ * @return null|string
  */
 	public function parentNode() {
 		return null;
@@ -185,7 +201,6 @@ class AclBehaviorTest extends TestCase {
 		TableRegistry::get('AclPosts', [
 			'className' => __NAMESPACE__ . '\AclPosts',
 		]);
-
 	}
 
 /**

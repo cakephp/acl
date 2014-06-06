@@ -27,6 +27,9 @@ class PermissionsTable extends AclNodesTable {
 
 /**
  * {@inheritDoc}
+ *
+ * @param array $config Configuration
+ * @return void
  */
 	public function initialize(array $config) {
 		$this->alias('Permissions');

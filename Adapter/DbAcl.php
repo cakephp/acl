@@ -16,8 +16,8 @@ namespace Cake\Acl\Adapter;
 use Cake\Acl\AclInterface;
 use Cake\Acl\Model\Table\PermissionsTable;
 
-use Cake\Core\App;
 use Cake\Controller\Component;
+use Cake\Core\App;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
 
@@ -56,7 +56,7 @@ class DbAcl implements AclInterface {
 /**
  * Initializes the containing component and sets the Aro/Aco objects to it.
  *
- * @param AclComponent $component
+ * @param AclComponent $component Component
  * @return void
  */
 	public function initialize(Component $component) {
