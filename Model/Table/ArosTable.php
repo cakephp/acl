@@ -24,13 +24,6 @@ use Cake\Core\App;
 class ArosTable extends AclNodesTable {
 
 /**
- * Model name
- *
- * @var string
- */
-	public $name = 'Aros';
-
-/**
  * {@inheritDoc}
  */
 	public function initialize(array $config) {

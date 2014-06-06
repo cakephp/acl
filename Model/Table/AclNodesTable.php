@@ -28,13 +28,6 @@ use Cake\Utility\Inflector;
 class AclNodesTable extends Table {
 
 /**
- * Explicitly disable in-memory query caching for ACL models
- *
- * @var boolean
- */
-	public $cacheQueries = false;
-
-/**
  * {@inheritDoc}
  */
 	public static function defaultConnectionName() {

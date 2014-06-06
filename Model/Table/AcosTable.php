@@ -24,13 +24,6 @@ use Cake\Core\App;
 class AcosTable extends AclNodesTable {
 
 /**
- * Model name
- *
- * @var string
- */
-	public $name = 'Acos';
-
-/**
  * {@inheritDoc}
  */
 	public function initialize(array $config) {
