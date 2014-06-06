@@ -75,7 +75,9 @@ class AclBehavior extends Behavior {
 			if (!TableRegistry::exists($alias)) {
 				$config = ['className' => $className];
 			}
-			$model->{$type} = TableRegistry::get($alias, $config);
+			$model->hasMany($type, [
+				'targetTable' => TableRegistry::get($alias, $config),
+			]);
 		}
 
 		if (!method_exists($model->entityClass(), 'parentNode')) {
@@ -135,7 +137,7 @@ class AclBehavior extends Behavior {
 				$data['id'] = isset($node->id) ? $node->id : null;
 			}
 			$newData = $model->{$type}->newEntity($data);
-			$saved = $model->{$type}->save($newData);
+			$saved = $model->{$type}->target()->save($newData);
 		}
 	}
 
