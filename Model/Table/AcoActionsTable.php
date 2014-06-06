@@ -28,10 +28,10 @@ class AcoActionsTable extends Table {
  */
 	public $name = 'AcoActions';
 
-/**
- * ACO Actions belong to ACOs
- *
- * @var array
- */
-	public $belongsTo = array('Aco');
+	public function initialize(array $config) {
+		$this->belongsTo('Acos', [
+			'className' => App::className('Cake/Acl.AcosTable', 'Model/Table'),
+		]);
+	}
+
 }
