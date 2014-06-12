@@ -34,7 +34,7 @@ define('CORE_PATH', CAKE_CORE_INCLUDE_PATH . DS);
 define('CAKE', CORE_PATH . 'src' . DS);
 define('CORE_TESTS', CORE_PATH . 'tests' . DS);
 define('CORE_TEST_CASES', CORE_TESTS . 'TestCase');
-define('TEST_APP', ROOT . DS . 'Test' . DS . 'test_app' . DS);
+define('TEST_APP', ROOT . DS . 'tests' . DS . 'test_app' . DS);
 define('LOG_ERROR', LOG_ERR);
 
 // Point app constants to the test app.
@@ -56,9 +56,9 @@ $loader = new Cake\Core\ClassLoader;
 $loader->register();
 
 $loader->addNamespace('TestApp', APP);
-$loader->addNamespace('TestPlugin', TEST_APP . 'Plugin/TestPlugin');
-$loader->addNamespace('TestPluginTwo', TEST_APP . 'Plugin/TestPluginTwo');
-$loader->addNamespace('PluginJs', TEST_APP . 'Plugin/PluginJs');
+$loader->addNamespace('TestPlugin', TEST_APP . 'Plugin/TestPlugin/src');
+$loader->addNamespace('TestPluginTwo', TEST_APP . 'Plugin/TestPluginTwo/src');
+$loader->addNamespace('PluginJs', TEST_APP . 'Plugin/PluginJs/src');
 
 require_once CAKE . 'bootstrap.php';
 

@@ -26,8 +26,8 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Cake\\Acl\\": "./",
-			"Cake\\Acl\\Test\\": "./Test"
+			"Cake\\Acl\\": "src",
+			"Cake\\Acl\\Test\\": "tests"
 		}
 	}
 }
