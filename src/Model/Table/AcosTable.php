@@ -39,7 +39,7 @@ class AcosTable extends AclNodesTable {
 			'through' => App::className('Cake/Acl.PermissionsTable', 'Model/Table'),
 			'className' => App::className('Cake/Acl.ArosTable', 'Model/Table'),
 		]);
-		$this->hasMany('Children', [
+		$this->hasMany('AcoChildren', [
 			'className' => App::className('Cake/Acl.AcosTable', 'Model/Table'),
 			'foreignKey' => 'parent_id'
 		]);
