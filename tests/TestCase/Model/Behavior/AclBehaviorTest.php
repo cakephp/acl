@@ -413,8 +413,7 @@ class AclBehaviorTest extends TestCase {
 			'father_id' => 3,
 		]));
 
-		$person = new AclPerson(['id' => 2], ['source' => $Person->alias()]);
-		$person->isNew(false);
+		$person = new AclPerson(['id' => 2], ['source' => $Person->alias(), 'markNew' => false]);
 
 		$Person->delete($person);
 		$result = $this->Aro->find('all', [
