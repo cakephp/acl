@@ -70,7 +70,10 @@ class AclBehavior extends Behavior {
 		}
 		foreach ($types as $type) {
 			$alias = Inflector::pluralize($type);
-			$className = App::className('Acl.' . $alias . 'Table', 'Model/Table');
+			$className = App::className($alias . 'Table', 'Model/Table');
+			if ($className == false) {
+				$className = App::className('Cake/Acl.' . $alias . 'Table', 'Model/Table');
+			}
 			$config = [];
 			if (!TableRegistry::exists($alias)) {
 				$config = ['className' => $className];
