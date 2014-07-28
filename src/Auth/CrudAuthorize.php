@@ -42,35 +42,6 @@ class CrudAuthorize extends BaseAuthorize {
  */
 	public function __construct(ComponentRegistry $registry, $config = array()) {
 		parent::__construct($registry, $config);
-		$this->_setPrefixMappings();
-	}
-
-/**
- * sets the crud mappings for prefix routes.
- *
- * @return void
- */
-	protected function _setPrefixMappings() {
-		$crud = array('create', 'read', 'update', 'delete');
-		$map = array_combine($crud, $crud);
-
-		$prefixes = Router::prefixes();
-		if (!empty($prefixes)) {
-			foreach ($prefixes as $prefix) {
-				$map = array_merge($map, array(
-					$prefix . '_index' => 'read',
-					$prefix . '_add' => 'create',
-					$prefix . '_edit' => 'update',
-					$prefix . '_view' => 'read',
-					$prefix . '_remove' => 'delete',
-					$prefix . '_create' => 'create',
-					$prefix . '_read' => 'read',
-					$prefix . '_update' => 'update',
-					$prefix . '_delete' => 'delete'
-				));
-			}
-		}
-		$this->mapActions($map);
 	}
 
 /**
