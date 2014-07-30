@@ -46,9 +46,11 @@ class DbAcl implements AclInterface {
  *
  */
 	public function __construct() {
-		$this->Permission = TableRegistry::get('Permissions', [
-			'className' => App::className('Cake/Acl.PermissionsTable', 'Model/Table'),
-		]);
+		$config = [];
+		if (!TableRegistry::exists('Permissions')) {
+			$config = ['className' => App::className('Cake/Acl.PermissionsTable', 'Model/Table')];
+		}
+		$this->Permission = TableRegistry::get('Permissions', $config);
 		$this->Aro = $this->Permission->Aros->target();
 		$this->Aco = $this->Permission->Acos->target();
 	}
