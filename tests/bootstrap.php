@@ -14,7 +14,6 @@
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
-use Cake\I18n\I18n;
 use Cake\Log\Log;
 
 require_once 'vendor/autoload.php';
@@ -60,7 +59,7 @@ $loader->addNamespace('TestPlugin', TEST_APP . 'Plugin/TestPlugin/src');
 $loader->addNamespace('TestPluginTwo', TEST_APP . 'Plugin/TestPluginTwo/src');
 $loader->addNamespace('PluginJs', TEST_APP . 'Plugin/PluginJs/src');
 
-require_once CAKE . 'bootstrap.php';
+require_once CORE_PATH . 'config' . DS . 'bootstrap.php';
 
 date_default_timezone_set('UTC');
 mb_internal_encoding('UTF-8');
@@ -129,8 +128,5 @@ Log::config([
 		'file' => 'error',
 	]
 ]);
-
-// Initialize the empty language.
-I18n::translate('empty');
 
 Carbon\Carbon::setTestNow(Carbon\Carbon::now());
