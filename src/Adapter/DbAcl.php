@@ -11,15 +11,13 @@
  * @link          http://cakephp.org CakePHP(tm) Project
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Acl\Adapter;
+namespace Acl\Adapter;
 
-use Cake\Acl\AclInterface;
-use Cake\Acl\Model\Table\PermissionsTable;
+use Acl\AclInterface;
 
 use Cake\Controller\Component;
 use Cake\Core\App;
 use Cake\ORM\TableRegistry;
-use Cake\Utility\Hash;
 
 /**
  * DbAcl implements an ACL control system in the database. ARO's and ACO's are
@@ -48,7 +46,7 @@ class DbAcl implements AclInterface {
 	public function __construct() {
 		$config = [];
 		if (!TableRegistry::exists('Permissions')) {
-			$config = ['className' => App::className('Cake/Acl.PermissionsTable', 'Model/Table')];
+			$config = ['className' => App::className('Acl.PermissionsTable', 'Model/Table')];
 		}
 		$this->Permission = TableRegistry::get('Permissions', $config);
 		$this->Aro = $this->Permission->Aros->target();

@@ -12,7 +12,7 @@
  * @link          http://cakephp.org CakePHP(tm) Project
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Acl\Auth;
+namespace Acl\Auth;
 
 use Cake\Auth\BaseAuthorize;
 use Cake\Network\Request;

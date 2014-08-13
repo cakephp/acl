@@ -11,16 +11,16 @@
  * @link          http://cakephp.org CakePHP(tm) Project
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Acl\Test\TestCase\Adapter;
+namespace Acl\Test\TestCase\Adapter;
 
-use Cake\Acl\Adapter\DbAcl;
-use Cake\Acl\Controller\Component\AclComponent;
-use Cake\Acl\Model\Entity\Aco;
-use Cake\Acl\Model\Entity\Aro;
-use Cake\Acl\Model\Table\AclNodesTable;
-use Cake\Acl\Model\Table\AcosTable;
-use Cake\Acl\Model\Table\ArosTable;
-use Cake\Acl\Model\Table\PermissionsTable;
+use Acl\Adapter\DbAcl;
+use Acl\Controller\Component\AclComponent;
+use Acl\Model\Entity\Aco;
+use Acl\Model\Entity\Aro;
+use Acl\Model\Table\AclNodesTable;
+use Acl\Model\Table\AcosTable;
+use Acl\Model\Table\ArosTable;
+use Acl\Model\Table\PermissionsTable;
 
 use Cake\Controller\ComponentRegistry;
 use Cake\Core\Configure;
@@ -95,7 +95,7 @@ class PermissionTwoTest extends PermissionsTable {
 	public function initialize(array $config) {
 		parent::initialize($config);
 		$this->alias('PermissionTwoTest');
-		$this->entityClass('Cake\Acl\Model\Entity\Permission');
+		$this->entityClass('Acl\Model\Entity\Permission');
 		$this->table('aros_aco_twos');
 		$this->associations()->removeAll();
 		$this->belongsTo('AroTwoTest', [

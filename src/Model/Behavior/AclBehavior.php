@@ -11,7 +11,7 @@
  * @link          http://cakephp.org CakePHP Project
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Acl\Model\Behavior;
+namespace Acl\Model\Behavior;
 
 use Cake\Core\App;
 use Cake\Error;
@@ -20,8 +20,6 @@ use Cake\ORM\Behavior;
 use Cake\ORM\Entity;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
-use Cake\Utility\ClassRegistry;
-use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 
 /**
@@ -72,7 +70,7 @@ class AclBehavior extends Behavior {
 			$alias = Inflector::pluralize($type);
 			$className = App::className($alias . 'Table', 'Model/Table');
 			if ($className == false) {
-				$className = App::className('Cake/Acl.' . $alias . 'Table', 'Model/Table');
+				$className = App::className('Acl.' . $alias . 'Table', 'Model/Table');
 			}
 			$config = [];
 			if (!TableRegistry::exists($alias)) {

@@ -11,11 +11,11 @@
  * @link          http://cakephp.org CakePHP(tm) Project
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Acl\Test\TestCase\Adapter;
+namespace Acl\Test\TestCase\Adapter;
 
-use Cake\Acl\Adapter\PhpAcl;
-use Cake\Acl\Adapter\PhpAro;
-use Cake\Acl\Controller\Component\AclComponent;
+use Acl\Adapter\PhpAcl;
+use Acl\Adapter\PhpAro;
+use Acl\Controller\Component\AclComponent;
 
 use Cake\Controller\ComponentRegistry;
 use Cake\Core\Configure;
