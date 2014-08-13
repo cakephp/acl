@@ -11,9 +11,9 @@
  * @link          http://cakephp.org CakePHP(tm) Project
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Acl\Model\Table;
+namespace Acl\Model\Table;
 
-use Cake\Acl\Model\Table\AclNodesTable;
+use Acl\Model\Table\AclNodesTable;
 
 use Cake\Core\App;
 
@@ -36,15 +36,15 @@ class ArosTable extends AclNodesTable {
 		$this->addBehavior('Tree', ['type' => 'nested']);
 
 		$this->belongsToMany('Acos', [
-			'through' => App::className('Cake/Acl.PermissionsTable', 'Model/Table'),
-			'className' => App::className('Cake/Acl.AcosTable', 'Model/Table'),
+			'through' => App::className('Acl.PermissionsTable', 'Model/Table'),
+			'className' => App::className('Acl.AcosTable', 'Model/Table'),
 		]);
 		$this->hasMany('AroChildren', [
-			'className' => App::className('Cake/Acl.ArosTable', 'Model/Table'),
+			'className' => App::className('Acl.ArosTable', 'Model/Table'),
 			'foreignKey' => 'parent_id'
 		]);
 
-		$this->entityClass('Cake/Acl.Aro', 'Model/Entity');
+		$this->entityClass('Acl.Aro', 'Model/Entity');
 	}
 
 }

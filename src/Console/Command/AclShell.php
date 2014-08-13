@@ -11,9 +11,9 @@
  * @link          http://cakephp.org CakePHP(tm) Project
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Acl\Console\Command;
+namespace Acl\Console\Command;
 
-use Cake\Acl\Controller\Component\AclComponent;
+use Acl\Controller\Component\AclComponent;
 
 use Cake\Console\Shell;
 use Cake\Controller\ComponentRegistry;
@@ -69,10 +69,10 @@ class AclShell extends Shell {
 		}
 
 		$class = Configure::read('Acl.classname');
-		$className = App::classname('Cake/Acl.' . $class, 'Adapter');
+		$className = App::classname('Acl.' . $class, 'Adapter');
 		if (
 			$class !== 'DbAcl' &&
-			!is_subclass_of($className, 'Cake\Acl\Adapter\DbAcl')
+			!is_subclass_of($className, 'Acl\Adapter\DbAcl')
 		) {
 			$out = "--------------------------------------------------\n";
 			$out .= __d('cake_acl', 'Error: Your current CakePHP configuration is set to an ACL implementation other than DB.') . "\n";

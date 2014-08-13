@@ -66,7 +66,7 @@ mb_internal_encoding('UTF-8');
 
 Configure::write('debug', true);
 Configure::write('App', [
-	'namespace' => 'Cake\Acl',
+	'namespace' => 'Acl',
 	'encoding' => 'UTF-8',
 	'base' => false,
 	'baseUrl' => false,

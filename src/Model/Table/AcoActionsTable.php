@@ -11,7 +11,7 @@
  * @link          http://cakephp.org CakePHP(tm) Project
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Acl\Model\Table;
+namespace Acl\Model\Table;
 
 use Cake\ORM\Table;
 
@@ -29,7 +29,7 @@ class AcoActionsTable extends Table {
  */
 	public function initialize(array $config) {
 		$this->belongsTo('Acos', [
-			'className' => App::className('Cake/Acl.AcosTable', 'Model/Table'),
+			'className' => App::className('Acl.AcosTable', 'Model/Table'),
 		]);
 	}
 

@@ -11,9 +11,9 @@
  * @link          http://book.cakephp.org/2.0/en/development/testing.html CakePHP(tm) Tests
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Acl\Test\TestCase\Controller\Component;
+namespace Acl\Test\TestCase\Controller\Component;
 
-use Cake\Acl\Controller\Component\AclComponent;
+use Acl\Controller\Component\AclComponent;
 
 use Cake\Controller\ComponentRegistry;
 use Cake\Core\Configure;
@@ -33,7 +33,7 @@ class AclComponentTest extends TestCase {
 	public function setUp() {
 		parent::setUp();
 		if (!class_exists('MockAclImplementation', false)) {
-			$this->getMock('Cake\Acl\AclInterface', array(), array(), 'MockAclImplementation');
+			$this->getMock('Acl\AclInterface', array(), array(), 'MockAclImplementation');
 		}
 		Configure::write('Acl.classname', '\MockAclImplementation');
 		$Collection = new ComponentRegistry();
@@ -69,7 +69,7 @@ class AclComponentTest extends TestCase {
  * @return void
  */
 	public function testAdapter() {
-		$Adapter = $this->getMock('Cake\Acl\AclInterface');
+		$Adapter = $this->getMock('Acl\AclInterface');
 		$Adapter->expects($this->once())->method('initialize')->with($this->Acl);
 
 		$this->assertNull($this->Acl->adapter($Adapter));
