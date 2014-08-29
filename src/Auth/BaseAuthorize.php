@@ -16,6 +16,7 @@ namespace Acl\Auth;
 use Cake\Auth\BaseAuthorize as ParentAuthorize;
 use Cake\Controller\ComponentRegistry;
 use Cake\Network\Request;
+use Cake\Utility\Inflector;
 
 /**
  * Base authorization adapter for other adapter of this plugin.
