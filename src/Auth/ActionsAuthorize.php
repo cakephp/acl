@@ -14,7 +14,6 @@
  */
 namespace Acl\Auth;
 
-use Cake\Auth\BaseAuthorize;
 use Cake\Network\Request;
 
 /**
