@@ -14,7 +14,6 @@
  */
 namespace Acl\Auth;
 
-use Cake\Auth\BaseAuthorize;
 use Cake\Controller\ComponentRegistry;
 use Cake\Network\Request;
 use Cake\Routing\Router;
