@@ -54,6 +54,7 @@ require CAKE . 'Core/ClassLoader.php';
 $loader = new Cake\Core\ClassLoader;
 $loader->register();
 
+$loader->addNamespace('Cake\Test\Fixture', ROOT . '/vendor/cakephp/cakephp/tests/Fixture');
 $loader->addNamespace('TestApp', APP);
 $loader->addNamespace('TestPlugin', TEST_APP . 'Plugin/TestPlugin/src');
 $loader->addNamespace('TestPluginTwo', TEST_APP . 'Plugin/TestPluginTwo/src');
