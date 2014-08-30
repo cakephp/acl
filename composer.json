@@ -19,14 +19,19 @@
 	},
 	"minimum-stability": "dev",
 	"require": {
-		"cakephp/cakephp": "~3.0"
+		"cakephp/plugin-installer": "dev-master"
 	},
 	"require-dev": {
+		"cakephp/cakephp": "~3.0",
 		"phpunit/phpunit": "*"
 	},
 	"autoload": {
 		"psr-4": {
-			"Acl\\": "src",
+			"Acl\\": "src"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
 			"Acl\\Test\\": "tests"
 		}
 	}
