@@ -19,7 +19,7 @@ use Acl\AclInterface;
 
 use Cake\Configure\Engine\PhpConfig;
 use Cake\Controller\Component;
-use Cake\Error;
+use Cake\Core\Exception\Exception;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 
@@ -103,15 +103,15 @@ class PhpAcl implements AclInterface {
  *
  * @param array $config configuration array, see docs
  * @return void
- * @throws \Cake\Error\Exception When required keys are missing.
+ * @throws \Cake\Core\Exception\Exception When required keys are missing.
  */
 	public function build(array $config) {
 		if (empty($config['roles'])) {
-			throw new Error\Exception('"roles" section not found in ACL configuration.');
+			throw new Exception('"roles" section not found in ACL configuration.');
 		}
 
 		if (empty($config['rules']['allow']) && empty($config['rules']['deny'])) {
-			throw new Error\Exception('Neither "allow" nor "deny" rules were provided in ACL configuration.');
+			throw new Exception('Neither "allow" nor "deny" rules were provided in ACL configuration.');
 		}
 
 		$rules['allow'] = !empty($config['rules']['allow']) ? $config['rules']['allow'] : array();
