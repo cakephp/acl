@@ -20,7 +20,7 @@ use Cake\Controller\Component;
 use Cake\Controller\ComponentRegistry;
 use Cake\Core\App;
 use Cake\Core\Configure;
-use Cake\Error;
+use Cake\Core\Exception\Exception;
 use Cake\Utility\ClassRegistry;
 use Cake\Utility\Inflector;
 
@@ -61,7 +61,7 @@ class AclComponent extends Component {
  *
  * @param ComponentRegistry $collection A ComponentRegistry
  * @param array $config Array of configuration settings
- * @throws \Cake\Error\Exception when Acl.classname could not be loaded.
+ * @throws \Cake\Core\Exception\Exception when Acl.classname could not be loaded.
  */
 	public function __construct(ComponentRegistry $collection, array $config = array()) {
 		parent::__construct($collection, $config);
@@ -69,7 +69,7 @@ class AclComponent extends Component {
 		if (!class_exists($className)) {
 			$className = App::className('Acl.' . $name, 'Adapter');
 			if (!$className) {
-				throw new Error\Exception(sprintf('Could not find %s.', $name));
+				throw new Exception(sprintf('Could not find %s.', $name));
 			}
 		}
 		$this->adapter($className);
@@ -85,7 +85,7 @@ class AclComponent extends Component {
  *
  * @param AclInterface|string $adapter Instance of AclInterface or a string name of the class to use. (optional)
  * @return AclInterface|void either null, or the adapter implementation.
- * @throws \Cake\Error\Exception when the given class is not an instance of AclInterface
+ * @throws \Cake\Core\Exception\Exception when the given class is not an instance of AclInterface
  */
 	public function adapter($adapter = null) {
 		if ($adapter) {
@@ -93,7 +93,7 @@ class AclComponent extends Component {
 				$adapter = new $adapter();
 			}
 			if (!$adapter instanceof AclInterface) {
-				throw new Error\Exception('AclComponent adapters must implement AclInterface');
+				throw new Exception('AclComponent adapters must implement AclInterface');
 			}
 			$this->_Instance = $adapter;
 			$this->_Instance->initialize($this);

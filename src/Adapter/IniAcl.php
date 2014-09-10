@@ -59,7 +59,6 @@ class IniAcl implements AclInterface {
  * @param mixed|null $value The value to set.
  * @param bool $merge Whether to merge or overwrite existing config defaults to true.
  * @return mixed Config value being read, or the object itself on write operations.
- * @throws \Cake\Error\Exception When trying to set a key that is invalid.
  */
 	public function config($key = null, $value = null, $merge = true) {
 		if (!$this->_configInitialized) {

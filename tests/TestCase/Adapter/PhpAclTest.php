@@ -284,7 +284,7 @@ class PhpAclTest extends TestCase {
  */
 	public function testInvalidConfigWithAroMissing() {
 		$this->setExpectedException(
-			'Cake\Error\Exception',
+			'Cake\Core\Exception\Exception',
 			'"roles" section not found in ACL configuration'
 		);
 		$config = array('aco' => array('allow' => array('foo' => '')));
@@ -298,7 +298,7 @@ class PhpAclTest extends TestCase {
  */
 	public function testInvalidConfigWithAcosMissing() {
 		$this->setExpectedException(
-			'Cake\Error\Exception',
+			'Cake\Core\Exception\Exception',
 			'Neither "allow" nor "deny" rules were provided in ACL configuration.'
 		);
 

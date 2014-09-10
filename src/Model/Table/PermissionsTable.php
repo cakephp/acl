@@ -15,7 +15,7 @@ namespace Acl\Model\Table;
 
 use Cake\Core\App;
 use Cake\Core\Configure;
-use Cake\Error;
+use Cake\Core\Exception\Exception;
 use Cake\ORM\Table;
 use Cake\Utility\Hash;
 
@@ -175,7 +175,7 @@ class PermissionsTable extends AclNodesTable {
 					$action = '_' . $action;
 				}
 				if (!in_array($action, $permKeys, true)) {
-					throw new Error\Exception(__d('cake_dev', 'Invalid permission key "%s"', $action));
+					throw new Exception(__d('cake_dev', 'Invalid permission key "%s"', $action));
 				}
 				$save[$action] = $value;
 			}
