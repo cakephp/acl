@@ -19,6 +19,7 @@ following to your `composer.json` file:
 "require": {
 	"cakephp/acl": "dev-master"
 }
+```
 
 And run `php composer.phar update`
 
