@@ -63,13 +63,13 @@ class AclComponent extends Component {
  * @param array $config Array of configuration settings
  * @throws \Cake\Core\Exception\Exception when Acl.classname could not be loaded.
  */
-	public function __construct(ComponentRegistry $collection, array $config = array()) {
+	public function __construct(ComponentRegistry $collection, array $config = []) {
 		parent::__construct($collection, $config);
 		$className = $name = Configure::read('Acl.classname');
 		if (!class_exists($className)) {
 			$className = App::className('Acl.' . $name, 'Adapter');
 			if (!$className) {
-				throw new Exception(sprintf('Could not find %s.', $name));
+				throw new Exception(sprintf('Could not find {0}.', [$name]));
 			}
 		}
 		$this->adapter($className);

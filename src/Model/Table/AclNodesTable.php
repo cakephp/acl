@@ -116,7 +116,7 @@ class AclNodesTable extends Table {
 			}
 
 			if (empty($entity)) {
-				throw new Error\Exception(__d('cake_dev', "Entity class '%s' not found in AclNode::node() when trying to bind %s object", $type, $this->alias()));
+				throw new Error\Exception(__d('cake_dev', "Entity class '{0}' not found in AclNode::node() when trying to bind {1} object", [$type, $this->alias()]));
 			}
 
 			$tmpRef = null;
@@ -165,7 +165,7 @@ class AclNodesTable extends Table {
 			$query = $this->find('all', $queryData);
 
 			if ($query->count() == 0) {
-				throw new Error\Exception(__d('cake_dev', "AclNode::node() - Couldn't find %s node identified by \"%s\"", $type, print_r($ref, true)));
+				throw new Error\Exception(__d('cake_dev', "AclNode::node() - Couldn't find {0} node identified by \"{0}\"", [$type, print_r($ref, true)]));
 			}
 		}
 		return $query;
