@@ -14,7 +14,7 @@
 namespace Acl\Model\Behavior;
 
 use Cake\Core\App;
-use Cake\Error;
+use Cake\Core\Exception;
 use Cake\Event\Event;
 use Cake\ORM\Behavior;
 use Cake\ORM\Entity;
@@ -104,7 +104,7 @@ class AclBehavior extends Behavior {
 			}
 		}
 		if (empty($ref)) {
-			throw new Error\Exception(__d('cake_dev', 'ref parameter must be a string or an Entity'));
+			throw new Exception\Exception(__d('cake_dev', 'ref parameter must be a string or an Entity'));
 		}
 		return $this->_table->{$type}->node($ref);
 	}
