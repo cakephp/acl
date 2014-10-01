@@ -13,13 +13,10 @@
  */
 namespace Acl\Model\Table;
 
-use Cake\Core\App;
 use Cake\Core\Configure;
-use Cake\Error;
+use Cake\Core\Exception;
 use Cake\ORM\Entity;
 use Cake\ORM\Table;
-use Cake\ORM\TableRegistry;
-use Cake\Utility\Inflector;
 
 /**
  * ACL Nodes
@@ -116,7 +113,7 @@ class AclNodesTable extends Table {
 			}
 
 			if (empty($entity)) {
-				throw new Error\Exception(__d('cake_dev', "Entity class '{0}' not found in AclNode::node() when trying to bind {1} object", [$type, $this->alias()]));
+				throw new Exception\Exception(__d('cake_dev', "Entity class '{0}' not found in AclNode::node() when trying to bind {1} object", [$type, $this->alias()]));
 			}
 
 			$tmpRef = null;
@@ -165,7 +162,7 @@ class AclNodesTable extends Table {
 			$query = $this->find('all', $queryData);
 
 			if ($query->count() == 0) {
-				throw new Error\Exception(__d('cake_dev', "AclNode::node() - Couldn't find {0} node identified by \"{0}\"", [$type, print_r($ref, true)]));
+				throw new Exception\Exception(__d('cake_dev', "AclNode::node() - Couldn't find {0} node identified by \"{0}\"", [$type, print_r($ref, true)]));
 			}
 		}
 		return $query;
