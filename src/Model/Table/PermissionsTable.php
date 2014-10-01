@@ -157,7 +157,7 @@ class PermissionsTable extends AclNodesTable {
 		$save = array();
 
 		if (!$perms) {
-			trigger_error(__d('cake_dev', '%s - Invalid node', 'DbAcl::allow()'), E_USER_WARNING);
+			trigger_error(__d('cake_dev', '{0} - Invalid node', ['DbAcl::allow()']), E_USER_WARNING);
 			return false;
 		}
 		if (isset($perms[0])) {
@@ -175,7 +175,7 @@ class PermissionsTable extends AclNodesTable {
 					$action = '_' . $action;
 				}
 				if (!in_array($action, $permKeys, true)) {
-					throw new Exception(__d('cake_dev', 'Invalid permission key "%s"', $action));
+					throw new Exception(__d('cake_dev', 'Invalid permission key "{0}"', [$action]));
 				}
 				$save[$action] = $value;
 			}

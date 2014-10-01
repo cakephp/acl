@@ -82,7 +82,7 @@ class AclBehavior extends Behavior {
 		}
 
 		if (!method_exists($model->entityClass(), 'parentNode')) {
-			trigger_error(__d('cake_dev', 'Callback %s not defined in %s', 'parentNode()', $model->entityClass()), E_USER_WARNING);
+			trigger_error(__d('cake_dev', 'Callback {0} not defined in {1}', ['parentNode()', $model->entityClass()]), E_USER_WARNING);
 		}
 	}
 

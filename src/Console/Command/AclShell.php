@@ -78,7 +78,7 @@ class AclShell extends Shell {
 			$out .= __d('cake_acl', 'Error: Your current CakePHP configuration is set to an ACL implementation other than DB.') . "\n";
 			$out .= __d('cake_acl', 'Please change your core config to reflect your decision to use DbAcl before attempting to use this script') . "\n";
 			$out .= "--------------------------------------------------\n";
-			$out .= __d('cake_acl', 'Current ACL Classname: %s', $class) . "\n";
+			$out .= __d('cake_acl', 'Current ACL Classname: {0}', [$class]) . "\n";
 			$out .= "--------------------------------------------------\n";
 			$this->err($out);
 			return $this->_stop();
@@ -135,9 +135,9 @@ class AclShell extends Shell {
 		$data['parent_id'] = $parent;
 		$entity = $this->Acl->{$class}->newEntity($data);
 		if ($this->Acl->{$class}->save($entity)) {
-			$this->out(__d('cake_acl', "<success>New %s</success> '%s' created.", $class, $this->args[2]), 2);
+			$this->out(__d('cake_acl', "<success>New {0}</success> '{1}' created.", [$class, $this->args[2]]), 2);
 		} else {
-			$this->err(__d('cake_acl', "There was a problem creating a new %s '%s'.", $class, $this->args[2]));
+			$this->err(__d('cake_acl', "There was a problem creating a new {0} '{1}'.", [$class, $this->args[2]]));
 		}
 	}
 
@@ -154,9 +154,9 @@ class AclShell extends Shell {
 		$entity = $this->Acl->{$class}->newEntity(['id' => $nodeId]);
 
 		if (!$this->Acl->{$class}->delete($entity)) {
-			$this->error(__d('cake_acl', 'Node Not Deleted') . __d('cake_acl', 'There was an error deleting the %s. Check that the node exists.', $class) . "\n");
+			$this->error(__d('cake_acl', 'Node Not Deleted') . __d('cake_acl', 'There was an error deleting the {0}. Check that the node exists.', [$class]) . "\n");
 		}
-		$this->out(__d('cake_acl', '<success>%s deleted.</success>', $class), 2);
+		$this->out(__d('cake_acl', '<success>{0} deleted.</success>', [$class]), 2);
 	}
 
 /**
@@ -179,7 +179,7 @@ class AclShell extends Shell {
 		if (!$this->Acl->{$class}->save($data)) {
 			$this->out(__d('cake_acl', 'Error in setting new parent. Please make sure the parent node exists, and is not a descendant of the node specified.'));
 		} else {
-			$this->out(__d('cake_acl', 'Node parent set to %s', $this->args[2]) . "\n");
+			$this->out(__d('cake_acl', 'Node parent set to {0}', [$this->args[2]]) . "\n");
 		}
 	}
 
@@ -197,7 +197,7 @@ class AclShell extends Shell {
 
 		if (empty($nodes) || $nodes->count() === 0) {
 			$this->error(
-				__d('cake_acl', "Supplied Node '%s' not found", $this->args[1]),
+				__d('cake_acl', "Supplied Node '{0}' not found", [$this->args[1]]),
 				__d('cake_acl', 'No tree returned.')
 			);
 		}
@@ -235,9 +235,9 @@ class AclShell extends Shell {
 		extract($this->_getParams());
 
 		if ($this->Acl->check($aro, $aco, $action)) {
-			$this->out(__d('cake_acl', '%s is <success>allowed</success>.', $aroName));
+			$this->out(__d('cake_acl', '{0} is <success>allowed</success>.', [$aroName]));
 		} else {
-			$this->out(__d('cake_acl', '%s is <error>not allowed</error>.', $aroName));
+			$this->out(__d('cake_acl', '{0} is <error>not allowed</error>.', [$aroName]));
 		}
 	}
 
@@ -315,9 +315,9 @@ class AclShell extends Shell {
 
 		if ($nodes->count() === 0) {
 			if (isset($this->args[1])) {
-				$this->error(__d('cake_acl', '%s not found', $this->args[1]), __d('cake_acl', 'No tree returned.'));
+				$this->error(__d('cake_acl', '{0} not found', [$this->args[1]]), __d('cake_acl', 'No tree returned.'));
 			} elseif (isset($this->args[0])) {
-				$this->error(__d('cake_acl', '%s not found', $this->args[0]), __d('cake_acl', 'No tree returned.'));
+				$this->error(__d('cake_acl', '{0} not found', [$this->args[0]]), __d('cake_acl', 'No tree returned.'));
 			}
 		}
 		$this->out($class . ' tree:');
@@ -527,7 +527,7 @@ class AclShell extends Shell {
 		$conditions = [$class . '.' . $key => $this->args[1]];
 		$possibility = $this->Acl->{$class}->find('all', compact('conditions'));
 		if (empty($possibility)) {
-			$this->error(__d('cake_acl', '%s not found', $this->args[1]), __d('cake_acl', 'No tree returned.'));
+			$this->error(__d('cake_acl', '{0} not found', [$this->args[1]]), __d('cake_acl', 'No tree returned.'));
 		}
 		return $possibility;
 	}
@@ -563,7 +563,7 @@ class AclShell extends Shell {
 			if (is_array($identifier)) {
 				$identifier = var_export($identifier, true);
 			}
-			$this->error(__d('cake_acl', 'Could not find node using reference "%s"', $identifier));
+			$this->error(__d('cake_acl', 'Could not find node using reference "{0}"', [$identifier]));
 			return;
 		}
 		return $node->first()->id;
