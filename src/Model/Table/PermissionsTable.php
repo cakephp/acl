@@ -63,7 +63,7 @@ class PermissionsTable extends AclNodesTable {
 
 		if (!$aroPath || !$acoPath) {
 			trigger_error(__d('cake_dev',
-					"%s - Failed ARO/ACO node lookup in permissions check. Node references:\nAro: %s\nAco: %s",
+					"{0} - Failed ARO/ACO node lookup in permissions check. Node references:\nAro: {1}\nAco: {2}",
 					'DbAcl::check()',
 					print_r($aro, true),
 					print_r($aco, true)),
@@ -74,7 +74,7 @@ class PermissionsTable extends AclNodesTable {
 
 		if (!$acoPath) {
 			trigger_error(__d('cake_dev',
-					"%s - Failed ACO node lookup in permissions check. Node references:\nAro: %s\nAco: %s",
+					"{0} - Failed ACO node lookup in permissions check. Node references:\nAro: {1}\nAco: {2}",
 					'DbAcl::check()',
 					print_r($aro, true),
 					print_r($aco, true)),
@@ -84,7 +84,7 @@ class PermissionsTable extends AclNodesTable {
 		}
 
 		if ($action !== '*' && !in_array('_' . $action, $permKeys)) {
-			trigger_error(__d('cake_dev', "ACO permissions key %s does not exist in %s", $action, 'DbAcl::check()'), E_USER_NOTICE);
+			trigger_error(__d('cake_dev', "ACO permissions key {0} does not exist in {1}", $action, 'DbAcl::check()'), E_USER_NOTICE);
 			return false;
 		}
 
