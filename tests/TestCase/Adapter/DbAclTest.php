@@ -28,8 +28,6 @@ use Cake\ORM\TableRegistry;
 use Cake\TestSuite\Fixture\TestModel;
 use Cake\TestSuite\TestCase;
 
-//require_once dirname(dirname(dirname(__DIR__))) . DS . 'Model/models.php';
-
 /**
  * AroTwoTest class
  *
@@ -144,7 +142,7 @@ class DbAclTest extends TestCase {
  *
  * @var array
  */
-	public $fixtures = array('app.aro_two', 'app.aco_two', 'app.aros_aco_two');
+	public $fixtures = array('app.aro_twos', 'app.aco_twos', 'app.aros_aco_twos');
 
 /**
  * setUp method

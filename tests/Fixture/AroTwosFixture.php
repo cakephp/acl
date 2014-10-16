@@ -19,7 +19,7 @@ use Cake\TestSuite\Fixture\TestFixture;
  * Short description for class.
  *
  */
-class AcoTwoFixture extends TestFixture {
+class AroTwosFixture extends TestFixture {
 
 /**
  * fields property
@@ -43,15 +43,15 @@ class AcoTwoFixture extends TestFixture {
  * @var array
  */
 	public $records = array(
-		array('parent_id' => null, 'model' => null, 'foreign_key' => null, 'alias' => 'ROOT', 'lft' => 1, 'rght' => 20),
-		array('parent_id' => 1, 'model' => null, 'foreign_key' => null, 'alias' => 'tpsReports', 'lft' => 2, 'rght' => 9),
-		array('parent_id' => 2, 'model' => null, 'foreign_key' => null, 'alias' => 'view', 'lft' => 3, 'rght' => 6),
-		array('parent_id' => 3, 'model' => null, 'foreign_key' => null, 'alias' => 'current', 'lft' => 4, 'rght' => 5),
-		array('parent_id' => 2, 'model' => null, 'foreign_key' => null, 'alias' => 'update', 'lft' => 7, 'rght' => 8),
-		array('parent_id' => 1, 'model' => null, 'foreign_key' => null, 'alias' => 'printers', 'lft' => 10, 'rght' => 19),
-		array('parent_id' => 6, 'model' => null, 'foreign_key' => null, 'alias' => 'print', 'lft' => 11, 'rght' => 14),
-		array('parent_id' => 7, 'model' => null, 'foreign_key' => null, 'alias' => 'lettersize', 'lft' => 12, 'rght' => 13),
-		array('parent_id' => 6, 'model' => null, 'foreign_key' => null, 'alias' => 'refill', 'lft' => 15, 'rght' => 16),
-		array('parent_id' => 6, 'model' => null, 'foreign_key' => null, 'alias' => 'smash', 'lft' => 17, 'rght' => 18),
+		array('parent_id' => null, 'model' => null, 'foreign_key' => null, 'alias' => 'root', 'lft' => '1', 'rght' => '20'),
+		array('parent_id' => 1, 'model' => 'Group', 'foreign_key' => '1', 'alias' => 'admin', 'lft' => '2', 'rght' => '5'),
+		array('parent_id' => 1, 'model' => 'Group', 'foreign_key' => '2', 'alias' => 'managers', 'lft' => '6', 'rght' => '9'),
+		array('parent_id' => 1, 'model' => 'Group', 'foreign_key' => '3', 'alias' => 'users', 'lft' => '10', 'rght' => '19'),
+		array('parent_id' => 2, 'model' => 'User', 'foreign_key' => '1', 'alias' => 'Bobs', 'lft' => '3', 'rght' => '4'),
+		array('parent_id' => 3, 'model' => 'User', 'foreign_key' => '2', 'alias' => 'Lumbergh', 'lft' => '7', 'rght' => '8'),
+		array('parent_id' => 4, 'model' => 'User', 'foreign_key' => '3', 'alias' => 'Samir', 'lft' => '11', 'rght' => '12'),
+		array('parent_id' => 4, 'model' => 'User', 'foreign_key' => '4', 'alias' => 'Micheal', 'lft' => '13', 'rght' => '14'),
+		array('parent_id' => 4, 'model' => 'User', 'foreign_key' => '5', 'alias' => 'Peter', 'lft' => '15', 'rght' => '16'),
+		array('parent_id' => 4, 'model' => 'User', 'foreign_key' => '6', 'alias' => 'Milton', 'lft' => '17', 'rght' => '18'),
 	);
 }

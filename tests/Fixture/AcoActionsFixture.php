@@ -19,7 +19,7 @@ use Cake\TestSuite\Fixture\TestFixture;
  * Short description for class.
  *
  */
-class ArosAcoFixture extends TestFixture {
+class AcoActionsFixture extends TestFixture {
 
 /**
  * fields property
@@ -28,12 +28,12 @@ class ArosAcoFixture extends TestFixture {
  */
 	public $fields = array(
 		'id' => ['type' => 'integer'],
-		'aro_id' => ['type' => 'integer', 'length' => 10, 'null' => false],
-		'aco_id' => ['type' => 'integer', 'length' => 10, 'null' => false],
-		'_create' => ['type' => 'string', 'length' => 2, 'default' => 0],
-		'_read' => ['type' => 'string', 'length' => 2, 'default' => 0],
-		'_update' => ['type' => 'string', 'length' => 2, 'default' => 0],
-		'_delete' => ['type' => 'string', 'length' => 2, 'default' => 0],
+		'parent_id' => ['type' => 'integer', 'length' => 10, 'null' => true],
+		'model' => ['type' => 'string', 'default' => ''],
+		'foreign_key' => ['type' => 'integer', 'length' => 10, 'null' => true],
+		'alias' => ['type' => 'string', 'default' => ''],
+		'lft' => ['type' => 'integer', 'length' => 10, 'null' => true],
+		'rght' => ['type' => 'integer', 'length' => 10, 'null' => true],
 		'_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]]
 	);
 

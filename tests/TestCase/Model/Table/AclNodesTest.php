@@ -172,8 +172,8 @@ class AclNodeTest extends TestCase {
  * @var array
  */
 	public $fixtures = [
-		'app.aro', 'app.aco', 'app.aros_aco',
-		'app.aco_action', 'core.auth_user',
+		'app.aros', 'app.acos', 'app.aros_acos',
+		'app.aco_actions', 'core.auth_users',
 	];
 
 /**

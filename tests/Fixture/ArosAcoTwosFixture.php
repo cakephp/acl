@@ -19,7 +19,7 @@ use Cake\TestSuite\Fixture\TestFixture;
  * Short description for class.
  *
  */
-class ArosAcoTwoFixture extends TestFixture {
+class ArosAcoTwosFixture extends TestFixture {
 
 /**
  * fields property

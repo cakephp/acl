@@ -11,7 +11,7 @@
  * @link          http://cakephp.org CakePHP Project
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Auth\Test\TestCase\Model\Behavior;
+namespace Cake\Acl\Test\TestCase\Model\Behavior;
 
 use Acl\Model\Behavior\AclBehavior;
 use Acl\Model\Entity\Aco;
@@ -171,8 +171,8 @@ class AclBehaviorTest extends TestCase {
  * @var array
  */
 	public $fixtures = [
-		'core.person', 'core.user', 'core.post',
-		'app.aco', 'app.aro', 'app.aros_aco',
+		'app.people', 'core.users', 'core.posts',
+		'app.acos', 'app.aros', 'app.aros_acos',
 	];
 
 /**
