@@ -32,7 +32,8 @@
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"Acl\\Test\\": "tests"
+			"Acl\\Test\\": "tests",
+			"Cake\\Test\\": "vendor/cakephp/cakephp/tests"
 		}
 	}
 }
