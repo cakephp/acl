@@ -22,22 +22,10 @@ use Cake\ORM\Entity;
 use Cake\Utility\Inflector;
 
 /**
- * DbAcl implements an ACL control system in the database. ARO's and ACO's are
- * structured into trees and a linking table is used to define permissions. You
- * can install the schema for DbAcl with the Schema Shell.
+ * CachedDbAcl extends DbAcl to add caching of permissions.
  *
- * `$aco` and `$aro` parameters can be slash delimited paths to tree nodes.
- *
- * eg. `controllers/Users/edit`
- *
- * Would point to a tree structure like
- *
- * {{{
- *	controllers
- *		Users
- *			edit
- * }}}
- *
+ * Its usage is identical to that of DbAcl, however it supports a `Acl.cacheConfig` configuration value
+ * This configuration value tells CachedDbAcl what cache config should be used.
  */
 class CachedDbAcl extends DbAcl implements AclInterface {
 
@@ -56,15 +44,10 @@ class CachedDbAcl extends DbAcl implements AclInterface {
 	}
 
 /**
- * Checks if the given $aro has access to action $action in $aco
- *
- * @param string $aro ARO The requesting object identifier.
- * @param string $aco ACO The controlled object identifier.
- * @param string $action Action (defaults to *)
- * @return bool Success (true if ARO has access to action in ACO, false otherwise)
+ * {{@inheritDoc}}
  */
 	public function check($aro, $aco, $action = "*") {
-		$key = $this->_getCacheKey($aro) . '_' . $this->_getCacheKey($aco) . ($action == '*' ? '' : '_' . $action);
+		$key = $this->_getCacheKey($aro, $aco, $action);
 
 		$permission = Cache::remember($key, function () use ($aro, $aco, $action) {
 			return $this->Permission->check($aro, $aco, $action) === true ? 'true' : 'false';
@@ -74,12 +57,33 @@ class CachedDbAcl extends DbAcl implements AclInterface {
 	}
 
 /**
+ * {{@inheritDoc}}
+ */
+	public function allow($aro, $aco, $actions = "*", $value = 1) {
+		Cache::clear($this->__cacheConfig);
+
+		return parent::allow($aro, $aco, $actions, $value);
+	}
+
+/**
+ * Generates a string cache key for the ARO, ACO pair
+ *
+ * @param string|array|Entity $aro The requesting object identifier.
+ * @param string|array|Entity $aco The controlled object identifier.
+ * @param string $action Action
+ * @return string
+ */
+	protected function _getCacheKey($aro, $aco, $action = '*') {
+		return $this->_getNodeCacheKey($aro) . '_' . $this->_getNodeCacheKey($aco) . ($action == '*' ? '' : '_' . $action);
+	}
+
+/**
  * Generates a key string to use for the cache
  *
  * @param string|array|Entity $ref Array with 'model' and 'foreign_key', model object, or string value
  * @return string
  */
-	protected function _getCacheKey($ref) {
+	protected function _getNodeCacheKey($ref) {
 		if (empty($ref)) {
 			return '';
 		} elseif (is_string($ref)) {
