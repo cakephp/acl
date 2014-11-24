@@ -60,7 +60,7 @@ class CachedDbAcl extends DbAcl implements AclInterface {
  * {{@inheritDoc}}
  */
 	public function allow($aro, $aco, $actions = "*", $value = 1) {
-		Cache::clear($this->__cacheConfig);
+		Cache::clear(false, $this->__cacheConfig);
 
 		return parent::allow($aro, $aco, $actions, $value);
 	}
