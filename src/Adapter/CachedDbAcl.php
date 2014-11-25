@@ -74,7 +74,7 @@ class CachedDbAcl extends DbAcl implements AclInterface {
  * @return string
  */
 	protected function _getCacheKey($aro, $aco, $action = '*') {
-		return $this->_getNodeCacheKey($aro) . '_' . $this->_getNodeCacheKey($aco) . ($action == '*' ? '' : '_' . $action);
+		return strtolower($this->_getNodeCacheKey($aro) . '_' . $this->_getNodeCacheKey($aco) . ($action == '*' ? '' : '_' . $action));
 	}
 
 /**
