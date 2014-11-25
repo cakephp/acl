@@ -29,7 +29,7 @@ use Cake\Utility\Inflector;
  */
 class CachedDbAcl extends DbAcl implements AclInterface {
 
-	private $__cacheConfig = 'default';
+	protected $_cacheConfig = 'default';
 
 /**
  * Constructor
@@ -39,7 +39,7 @@ class CachedDbAcl extends DbAcl implements AclInterface {
 		parent::__construct();
 
 		if (Configure::check('Acl.cacheConfig')) {
-			$this->__cacheConfig = Configure::read('Acl.cacheConfig');
+			$this->_cacheConfig = Configure::read('Acl.cacheConfig');
 		}
 	}
 
@@ -51,7 +51,7 @@ class CachedDbAcl extends DbAcl implements AclInterface {
 
 		$permission = Cache::remember($key, function () use ($aro, $aco, $action) {
 			return $this->Permission->check($aro, $aco, $action) === true ? 'true' : 'false';
-		}, $this->__cacheConfig);
+		}, $this->_cacheConfig);
 
 		return $permission === 'true';
 	}
@@ -60,7 +60,7 @@ class CachedDbAcl extends DbAcl implements AclInterface {
  * {{@inheritDoc}}
  */
 	public function allow($aro, $aco, $actions = "*", $value = 1) {
-		Cache::clear(false, $this->__cacheConfig);
+		Cache::clear(false, $this->_cacheConfig);
 
 		return parent::allow($aro, $aco, $actions, $value);
 	}
