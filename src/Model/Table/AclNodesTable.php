@@ -38,7 +38,7 @@ class AclNodesTable extends Table {
  *
  * @param string|array|Model $ref Array with 'model' and 'foreign_key', model object, or string value
  * @return array Node found in database
- * @throws Cake\Error\Exception when binding to a model that doesn't exist.
+ * @throws \Cake\Core\Exception\Exception when binding to a model that doesn't exist.
  */
 	public function node($ref = null) {
 		$db = $this->connection();
