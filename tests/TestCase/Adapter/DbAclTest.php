@@ -476,7 +476,7 @@ class DbAclTest extends TestCase {
  * Generates a list of the current aro and aco structures and a grid dump of the permissions that are defined
  * Only designed to work with the db based ACL
  *
- * @param boolean $printTreesToo Set to True to output tree data to screen
+ * @param bool $printTreesToo Set to True to output tree data to screen
  * @return void
  */
 	protected function _debug($printTreesToo = false) {
@@ -523,7 +523,7 @@ class DbAclTest extends TestCase {
  * Used by debug to format strings used in the data dump
  *
  * @param string $string String for padding
- * @param integer $len Padding length
+ * @param int $len Padding length
  * @return void
  */
 	protected function _pad($string = '', $len = 14) {

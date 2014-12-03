@@ -93,7 +93,7 @@ class AclBehavior extends Behavior {
  * @param string $type Only needed when Acl is set up as 'both', specify 'Aro' or 'Aco' to get the correct node
  * @return Cake\ORM\Query
  * @link http://book.cakephp.org/2.0/en/core-libraries/behaviors/acl.html#node
- * @throws Cake\Error\Exception
+ * @throws \Cake\Core\Exception\Exception
  */
 	public function node($ref = null, $type = null) {
 		if (empty($type)) {

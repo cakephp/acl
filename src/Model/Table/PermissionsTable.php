@@ -50,7 +50,7 @@ class PermissionsTable extends AclNodesTable {
  * @param string $aro ARO The requesting object identifier.
  * @param string $aco ACO The controlled object identifier.
  * @param string $action Action (defaults to *)
- * @return boolean Success (true if ARO has access to action in ACO, false otherwise)
+ * @return bool Success (true if ARO has access to action in ACO, false otherwise)
  */
 	public function check($aro, $aco, $action = '*') {
 		if (!$aro || !$aco) {
@@ -146,9 +146,9 @@ class PermissionsTable extends AclNodesTable {
  * @param string $aro ARO The requesting object identifier.
  * @param string $aco ACO The controlled object identifier.
  * @param string $actions Action (defaults to *) Invalid permissions will result in an exception
- * @param integer $value Value to indicate access type (1 to give access, -1 to deny, 0 to inherit)
- * @return boolean Success
- * @throws Cake\Error\Exception on Invalid permission key.
+ * @param int $value Value to indicate access type (1 to give access, -1 to deny, 0 to inherit)
+ * @return bool Success
+ * @throws \Cake\Core\Exception\Exception on Invalid permission key.
  */
 	public function allow($aro, $aco, $actions = '*', $value = 1) {
 		$perms = $this->getAclLink($aro, $aco);
