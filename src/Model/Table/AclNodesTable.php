@@ -162,7 +162,7 @@ class AclNodesTable extends Table {
 			$query = $this->find('all', $queryData);
 
 			if ($query->count() == 0) {
-				throw new Exception\Exception(__d('cake_dev', "AclNode::node() - Couldn't find {0} node identified by \"{0}\"", [$type, print_r($ref, true)]));
+				throw new Exception\Exception(__d('cake_dev', "AclNode::node() - Couldn't find {0} node identified by \"{1}\"", [$type, print_r($ref, true)]));
 			}
 		}
 		return $query;
