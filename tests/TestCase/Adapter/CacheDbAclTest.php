@@ -28,11 +28,14 @@ use Cake\TestSuite\TestCase;
  */
 class CachedDbAclTwoTest extends CachedDbAcl {
 
+	public $Permission = null;
+
 /**
  * construct method
  *
  */
 	public function __construct() {
+		$this->_cacheConfig = 'tests';
 	}
 
 /**
@@ -66,6 +69,12 @@ class CacheDbAclTest extends TestCase {
 		Configure::write('Acl.classname', __NAMESPACE__ . '\CachedDbAclTwoTest');
 
 		$this->CachedDb = new CachedDbAclTwoTest();
+
+		Cache::config('tests', [
+			'engine' => 'File',
+			'path' => TMP,
+			'prefix' => 'test_'
+		]);
 	}
 
 /**
@@ -76,6 +85,8 @@ class CacheDbAclTest extends TestCase {
 	public function tearDown() {
 		parent::tearDown();
 		unset($this->Acl);
+		Cache::clear(false, 'tests');
+		Cache::drop('tests');
 	}
 
 /**
@@ -93,5 +104,68 @@ class CacheDbAclTest extends TestCase {
 			'id' => '1'
 		], ['source' => 'User']);
 		$this->assertSame('user_1_print', $this->CachedDb->getCacheKey($entity, 'print', '*'));
+	}
+
+/**
+ * Tests that permissions are cached
+ *
+ * @return void
+ */
+	public function testCaching() {
+		$this->CachedDb->Permission = $this->getMock('Acl\\Model\\Table\\PermissionsTable');
+
+		$this->CachedDb->Permission
+			->expects($this->once())
+			->method('check')
+			->with('Samir', 'print', '*')
+			->will($this->returnValue(true));
+
+		$this->assertTrue($this->CachedDb->check('Samir', 'print'));
+		$this->assertTrue($this->CachedDb->check('Samir', 'print'));
+	}
+
+/**
+ * Tests that permissions are cached for false permissions
+ *
+ * @return void
+ */
+	public function testCacheFalse() {
+		$this->CachedDb->Permission = $this->getMock('Acl\\Model\\Table\\PermissionsTable');
+
+		$this->CachedDb->Permission
+			->expects($this->once())
+			->method('check')
+			->with('Samir', 'view', 'create')
+			->will($this->returnValue(false));
+
+		$this->assertFalse($this->CachedDb->check('Samir', 'view', 'create'));
+		$this->assertFalse($this->CachedDb->check('Samir', 'view', 'create'));
+	}
+
+/**
+ * Tests that permissions cache is cleared when updated
+ *
+ * @return void
+ */
+	public function testCacheCleared() {
+		$this->CachedDb->Permission = $this->getMock('Acl\\Model\\Table\\PermissionsTable');
+
+		$this->CachedDb->Permission
+			->expects($this->exactly(2))
+			->method('check')
+			->with('Samir', 'view', '*')
+			->will($this->returnValue(true));
+
+		$this->CachedDb->Permission
+			->expects($this->once())
+			->method('allow')
+			->with('Samir', 'view', '*', 1)
+			->will($this->returnValue(true));
+
+		$this->assertTrue($this->CachedDb->check('Samir', 'view'));
+
+		$this->CachedDb->allow('Samir', 'view');
+
+		$this->assertTrue($this->CachedDb->check('Samir', 'view'));
 	}
 }
