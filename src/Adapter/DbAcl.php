@@ -30,9 +30,9 @@ use Cake\ORM\TableRegistry;
  * Would point to a tree structure like
  *
  * {{{
- *	controllers
- *		Users
- *			edit
+ *    controllers
+ *        Users
+ *            edit
  * }}}
  *
  */

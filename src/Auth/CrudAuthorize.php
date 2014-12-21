@@ -57,10 +57,11 @@ class CrudAuthorize extends BaseAuthorize
         $mapped = $this->config('actionMap.' . $request->params['action']);
 
         if (!$mapped) {
-            trigger_error(sprintf(
-                'CrudAuthorize::authorize() - Attempted access of un-mapped action "%1$s" in controller "%2$s"',
-                $request->action,
-                $request->controller
+            trigger_error(
+                sprintf(
+                    'CrudAuthorize::authorize() - Attempted access of un-mapped action "%1$s" in controller "%2$s"',
+                    $request->action,
+                    $request->controller
                 ),
                 E_USER_WARNING
             );
