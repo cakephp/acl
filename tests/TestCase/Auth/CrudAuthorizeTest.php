@@ -23,145 +23,152 @@ use Cake\TestSuite\TestCase;
  * Class CrudAuthorizeTest
  *
  */
-class CrudAuthorizeTest extends TestCase {
+class CrudAuthorizeTest extends TestCase
+{
 
-/**
- * setup
- *
- * @return void
- */
-	public function setUp() {
-		parent::setUp();
-		Configure::write('Routing.prefixes', array());
-		Router::reload();
+    /**
+     * setup
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        parent::setUp();
+        Configure::write('Routing.prefixes', array());
+        Router::reload();
 
-		$this->Acl = $this->getMock('Acl\Controller\Component\AclComponent', array(), array(), '', false);
-		$this->Components = $this->getMock('Cake\Controller\ComponentRegistry');
+        $this->Acl = $this->getMock('Acl\Controller\Component\AclComponent', array(), array(), '', false);
+        $this->Components = $this->getMock('Cake\Controller\ComponentRegistry');
 
-		$this->auth = new CrudAuthorize($this->Components);
-	}
+        $this->auth = new CrudAuthorize($this->Components);
+    }
 
-/**
- * setup the mock acl.
- *
- * @return void
- */
-	protected function _mockAcl() {
-		$this->Components->expects($this->any())
-			->method('load')
-			->with('Acl')
-			->will($this->returnValue($this->Acl));
-	}
+    /**
+     * setup the mock acl.
+     *
+     * @return void
+     */
+    protected function _mockAcl()
+    {
+        $this->Components->expects($this->any())
+            ->method('load')
+            ->with('Acl')
+            ->will($this->returnValue($this->Acl));
+    }
 
-/**
- * test authorize() without a mapped action, ensure an error is generated.
- *
- * @expectedException PHPUnit_Framework_Error_Warning
- * @return void
- */
-	public function testAuthorizeNoMappedAction() {
-		$request = new Request('/posts/foobar');
-		$request->addParams(array(
-			'controller' => 'posts',
-			'action' => 'foobar'
-		));
-		$user = array('User' => array('username' => 'mark'));
+    /**
+     * test authorize() without a mapped action, ensure an error is generated.
+     *
+     * @expectedException PHPUnit_Framework_Error_Warning
+     * @return void
+     */
+    public function testAuthorizeNoMappedAction()
+    {
+        $request = new Request('/posts/foobar');
+        $request->addParams(array(
+            'controller' => 'posts',
+            'action' => 'foobar'
+        ));
+        $user = array('User' => array('username' => 'mark'));
 
-		$this->auth->authorize($user, $request);
-	}
+        $this->auth->authorize($user, $request);
+    }
 
-/**
- * test check() passing
- *
- * @return void
- */
-	public function testAuthorizeCheckSuccess() {
-		$request = new Request('posts/index');
-		$request->addParams(array(
-			'controller' => 'posts',
-			'action' => 'index'
-		));
-		$user = array('Users' => array('username' => 'mark'));
+    /**
+     * test check() passing
+     *
+     * @return void
+     */
+    public function testAuthorizeCheckSuccess()
+    {
+        $request = new Request('posts/index');
+        $request->addParams(array(
+            'controller' => 'posts',
+            'action' => 'index'
+        ));
+        $user = array('Users' => array('username' => 'mark'));
 
-		$this->_mockAcl();
-		$this->Acl->expects($this->once())
-			->method('check')
-			->with($user, 'Posts', 'read')
-			->will($this->returnValue(true));
+        $this->_mockAcl();
+        $this->Acl->expects($this->once())
+            ->method('check')
+            ->with($user, 'Posts', 'read')
+            ->will($this->returnValue(true));
 
-		$this->assertTrue($this->auth->authorize($user['Users'], $request));
-	}
+        $this->assertTrue($this->auth->authorize($user['Users'], $request));
+    }
 
-/**
- * test check() failing
- *
- * @return void
- */
-	public function testAuthorizeCheckFailure() {
-		$request = new Request('posts/index');
-		$request->addParams(array(
-			'controller' => 'posts',
-			'action' => 'index'
-		));
-		$user = array('Users' => array('username' => 'mark'));
+    /**
+     * test check() failing
+     *
+     * @return void
+     */
+    public function testAuthorizeCheckFailure()
+    {
+        $request = new Request('posts/index');
+        $request->addParams(array(
+            'controller' => 'posts',
+            'action' => 'index'
+        ));
+        $user = array('Users' => array('username' => 'mark'));
 
-		$this->_mockAcl();
-		$this->Acl->expects($this->once())
-			->method('check')
-			->with($user, 'Posts', 'read')
-			->will($this->returnValue(false));
+        $this->_mockAcl();
+        $this->Acl->expects($this->once())
+            ->method('check')
+            ->with($user, 'Posts', 'read')
+            ->will($this->returnValue(false));
 
-		$this->assertFalse($this->auth->authorize($user['Users'], $request));
-	}
+        $this->assertFalse($this->auth->authorize($user['Users'], $request));
+    }
 
-/**
- * test getting actionMap
- *
- * @return void
- */
-	public function testMapActionsGet() {
-		$result = $this->auth->mapActions();
-		$expected = array(
-			'delete' => 'delete',
-			'index' => 'read',
-			'add' => 'create',
-			'edit' => 'update',
-			'view' => 'read',
-			'remove' => 'delete'
-		);
-		$this->assertEquals($expected, $result);
-	}
+    /**
+     * test getting actionMap
+     *
+     * @return void
+     */
+    public function testMapActionsGet()
+    {
+        $result = $this->auth->mapActions();
+        $expected = array(
+            'delete' => 'delete',
+            'index' => 'read',
+            'add' => 'create',
+            'edit' => 'update',
+            'view' => 'read',
+            'remove' => 'delete'
+        );
+        $this->assertEquals($expected, $result);
+    }
 
-/**
- * test adding into mapActions
- *
- * @return void
- */
-	public function testMapActionsSet() {
-		$map = array(
-			'create' => array('generate'),
-			'read' => array('listing', 'show'),
-			'update' => array('update'),
-			'random' => 'custom'
-		);
-		$result = $this->auth->mapActions($map);
-		$this->assertNull($result);
+    /**
+     * test adding into mapActions
+     *
+     * @return void
+     */
+    public function testMapActionsSet()
+    {
+        $map = array(
+            'create' => array('generate'),
+            'read' => array('listing', 'show'),
+            'update' => array('update'),
+            'random' => 'custom'
+        );
+        $result = $this->auth->mapActions($map);
+        $this->assertNull($result);
 
-		$result = $this->auth->mapActions();
-		$expected = array(
-			'add' => 'create',
-			'index' => 'read',
-			'edit' => 'update',
-			'view' => 'read',
-			'delete' => 'delete',
-			'remove' => 'delete',
-			'generate' => 'create',
-			'listing' => 'read',
-			'show' => 'read',
-			'update' => 'update',
-			'random' => 'custom',
-		);
-		$this->assertEquals($expected, $result);
-	}
-
+        $result = $this->auth->mapActions();
+        $expected = array(
+            'add' => 'create',
+            'index' => 'read',
+            'edit' => 'update',
+            'view' => 'read',
+            'delete' => 'delete',
+            'remove' => 'delete',
+            'generate' => 'create',
+            'listing' => 'read',
+            'show' => 'read',
+            'update' => 'update',
+            'random' => 'custom',
+        );
+        $this->assertEquals($expected, $result);
+    }
 }

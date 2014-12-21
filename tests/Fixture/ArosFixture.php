@@ -19,33 +19,34 @@ use Cake\TestSuite\Fixture\TestFixture;
  * Short description for class.
  *
  */
-class ArosFixture extends TestFixture {
+class ArosFixture extends TestFixture
+{
 
-/**
- * fields property
- *
- * @var array
- */
-	public $fields = array(
-		'id' => ['type' => 'integer'],
-		'parent_id' => ['type' => 'integer', 'length' => 10, 'null' => true],
-		'model' => ['type' => 'string', 'null' => true],
-		'foreign_key' => ['type' => 'integer', 'length' => 10, 'null' => true],
-		'alias' => ['type' => 'string', 'default' => ''],
-		'lft' => ['type' => 'integer', 'length' => 10, 'null' => true],
-		'rght' => ['type' => 'integer', 'length' => 10, 'null' => true],
-		'_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]]
-	);
+    /**
+     * fields property
+     *
+     * @var array
+     */
+    public $fields = array(
+        'id' => ['type' => 'integer'],
+        'parent_id' => ['type' => 'integer', 'length' => 10, 'null' => true],
+        'model' => ['type' => 'string', 'null' => true],
+        'foreign_key' => ['type' => 'integer', 'length' => 10, 'null' => true],
+        'alias' => ['type' => 'string', 'default' => ''],
+        'lft' => ['type' => 'integer', 'length' => 10, 'null' => true],
+        'rght' => ['type' => 'integer', 'length' => 10, 'null' => true],
+        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]]
+    );
 
-/**
- * records property
- *
- * @var array
- */
-	public $records = array(
-		array('parent_id' => null, 'model' => null, 'foreign_key' => null, 'alias' => 'ROOT', 'lft' => 1, 'rght' => 8),
-		array('parent_id' => '1', 'model' => 'Group', 'foreign_key' => '1', 'alias' => 'admins', 'lft' => 2, 'rght' => 7),
-		array('parent_id' => '2', 'model' => 'AuthUser', 'foreign_key' => '1', 'alias' => 'Gandalf', 'lft' => 3, 'rght' => 4),
-		array('parent_id' => '2', 'model' => 'AuthUser', 'foreign_key' => '2', 'alias' => 'Elrond', 'lft' => 5, 'rght' => 6)
-	);
+    /**
+     * records property
+     *
+     * @var array
+     */
+    public $records = array(
+        array('parent_id' => null, 'model' => null, 'foreign_key' => null, 'alias' => 'ROOT', 'lft' => 1, 'rght' => 8),
+        array('parent_id' => '1', 'model' => 'Group', 'foreign_key' => '1', 'alias' => 'admins', 'lft' => 2, 'rght' => 7),
+        array('parent_id' => '2', 'model' => 'AuthUser', 'foreign_key' => '1', 'alias' => 'Gandalf', 'lft' => 3, 'rght' => 4),
+        array('parent_id' => '2', 'model' => 'AuthUser', 'foreign_key' => '2', 'alias' => 'Elrond', 'lft' => 5, 'rght' => 6)
+    );
 }

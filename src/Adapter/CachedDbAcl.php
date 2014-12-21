@@ -14,7 +14,6 @@
 namespace Acl\Adapter;
 
 use Acl\AclInterface;
-
 use Cake\Cache\Cache;
 use Cake\Controller\Component;
 use Cake\Core\Configure;
@@ -27,78 +26,83 @@ use Cake\Utility\Inflector;
  * Its usage is identical to that of DbAcl, however it supports a `Acl.cacheConfig` configuration value
  * This configuration value tells CachedDbAcl what cache config should be used.
  */
-class CachedDbAcl extends DbAcl implements AclInterface {
+class CachedDbAcl extends DbAcl implements AclInterface
+{
 
-	protected $_cacheConfig = 'default';
+    protected $_cacheConfig = 'default';
 
-/**
- * Constructor
- *
- */
-	public function __construct() {
-		parent::__construct();
+    /**
+     * Constructor
+     *
+     */
+    public function __construct()
+    {
+        parent::__construct();
 
-		if (Configure::check('Acl.cacheConfig')) {
-			$this->_cacheConfig = Configure::read('Acl.cacheConfig');
-		}
-	}
+        if (Configure::check('Acl.cacheConfig')) {
+            $this->_cacheConfig = Configure::read('Acl.cacheConfig');
+        }
+    }
 
-/**
- * {{@inheritDoc}}
- */
-	public function check($aro, $aco, $action = "*") {
-		$key = $this->_getCacheKey($aro, $aco, $action);
+    /**
+     * {{@inheritDoc}}
+     */
+    public function check($aro, $aco, $action = "*")
+    {
+        $key = $this->_getCacheKey($aro, $aco, $action);
 
-		$permission = Cache::remember($key, function () use ($aro, $aco, $action) {
-			return $this->Permission->check($aro, $aco, $action) === true ? 'true' : 'false';
-		}, $this->_cacheConfig);
+        $permission = Cache::remember($key, function () use ($aro, $aco, $action) {
+            return $this->Permission->check($aro, $aco, $action) === true ? 'true' : 'false';
+        }, $this->_cacheConfig);
 
-		return $permission === 'true';
-	}
+        return $permission === 'true';
+    }
 
-/**
- * {{@inheritDoc}}
- */
-	public function allow($aro, $aco, $actions = "*", $value = 1) {
-		Cache::clear(false, $this->_cacheConfig);
+    /**
+     * {{@inheritDoc}}
+     */
+    public function allow($aro, $aco, $actions = "*", $value = 1)
+    {
+        Cache::clear(false, $this->_cacheConfig);
 
-		return parent::allow($aro, $aco, $actions, $value);
-	}
+        return parent::allow($aro, $aco, $actions, $value);
+    }
 
-/**
- * Generates a string cache key for the ARO, ACO pair
- *
- * @param string|array|Entity $aro The requesting object identifier.
- * @param string|array|Entity $aco The controlled object identifier.
- * @param string $action Action
- * @return string
- */
-	protected function _getCacheKey($aro, $aco, $action = '*') {
-		return strtolower($this->_getNodeCacheKey($aro) . '_' . $this->_getNodeCacheKey($aco) . ($action == '*' ? '' : '_' . $action));
-	}
+    /**
+     * Generates a string cache key for the ARO, ACO pair
+     *
+     * @param string|array|Entity $aro The requesting object identifier.
+     * @param string|array|Entity $aco The controlled object identifier.
+     * @param string $action Action
+     * @return string
+     */
+    protected function _getCacheKey($aro, $aco, $action = '*')
+    {
+        return strtolower($this->_getNodeCacheKey($aro) . '_' . $this->_getNodeCacheKey($aco) . ($action == '*' ? '' : '_' . $action));
+    }
 
-/**
- * Generates a key string to use for the cache
- *
- * @param string|array|Entity $ref Array with 'model' and 'foreign_key', model object, or string value
- * @return string
- */
-	protected function _getNodeCacheKey($ref) {
-		if (empty($ref)) {
-			return '';
-		} elseif (is_string($ref)) {
-			return Inflector::slug($ref, '_');
-		} elseif (is_object($ref) && $ref instanceof Entity) {
-			return $ref->source() . '_' . $ref->id;
-		} elseif (is_array($ref) && !(isset($ref['model']) && isset($ref['foreign_key']))) {
-			$name = key($ref);
-			list(, $alias) = pluginSplit($name);
-			return $alias . '_' . $ref[$name]['id'];
-		} elseif (is_array($ref)) {
-			return $ref['model'] . '_' . $ref['foreign_key'];
-		}
+    /**
+     * Generates a key string to use for the cache
+     *
+     * @param string|array|Entity $ref Array with 'model' and 'foreign_key', model object, or string value
+     * @return string
+     */
+    protected function _getNodeCacheKey($ref)
+    {
+        if (empty($ref)) {
+            return '';
+        } elseif (is_string($ref)) {
+            return Inflector::slug($ref, '_');
+        } elseif (is_object($ref) && $ref instanceof Entity) {
+            return $ref->source() . '_' . $ref->id;
+        } elseif (is_array($ref) && !(isset($ref['model']) && isset($ref['foreign_key']))) {
+            $name = key($ref);
+            list(, $alias) = pluginSplit($name);
+            return $alias . '_' . $ref[$name]['id'];
+        } elseif (is_array($ref)) {
+            return $ref['model'] . '_' . $ref['foreign_key'];
+        }
 
-		return '';
-	}
-
+        return '';
+    }
 }

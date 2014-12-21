@@ -19,18 +19,19 @@ use Cake\ORM\Table;
  * Action for Access Control Object
  *
  */
-class AcoActionsTable extends Table {
+class AcoActionsTable extends Table
+{
 
-/**
- * {@inheritDoc}
- *
- * @param array $config Configuration
- * @return void
- */
-	public function initialize(array $config) {
-		$this->belongsTo('Acos', [
-			'className' => App::className('Acl.AcosTable', 'Model/Table'),
-		]);
-	}
-
+    /**
+     * {@inheritDoc}
+     *
+     * @param array $config Configuration
+     * @return void
+     */
+    public function initialize(array $config)
+    {
+        $this->belongsTo('Acos', [
+            'className' => App::className('Acl.AcosTable', 'Model/Table'),
+        ]);
+    }
 }

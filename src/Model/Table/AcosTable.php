@@ -14,36 +14,36 @@
 namespace Acl\Model\Table;
 
 use Acl\Model\Table\AclNodesTable;
-
 use Cake\Core\App;
 
 /**
  * Access Control Object
  *
  */
-class AcosTable extends AclNodesTable {
+class AcosTable extends AclNodesTable
+{
 
-/**
- * {@inheritDoc}
- *
- * @param array $config Config
- * @return void
- */
-	public function initialize(array $config) {
-		parent::initialize($config);
-		$this->alias('Acos');
-		$this->table('acos');
-		$this->addBehavior('Tree', ['type' => 'nested']);
+    /**
+     * {@inheritDoc}
+     *
+     * @param array $config Config
+     * @return void
+     */
+    public function initialize(array $config)
+    {
+        parent::initialize($config);
+        $this->alias('Acos');
+        $this->table('acos');
+        $this->addBehavior('Tree', ['type' => 'nested']);
 
-		$this->belongsToMany('Aros', [
-			'through' => App::className('Acl.PermissionsTable', 'Model/Table'),
-			'className' => App::className('Acl.ArosTable', 'Model/Table'),
-		]);
-		$this->hasMany('AcoChildren', [
-			'className' => App::className('Acl.AcosTable', 'Model/Table'),
-			'foreignKey' => 'parent_id'
-		]);
-		$this->entityClass(App::className('Acl.Aco', 'Model/Entity'));
-	}
-
+        $this->belongsToMany('Aros', [
+            'through' => App::className('Acl.PermissionsTable', 'Model/Table'),
+            'className' => App::className('Acl.ArosTable', 'Model/Table'),
+        ]);
+        $this->hasMany('AcoChildren', [
+            'className' => App::className('Acl.AcosTable', 'Model/Table'),
+            'foreignKey' => 'parent_id'
+        ]);
+        $this->entityClass(App::className('Acl.Aco', 'Model/Entity'));
+    }
 }

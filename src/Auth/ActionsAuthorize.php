@@ -23,19 +23,20 @@ use Cake\Network\Request;
  * @see AuthComponent::$authenticate
  * @see AclComponent::check()
  */
-class ActionsAuthorize extends BaseAuthorize {
+class ActionsAuthorize extends BaseAuthorize
+{
 
-/**
- * Authorize a user using the AclComponent.
- *
- * @param array $user The user to authorize
- * @param \Cake\Network\Request $request The request needing authorization.
- * @return bool
- */
-	public function authorize($user, Request $request) {
-		$Acl = $this->_registry->load('Acl');
-		$user = [$this->_config['userModel'] => $user];
-		return $Acl->check($user, $this->action($request));
-	}
-
+    /**
+     * Authorize a user using the AclComponent.
+     *
+     * @param array $user The user to authorize
+     * @param \Cake\Network\Request $request The request needing authorization.
+     * @return bool
+     */
+    public function authorize($user, Request $request)
+    {
+        $Acl = $this->_registry->load('Acl');
+        $user = [$this->_config['userModel'] => $user];
+        return $Acl->check($user, $this->action($request));
+    }
 }
