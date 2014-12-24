@@ -21,7 +21,7 @@ use Cake\Utility\Hash;
 
 /**
  * IniAcl implements an access control system using an INI file. An example
- * of the ini file used can be found in /config/acl.ini.php.
+ * of the ini file used can be found in /config/acl.ini.
  *
  */
 class IniAcl implements AclInterface
@@ -63,7 +63,7 @@ class IniAcl implements AclInterface
     public function config($key = null, $value = null, $merge = true)
     {
         if (!$this->_configInitialized) {
-            $this->_defaultConfig = $this->readConfigFile(APP . 'Config/acl.ini.php');
+            $this->_defaultConfig = $this->readConfigFile(APP . 'Config/acl.ini');
         }
 
         if (is_array($key) || func_num_args() >= 2) {
@@ -121,8 +121,8 @@ class IniAcl implements AclInterface
 
     /**
      * Main ACL check function. Checks to see if the ARO (access request object) has access to the
-     * ACO (access control object).Looks at the acl.ini.php file for permissions
-     * (see instructions in /config/acl.ini.php).
+     * ACO (access control object).Looks at the acl.ini file for permissions
+     * (see instructions in /config/acl.ini).
      *
      * @param string $aro ARO
      * @param string $aco ACO
