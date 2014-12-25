@@ -31,45 +31,48 @@ use Cake\Routing\Router;
  * @see AuthComponent::$authenticate
  * @see AclComponent::check()
  */
-class CrudAuthorize extends BaseAuthorize {
+class CrudAuthorize extends BaseAuthorize
+{
 
-/**
- * Sets up additional actionMap values that match the configured `Routing.prefixes`.
- *
- * @param ComponentRegistry $registry The component registry from the controller.
- * @param array $config An array of config. This class does not use any config.
- */
-	public function __construct(ComponentRegistry $registry, $config = array()) {
-		parent::__construct($registry, $config);
-	}
+    /**
+     * Sets up additional actionMap values that match the configured `Routing.prefixes`.
+     *
+     * @param ComponentRegistry $registry The component registry from the controller.
+     * @param array $config An array of config. This class does not use any config.
+     */
+    public function __construct(ComponentRegistry $registry, $config = array())
+    {
+        parent::__construct($registry, $config);
+    }
 
-/**
- * Authorize a user using the mapped actions and the AclComponent.
- *
- * @param array $user The user to authorize
- * @param \Cake\Network\Request $request The request needing authorization.
- * @return bool
- */
-	public function authorize($user, Request $request) {
-		$mapped = $this->config('actionMap.' . $request->params['action']);
+    /**
+     * Authorize a user using the mapped actions and the AclComponent.
+     *
+     * @param array $user The user to authorize
+     * @param \Cake\Network\Request $request The request needing authorization.
+     * @return bool
+     */
+    public function authorize($user, Request $request)
+    {
+        $mapped = $this->config('actionMap.' . $request->params['action']);
 
-		if (!$mapped) {
-			trigger_error(sprintf(
-				'CrudAuthorize::authorize() - Attempted access of un-mapped action "%1$s" in controller "%2$s"',
-				$request->action,
-				$request->controller
-				),
-				E_USER_WARNING
-			);
-			return false;
-		}
-		$user = array($this->_config['userModel'] => $user);
-		$Acl = $this->_registry->load('Acl');
-		return $Acl->check(
-			$user,
-			$this->action($request, ':controller'),
-			$mapped
-		);
-	}
-
+        if (!$mapped) {
+            trigger_error(
+                sprintf(
+                    'CrudAuthorize::authorize() - Attempted access of un-mapped action "%1$s" in controller "%2$s"',
+                    $request->action,
+                    $request->controller
+                ),
+                E_USER_WARNING
+            );
+            return false;
+        }
+        $user = array($this->_config['userModel'] => $user);
+        $Acl = $this->_registry->load('Acl');
+        return $Acl->check(
+            $user,
+            $this->action($request, ':controller'),
+            $mapped
+        );
+    }
 }

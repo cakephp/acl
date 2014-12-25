@@ -18,38 +18,39 @@ use Cake\TestSuite\Fixture\TestFixture;
 /**
  * Class PeopleFixture
  */
-class PeopleFixture extends TestFixture {
+class PeopleFixture extends TestFixture
+{
 
-/**
- * fields property
- *
- * @var array
- */
-	public $fields = [
-		'id' => ['type' => 'integer', 'null' => false],
-		'name' => ['type' => 'string', 'null' => false, 'length' => 32],
-		'mother_id' => ['type' => 'integer', 'null' => false],
-		'father_id' => ['type' => 'integer', 'null' => false],
-		'_constraints' => [
-			'PRIMARY' => ['type' => 'primary', 'columns' => ['id']],
-		],
-		'_indexes' => [
-			'mother_id' => ['type' => 'index', 'columns' => ['mother_id', 'father_id']]
-		]
-	];
+    /**
+     * fields property
+     *
+     * @var array
+     */
+    public $fields = [
+        'id' => ['type' => 'integer', 'null' => false],
+        'name' => ['type' => 'string', 'null' => false, 'length' => 32],
+        'mother_id' => ['type' => 'integer', 'null' => false],
+        'father_id' => ['type' => 'integer', 'null' => false],
+        '_constraints' => [
+            'PRIMARY' => ['type' => 'primary', 'columns' => ['id']],
+        ],
+        '_indexes' => [
+            'mother_id' => ['type' => 'index', 'columns' => ['mother_id', 'father_id']]
+        ]
+    ];
 
-/**
- * records property
- *
- * @var array
- */
-	public $records = [
-		['name' => 'person', 'mother_id' => 2, 'father_id' => 3],
-		['name' => 'mother', 'mother_id' => 4, 'father_id' => 5],
-		['name' => 'father', 'mother_id' => 6, 'father_id' => 7],
-		['name' => 'mother - grand mother', 'mother_id' => 0, 'father_id' => 0],
-		['name' => 'mother - grand father', 'mother_id' => 0, 'father_id' => 0],
-		['name' => 'father - grand mother', 'mother_id' => 0, 'father_id' => 0],
-		['name' => 'father - grand father', 'mother_id' => 0, 'father_id' => 0]
-	];
+    /**
+     * records property
+     *
+     * @var array
+     */
+    public $records = [
+        ['name' => 'person', 'mother_id' => 2, 'father_id' => 3],
+        ['name' => 'mother', 'mother_id' => 4, 'father_id' => 5],
+        ['name' => 'father', 'mother_id' => 6, 'father_id' => 7],
+        ['name' => 'mother - grand mother', 'mother_id' => 0, 'father_id' => 0],
+        ['name' => 'mother - grand father', 'mother_id' => 0, 'father_id' => 0],
+        ['name' => 'father - grand mother', 'mother_id' => 0, 'father_id' => 0],
+        ['name' => 'father - grand father', 'mother_id' => 0, 'father_id' => 0]
+    ];
 }

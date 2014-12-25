@@ -19,28 +19,29 @@ use Cake\TestSuite\Fixture\TestFixture;
  * Short description for class.
  *
  */
-class ArosAcosFixture extends TestFixture {
+class ArosAcosFixture extends TestFixture
+{
 
-/**
- * fields property
- *
- * @var array
- */
-	public $fields = array(
-		'id' => ['type' => 'integer'],
-		'aro_id' => ['type' => 'integer', 'length' => 10, 'null' => false],
-		'aco_id' => ['type' => 'integer', 'length' => 10, 'null' => false],
-		'_create' => ['type' => 'string', 'length' => 2, 'default' => 0],
-		'_read' => ['type' => 'string', 'length' => 2, 'default' => 0],
-		'_update' => ['type' => 'string', 'length' => 2, 'default' => 0],
-		'_delete' => ['type' => 'string', 'length' => 2, 'default' => 0],
-		'_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]]
-	);
+    /**
+     * fields property
+     *
+     * @var array
+     */
+    public $fields = array(
+        'id' => ['type' => 'integer'],
+        'aro_id' => ['type' => 'integer', 'length' => 10, 'null' => false],
+        'aco_id' => ['type' => 'integer', 'length' => 10, 'null' => false],
+        '_create' => ['type' => 'string', 'length' => 2, 'default' => 0],
+        '_read' => ['type' => 'string', 'length' => 2, 'default' => 0],
+        '_update' => ['type' => 'string', 'length' => 2, 'default' => 0],
+        '_delete' => ['type' => 'string', 'length' => 2, 'default' => 0],
+        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]]
+    );
 
-/**
- * records property
- *
- * @var array
- */
-	public $records = array();
+    /**
+     * records property
+     *
+     * @var array
+     */
+    public $records = array();
 }

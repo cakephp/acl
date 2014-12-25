@@ -14,7 +14,6 @@
 namespace Acl\Test\TestCase\Controller\Component;
 
 use Acl\Controller\Component\AclComponent;
-
 use Cake\Controller\ComponentRegistry;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
@@ -23,68 +22,73 @@ use Cake\TestSuite\TestCase;
  * Test Case for AclComponent
  *
  */
-class AclComponentTest extends TestCase {
+class AclComponentTest extends TestCase
+{
 
-/**
- * setUp method
- *
- * @return void
- */
-	public function setUp() {
-		parent::setUp();
-		if (!class_exists('MockAclImplementation', false)) {
-			$this->getMock('Acl\AclInterface', array(), array(), 'MockAclImplementation');
-		}
-		Configure::write('Acl.classname', '\MockAclImplementation');
-		$Collection = new ComponentRegistry();
-		$this->Acl = new AclComponent($Collection);
-	}
+    /**
+     * setUp method
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        parent::setUp();
+        if (!class_exists('MockAclImplementation', false)) {
+            $this->getMock('Acl\AclInterface', array(), array(), 'MockAclImplementation');
+        }
+        Configure::write('Acl.classname', '\MockAclImplementation');
+        $Collection = new ComponentRegistry();
+        $this->Acl = new AclComponent($Collection);
+    }
 
-/**
- * tearDown method
- *
- * @return void
- */
-	public function tearDown() {
-		parent::tearDown();
-		unset($this->Acl);
-	}
+    /**
+     * tearDown method
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+        unset($this->Acl);
+    }
 
-/**
- * test that constructor throws an exception when Acl.classname is a
- * non-existent class
- *
- * @expectedException \Cake\Core\Exception\Exception
- * @return void
- */
-	public function testConstrutorException() {
-		Configure::write('Acl.classname', 'AclClassNameThatDoesNotExist');
-		$Collection = new ComponentRegistry();
-		new AclComponent($Collection);
-	}
+    /**
+     * test that constructor throws an exception when Acl.classname is a
+     * non-existent class
+     *
+     * @expectedException \Cake\Core\Exception\Exception
+     * @return void
+     */
+    public function testConstrutorException()
+    {
+        Configure::write('Acl.classname', 'AclClassNameThatDoesNotExist');
+        $Collection = new ComponentRegistry();
+        new AclComponent($Collection);
+    }
 
-/**
- * test that adapter() allows control of the internal implementation AclComponent uses.
- *
- * @return void
- */
-	public function testAdapter() {
-		$Adapter = $this->getMock('Acl\AclInterface');
-		$Adapter->expects($this->once())->method('initialize')->with($this->Acl);
+    /**
+     * test that adapter() allows control of the internal implementation AclComponent uses.
+     *
+     * @return void
+     */
+    public function testAdapter()
+    {
+        $Adapter = $this->getMock('Acl\AclInterface');
+        $Adapter->expects($this->once())->method('initialize')->with($this->Acl);
 
-		$this->assertNull($this->Acl->adapter($Adapter));
-		$this->assertEquals($this->Acl->adapter(), $Adapter, 'Returned object is different %s');
-	}
+        $this->assertNull($this->Acl->adapter($Adapter));
+        $this->assertEquals($this->Acl->adapter(), $Adapter, 'Returned object is different %s');
+    }
 
-/**
- * test that adapter() whines when the class does not implement AclInterface
- *
- * @expectedException \Cake\Core\Exception\Exception
- * @return void
- */
-	public function testAdapterException() {
-		$thing = new \StdClass();
-		$this->Acl->adapter($thing);
-	}
-
+    /**
+     * test that adapter() whines when the class does not implement AclInterface
+     *
+     * @expectedException \Cake\Core\Exception\Exception
+     * @return void
+     */
+    public function testAdapterException()
+    {
+        $thing = new \StdClass();
+        $this->Acl->adapter($thing);
+    }
 }
