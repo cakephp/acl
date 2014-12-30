@@ -173,14 +173,12 @@ class AcoSyncTask extends Shell {
         if (!$plugin) {
             $path = App::path('Controller');
             $dir = new Folder($path[0]);
-            $controllers = $dir->findRecursive('.*\.php');
-            $controllers = $this->removeComponents($controllers);
+            $controllers = $dir->findRecursive('.*Controller\.php');
             unset($controllers[0]);
         } else {
             $path = App::path('Controller',$plugin);
             $dir = new Folder($path[0]);
-            $controllers = $dir->findRecursive('.*\.php');
-            $controllers = $this->removeComponents($controllers);
+            $controllers = $dir->findRecursive('.*Controller\.php');
         }
         return $controllers;
     }
@@ -314,14 +312,4 @@ class AcoSyncTask extends Shell {
         $plugins = $dir->read();
         return $plugins[0];
     }
-    private function removeComponents($controllers){
-        $return = [];
-        foreach($controllers as $controller){
-            if(!preg_match('/\/Component\//', $controller)){
-               $return[]=$controller;
-            }
-        }
-        return $return;
-    }
-
 }
