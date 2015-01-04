@@ -146,7 +146,7 @@ class DbAclTest extends TestCase
      *
      * @var array
      */
-    public $fixtures = array('app.aro_twos', 'app.aco_twos', 'app.aros_aco_twos');
+    public $fixtures = ['app.aro_twos', 'app.aco_twos', 'app.aros_aco_twos'];
 
     /**
      * setUp method
@@ -248,7 +248,7 @@ class DbAclTest extends TestCase
     public function testAllow()
     {
         $this->assertFalse($this->Acl->check('Micheal', 'tpsReports', 'read'));
-        $this->assertTrue($this->Acl->allow('Micheal', 'tpsReports', array('read', 'delete', 'update')));
+        $this->assertTrue($this->Acl->allow('Micheal', 'tpsReports', ['read', 'delete', 'update']));
         $this->assertTrue($this->Acl->check('Micheal', 'tpsReports', 'update'));
         $this->assertTrue($this->Acl->check('Micheal', 'tpsReports', 'read'));
         $this->assertTrue($this->Acl->check('Micheal', 'tpsReports', 'delete'));
@@ -460,7 +460,7 @@ class DbAclTest extends TestCase
         $this->assertTrue($this->Acl->check('Samir', 'tpsReports', 'create'));
 
         $this->assertFalse($this->Acl->check('Micheal', 'view', 'read'));
-        $this->Acl->allow('Micheal', 'view', array('read', 'create', 'update'));
+        $this->Acl->allow('Micheal', 'view', ['read', 'create', 'update']);
         $this->assertTrue($this->Acl->check('Micheal', 'view', 'read'));
         $this->assertTrue($this->Acl->check('Micheal', 'view', 'create'));
         $this->assertTrue($this->Acl->check('Micheal', 'view', 'update'));
@@ -504,12 +504,12 @@ class DbAclTest extends TestCase
     {
         $this->Acl->Aro->displayField = 'alias';
         $this->Acl->Aco->displayField = 'alias';
-        $aros = $this->Acl->Aro->find('list', array('order' => 'lft'));
-        $acos = $this->Acl->Aco->find('list', array('order' => 'lft'));
-        $rights = array('*', 'create', 'read', 'update', 'delete');
+        $aros = $this->Acl->Aro->find('list', ['order' => 'lft']);
+        $acos = $this->Acl->Aco->find('list', ['order' => 'lft']);
+        $rights = ['*', 'create', 'read', 'update', 'delete'];
         $permissions['Aros v Acos >'] = $acos;
         foreach ($aros as $aro) {
-            $row = array();
+            $row = [];
             foreach ($acos as $aco) {
                 $perms = '';
                 foreach ($rights as $right) {
@@ -529,13 +529,13 @@ class DbAclTest extends TestCase
         }
         foreach ($permissions as $key => $values) {
             array_unshift($values, $key);
-            $values = array_map(array(&$this, '_pad'), $values);
+            $values = array_map([&$this, '_pad'], $values);
             $permissions[$key] = implode(' ', $values);
         }
-        $permissions = array_map(array(&$this, '_pad'), $permissions);
+        $permissions = array_map([&$this, '_pad'], $permissions);
         array_unshift($permissions, 'Current Permissions :');
         if ($printTreesToo) {
-            debug(array('aros' => $this->Acl->Aro->generateTreeList(), 'acos' => $this->Acl->Aco->generateTreeList()));
+            debug(['aros' => $this->Acl->Aro->generateTreeList(), 'acos' => $this->Acl->Aco->generateTreeList()]);
         }
         debug(implode("\r\n", $permissions));
     }

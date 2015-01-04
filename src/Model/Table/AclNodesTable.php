@@ -66,7 +66,7 @@ class AclNodesTable extends Table
                         'table' => $table,
                         'alias' => "{$type}0",
                         'type' => 'INNER',
-                        'conditions' => array("{$type}0.alias" => $start)
+                        'conditions' => ["{$type}0.alias" => $start]
                 ]],
                 'order' => "{$type}.lft" . ' DESC'
             ];
@@ -105,7 +105,7 @@ class AclNodesTable extends Table
                 return false;
             }
         } elseif (is_object($ref) && $ref instanceof Entity) {
-            $ref = array('model' => $ref->source(), 'foreign_key' => $ref->id);
+            $ref = ['model' => $ref->source(), 'foreign_key' => $ref->id];
         } elseif (is_array($ref) && !(isset($ref['model']) && isset($ref['foreign_key']))) {
             $name = key($ref);
             list(, $alias) = pluginSplit($name);

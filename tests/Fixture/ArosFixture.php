@@ -27,7 +27,7 @@ class ArosFixture extends TestFixture
      *
      * @var array
      */
-    public $fields = array(
+    public $fields = [
         'id' => ['type' => 'integer'],
         'parent_id' => ['type' => 'integer', 'length' => 10, 'null' => true],
         'model' => ['type' => 'string', 'null' => true],
@@ -36,17 +36,17 @@ class ArosFixture extends TestFixture
         'lft' => ['type' => 'integer', 'length' => 10, 'null' => true],
         'rght' => ['type' => 'integer', 'length' => 10, 'null' => true],
         '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]]
-    );
+    ];
 
     /**
      * records property
      *
      * @var array
      */
-    public $records = array(
-        array('parent_id' => null, 'model' => null, 'foreign_key' => null, 'alias' => 'ROOT', 'lft' => 1, 'rght' => 8),
-        array('parent_id' => '1', 'model' => 'Group', 'foreign_key' => '1', 'alias' => 'admins', 'lft' => 2, 'rght' => 7),
-        array('parent_id' => '2', 'model' => 'AuthUser', 'foreign_key' => '1', 'alias' => 'Gandalf', 'lft' => 3, 'rght' => 4),
-        array('parent_id' => '2', 'model' => 'AuthUser', 'foreign_key' => '2', 'alias' => 'Elrond', 'lft' => 5, 'rght' => 6)
-    );
+    public $records = [
+        ['parent_id' => null, 'model' => null, 'foreign_key' => null, 'alias' => 'ROOT', 'lft' => 1, 'rght' => 8],
+        ['parent_id' => '1', 'model' => 'Group', 'foreign_key' => '1', 'alias' => 'admins', 'lft' => 2, 'rght' => 7],
+        ['parent_id' => '2', 'model' => 'AuthUser', 'foreign_key' => '1', 'alias' => 'Gandalf', 'lft' => 3, 'rght' => 4],
+        ['parent_id' => '2', 'model' => 'AuthUser', 'foreign_key' => '2', 'alias' => 'Elrond', 'lft' => 5, 'rght' => 6]
+    ];
 }

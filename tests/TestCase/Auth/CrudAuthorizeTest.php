@@ -34,10 +34,10 @@ class CrudAuthorizeTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        Configure::write('Routing.prefixes', array());
+        Configure::write('Routing.prefixes', []);
         Router::reload();
 
-        $this->Acl = $this->getMock('Acl\Controller\Component\AclComponent', array(), array(), '', false);
+        $this->Acl = $this->getMock('Acl\Controller\Component\AclComponent', [], [], '', false);
         $this->Components = $this->getMock('Cake\Controller\ComponentRegistry');
 
         $this->auth = new CrudAuthorize($this->Components);
@@ -65,11 +65,11 @@ class CrudAuthorizeTest extends TestCase
     public function testAuthorizeNoMappedAction()
     {
         $request = new Request('/posts/foobar');
-        $request->addParams(array(
+        $request->addParams([
             'controller' => 'posts',
             'action' => 'foobar'
-        ));
-        $user = array('User' => array('username' => 'mark'));
+        ]);
+        $user = ['User' => ['username' => 'mark']];
 
         $this->auth->authorize($user, $request);
     }
@@ -82,11 +82,11 @@ class CrudAuthorizeTest extends TestCase
     public function testAuthorizeCheckSuccess()
     {
         $request = new Request('posts/index');
-        $request->addParams(array(
+        $request->addParams([
             'controller' => 'posts',
             'action' => 'index'
-        ));
-        $user = array('Users' => array('username' => 'mark'));
+        ]);
+        $user = ['Users' => ['username' => 'mark']];
 
         $this->_mockAcl();
         $this->Acl->expects($this->once())
@@ -105,11 +105,11 @@ class CrudAuthorizeTest extends TestCase
     public function testAuthorizeCheckFailure()
     {
         $request = new Request('posts/index');
-        $request->addParams(array(
+        $request->addParams([
             'controller' => 'posts',
             'action' => 'index'
-        ));
-        $user = array('Users' => array('username' => 'mark'));
+        ]);
+        $user = ['Users' => ['username' => 'mark']];
 
         $this->_mockAcl();
         $this->Acl->expects($this->once())
@@ -128,14 +128,14 @@ class CrudAuthorizeTest extends TestCase
     public function testMapActionsGet()
     {
         $result = $this->auth->mapActions();
-        $expected = array(
+        $expected = [
             'delete' => 'delete',
             'index' => 'read',
             'add' => 'create',
             'edit' => 'update',
             'view' => 'read',
             'remove' => 'delete'
-        );
+        ];
         $this->assertEquals($expected, $result);
     }
 
@@ -146,17 +146,17 @@ class CrudAuthorizeTest extends TestCase
      */
     public function testMapActionsSet()
     {
-        $map = array(
-            'create' => array('generate'),
-            'read' => array('listing', 'show'),
-            'update' => array('update'),
+        $map = [
+            'create' => ['generate'],
+            'read' => ['listing', 'show'],
+            'update' => ['update'],
             'random' => 'custom'
-        );
+        ];
         $result = $this->auth->mapActions($map);
         $this->assertNull($result);
 
         $result = $this->auth->mapActions();
-        $expected = array(
+        $expected = [
             'add' => 'create',
             'index' => 'read',
             'edit' => 'update',
@@ -168,7 +168,7 @@ class CrudAuthorizeTest extends TestCase
             'show' => 'read',
             'update' => 'update',
             'random' => 'custom',
-        );
+        ];
         $this->assertEquals($expected, $result);
     }
 }
