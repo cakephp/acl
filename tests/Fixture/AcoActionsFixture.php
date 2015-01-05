@@ -27,7 +27,7 @@ class AcoActionsFixture extends TestFixture
      *
      * @var array
      */
-    public $fields = array(
+    public $fields = [
         'id' => ['type' => 'integer'],
         'parent_id' => ['type' => 'integer', 'length' => 10, 'null' => true],
         'model' => ['type' => 'string', 'default' => ''],
@@ -36,12 +36,12 @@ class AcoActionsFixture extends TestFixture
         'lft' => ['type' => 'integer', 'length' => 10, 'null' => true],
         'rght' => ['type' => 'integer', 'length' => 10, 'null' => true],
         '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]]
-    );
+    ];
 
     /**
      * records property
      *
      * @var array
      */
-    public $records = array();
+    public $records = [];
 }

@@ -34,7 +34,7 @@ class AclComponentTest extends TestCase
     {
         parent::setUp();
         if (!class_exists('MockAclImplementation', false)) {
-            $this->getMock('Acl\AclInterface', array(), array(), 'MockAclImplementation');
+            $this->getMock('Acl\AclInterface', [], [], 'MockAclImplementation');
         }
         Configure::write('Acl.classname', '\MockAclImplementation');
         $Collection = new ComponentRegistry();

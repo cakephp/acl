@@ -79,7 +79,7 @@ class AclPerson extends Entity
         if (!$motherId) {
             return null;
         }
-        return array('AclPeople' => array('id' => $motherId));
+        return ['AclPeople' => ['id' => $motherId]];
     }
 }
 
@@ -298,9 +298,9 @@ class AclBehaviorTest extends TestCase
             'father_id' => 3,
         ]);
         $saved = $Person->save($data);
-        $result = $this->Aro->find('all', array(
-            'conditions' => array('model' => $Person->alias(), 'foreign_key' => $saved->id)
-        ))->first();
+        $result = $this->Aro->find('all', [
+            'conditions' => ['model' => $Person->alias(), 'foreign_key' => $saved->id]
+        ])->first();
         $this->assertEquals(5, $result->parent_id);
 
         $node = $Person->node(['model' => $Person->alias(), 'foreign_key' => 8], 'Aro');
@@ -415,9 +415,9 @@ class AclBehaviorTest extends TestCase
             'conditions' => ['model' => $Person->alias(), 'foreign_key' => $person->id]
         ]);
         $this->assertTrue($result->count() === 0);
-        $result = $this->Aro->find('all', array(
-            'conditions' => array('model' => $Person->alias(), 'foreign_key' => 2)
-        ));
+        $result = $this->Aro->find('all', [
+            'conditions' => ['model' => $Person->alias(), 'foreign_key' => 2]
+        ]);
         $this->assertTrue($result->count() > 0);
 
         $person = $Person->save(new AclPerson([

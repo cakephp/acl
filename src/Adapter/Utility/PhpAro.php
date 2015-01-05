@@ -36,7 +36,7 @@ class PhpAro
     /**
      * map external identifiers. E.g. if
      *
-     * array('User' => array('username' => 'jeff', 'role' => 'editor'))
+     * ['User' => ['username' => 'jeff', 'role' => 'editor']]
      *
      * is passed as an ARO to one of the methods of AclComponent, PhpAcl
      * will check if it can be resolved to an User or a Role defined in the
@@ -45,24 +45,24 @@ class PhpAro
      * @var array
      * @see app/Config/acl.php
      */
-    public $map = array(
+    public $map = [
         'User' => 'User/username',
         'Role' => 'User/role',
-    );
+    ];
 
     /**
      * aliases to map
      *
      * @var array
      */
-    public $aliases = array();
+    public $aliases = [];
 
     /**
      * internal ARO representation
      *
      * @var array
      */
-    protected $_tree = array();
+    protected $_tree = [];
 
     /**
      * Constructor
@@ -71,7 +71,7 @@ class PhpAro
      * @param array $map Map
      * @param array $aliases Aliases
      */
-    public function __construct(array $aro = array(), array $map = array(), array $aliases = array())
+    public function __construct(array $aro = [], array $map = [], array $aliases = [])
     {
         if (!empty($map)) {
             $this->map = $map;
@@ -93,9 +93,9 @@ class PhpAro
      */
     public function roles($aro)
     {
-        $aros = array();
+        $aros = [];
         $aro = $this->resolve($aro);
-        $stack = array(array($aro, 0));
+        $stack = [[$aro, 0]];
 
         while (!empty($stack)) {
             list($element, $depth) = array_pop($stack);
@@ -103,7 +103,7 @@ class PhpAro
 
             foreach ($this->_tree as $node => $children) {
                 if (in_array($element, $children)) {
-                    array_push($stack, array($node, $depth + 1));
+                    array_push($stack, [$node, $depth + 1]);
                 }
             }
         }
@@ -115,7 +115,7 @@ class PhpAro
      * resolve an ARO identifier to an internal ARO string using
      * the internal mapping information.
      *
-     * @param string|array $aro ARO identifier (User.jeff, array('User' => ...), etc)
+     * @param string|array $aro ARO identifier (User.jeff, ['User' => ...], etc)
      * @return string internal aro string (e.g. User/jeff, Role/default)
      */
     public function resolve($aro)
@@ -170,7 +170,7 @@ class PhpAro
     {
         foreach ($aro as $role => $inheritedRoles) {
             if (!isset($this->_tree[$role])) {
-                $this->_tree[$role] = array();
+                $this->_tree[$role] = [];
             }
 
             if (!empty($inheritedRoles)) {
@@ -194,7 +194,7 @@ class PhpAro
                     }
 
                     if (!isset($this->_tree[$dependency])) {
-                        $this->_tree[$dependency] = array();
+                        $this->_tree[$dependency] = [];
                     }
 
                     $this->_tree[$dependency][] = $role;
@@ -222,7 +222,7 @@ class PhpAro
      */
     public function build(array $aros)
     {
-        $this->_tree = array();
+        $this->_tree = [];
         $this->addRole($aros);
     }
 }
