@@ -11,7 +11,7 @@
  * @link          http://cakephp.org CakePHP(tm) Project
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Acl\Console\Command;
+namespace Acl\Shell;
 
 use Acl\Controller\Component\AclComponent;
 use Cake\Console\Shell;

@@ -64,11 +64,11 @@ class PermissionsTable extends AclNodesTable
         $aroPath = $this->Aro->node($aro);
         $acoPath = $this->Aco->node($aco);
 
-        if (!$aroPath || !$acoPath) {
+        if (!$aroPath) {
             trigger_error(
                 __d(
                     'cake_dev',
-                    "{0} - Failed ARO/ACO node lookup in permissions check. Node references:\nAro: {1}\nAco: {2}",
+                    "{0} - Failed ARO node lookup in permissions check. Node references:\nAro: {1}\nAco: {2}",
                     'DbAcl::check()',
                     print_r($aro, true),
                     print_r($aco, true)
