@@ -270,12 +270,12 @@ class AclNodeTest extends TestCase
         $Aro = TableRegistry::get('DbAroTest');
         $Aro->entityClass(__NAMESPACE__ . '\DbAroUserTest');
         Configure::write('DbAclbindMode', 'string');
-        $result = $Aro->node(['DbAroUserTest' => ['id' => '1', 'foreign_key' => '1']])->extract('id')->toArray();
+        $result = $Aro->node(['DbAroTest' => ['id' => '1', 'foreign_key' => '1']])->extract('id')->toArray();
         $expected = [3, 2, 1];
         $this->assertEquals($expected, $result);
 
         Configure::write('DbAclbindMode', 'array');
-        $result = $Aro->node(['DbAroUserTest' => ['id' => 4, 'foreign_key' => 2]])->extract('id')->toArray();
+        $result = $Aro->node(['DbAroTest' => ['id' => 4, 'foreign_key' => 2]])->extract('id')->toArray();
         $expected = [4];
         $this->assertEquals($expected, $result);
     }
