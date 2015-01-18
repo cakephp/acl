@@ -17,6 +17,7 @@ use Cake\Core\Configure;
 use Cake\Core\Exception;
 use Cake\ORM\Entity;
 use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 
 /**
  * ACL Nodes
@@ -110,13 +111,15 @@ class AclNodesTable extends Table
             $name = key($ref);
             list(, $alias) = pluginSplit($name);
 
-            $entityClass = $this->entityClass();
+            $bindTable = TableRegistry::get($name);
+            $entityClass = $bindTable->entityClass();
+
             if ($entityClass) {
                 $entity = new $entityClass();
             }
 
             if (empty($entity)) {
-                throw new Exception\Exception(__d('cake_dev', "Entity class '{0}' not found in AclNode::node() when trying to bind {1} object", [$type, $this->alias()]));
+                throw new Exception\Exception(__d('cake_dev', "Entity class {0} not found in AclNode::node() when trying to bind {1} object", [$type, $this->alias()]));
             }
 
             $tmpRef = null;

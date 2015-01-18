@@ -138,9 +138,9 @@ class AclShell extends Shell
         $data['parent_id'] = $parent;
         $entity = $this->Acl->{$class}->newEntity($data);
         if ($this->Acl->{$class}->save($entity)) {
-            $this->out(__d('cake_acl', "<success>New {0}</success> '{1}' created.", [$class, $this->args[2]]), 2);
+            $this->out(__d('cake_acl', "<success>New {0}</success> {1} created.", [$class, $this->args[2]]), 2);
         } else {
-            $this->err(__d('cake_acl', "There was a problem creating a new {0} '{1}'.", [$class, $this->args[2]]));
+            $this->err(__d('cake_acl', "There was a problem creating a new {0} {1}.", [$class, $this->args[2]]));
         }
     }
 
@@ -203,7 +203,7 @@ class AclShell extends Shell
 
         if (empty($nodes) || $nodes->count() === 0) {
             $this->error(
-                __d('cake_acl', "Supplied Node '{0}' not found", [$this->args[1]]),
+                __d('cake_acl', "Supplied Node {0} not found", [$this->args[1]]),
                 __d('cake_acl', 'No tree returned.')
             );
         }

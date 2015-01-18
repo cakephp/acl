@@ -12,5 +12,9 @@
  */
 use Cake\Core\Configure;
 
-Configure::write('Acl.classname', 'DbAcl');
-Configure::write('Acl.database', 'default');
+if (!Configure::read('Acl.classname')) {
+    Configure::write('Acl.classname', 'DbAcl');
+}
+if (!Configure::read('Acl.database')) {
+    Configure::write('Acl.database', 'default');
+}
