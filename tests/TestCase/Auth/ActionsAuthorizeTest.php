@@ -197,4 +197,32 @@ class ActionsAuthorizeTest extends TestCase
         $result = $this->auth->action($request);
         $this->assertEquals('controllers/DebugKit/Posts/index', $result);
     }
+
+    public function testActionWithPluginAndPrefix()
+    {
+        $request = new Request('/debug_kit/admin/posts/index');
+        $request->addParams([
+            'plugin' => 'debug_kit',
+            'prefix' => 'admin',
+            'controller' => 'posts',
+            'action' => 'index'
+        ]);
+
+        $result = $this->auth->action($request);
+        $this->assertEquals('controllers/DebugKit/admin/Posts/index', $result);
+    }
+
+    public function testActionWithPrefix()
+    {
+        $request = new Request('/admin/posts/index');
+        $request->addParams([
+            'plugin' => null,
+            'prefix' => 'admin',
+            'controller' => 'posts',
+            'action' => 'index'
+        ]);
+
+        $result = $this->auth->action($request);
+        $this->assertEquals('controllers/admin/Posts/index', $result);
+    }
 }
