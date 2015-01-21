@@ -310,16 +310,16 @@ class AclShell extends Shell
         if (isset($this->args[1])) {
             $identity = $this->parseIdentifier($this->args[1]);
 
-            $topNode = $this->Acl->{$alias}->find('all', [
+            $topNode = $this->Acl->{$class}->find('all', [
                 'conditions' => [$alias . '.id' => $this->_getNodeId($class, $identity)]
             ])->first();
 
-            $nodes = $this->Acl->{$alias}->find('all', [
+            $nodes = $this->Acl->{$class}->find('all', [
                 'conditions' => [
-                    $alias . '.lft >=' => $topNode[$class]['lft'],
-                    $alias . '.lft <=' => $topNode[$class]['rght']
+                    $alias . '.lft >=' => $topNode->lft,
+                    $alias . '.lft <=' => $topNode->rght
                 ],
-                'order' => $class . '.lft ASC'
+                'order' => $alias . '.lft ASC'
             ]);
         } else {
             $nodes = $this->Acl->{$class}->find('all', ['order' => $alias . '.lft ASC']);
