@@ -58,15 +58,17 @@ abstract class BaseAuthorize extends ParentAuthorize
      * @param string $path Path
      * @return string The action path for the given request.
      */
-    public function action(Request $request, $path = '/:plugin/:controller/:action')
+    public function action(Request $request, $path = '/:plugin/:prefix/:controller/:action')
     {
         $plugin = empty($request['plugin']) ? null : Inflector::camelize($request['plugin']) . '/';
+        $prefix = empty($request['prefix']) ? null : $request['prefix'] . '/';
         $path = str_replace(
-            [':controller', ':action', ':plugin/'],
-            [Inflector::camelize($request['controller']), $request['action'], $plugin],
+            [':controller', ':action', ':plugin/', ':prefix/'],
+            [Inflector::camelize($request['controller']), $request['action'], $plugin, $prefix],
             $this->_config['actionPath'] . $path
         );
         $path = str_replace('//', '/', $path);
+
         return trim($path, '/');
     }
 
