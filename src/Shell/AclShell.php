@@ -367,7 +367,10 @@ class AclShell extends Shell
      */
     public function initdb()
     {
-        return $this->dispatchShell('schema create DbAcl');
+        $_SERVER['argv'][1]='migrations';
+        $_SERVER['argv'][2]='migrate';
+        $_SERVER['argv'][3]='--plugin=acl';
+        return $this->dispatchShell('migrations migrate --plugin=acl');
     }
 
     /**
