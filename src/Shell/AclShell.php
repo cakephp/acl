@@ -55,7 +55,7 @@ class AclShell extends Shell
      *
      * @var array
      */
-    public $tasks = ['DbConfig'];
+    public $tasks = ['DbConfig','Acl.AcoSync'];
 
     /**
      * Override startup of the Shell
@@ -367,7 +367,19 @@ class AclShell extends Shell
      */
     public function initdb()
     {
-        return $this->dispatchShell('schema create DbAcl');
+        $_SERVER['argv'][1]='migrations';
+        $_SERVER['argv'][2]='migrate';
+        $_SERVER['argv'][3]='--plugin=acl';
+        return $this->dispatchShell('migrations migrate --plugin=acl');
+    }
+
+    /**
+     * Syncronize ACOs
+     *
+     * @return mixed
+     */
+    public function acosync(){
+        return $this->AcoSync->main();
     }
 
     /**
@@ -510,6 +522,9 @@ class AclShell extends Shell
             ]
         ])->addSubcommand('initdb', [
             'help' => __d('cake_acl', 'Initialize the DbAcl tables. Uses this command : cake schema create DbAcl')
+        ])->addSubcommand('acosync', [
+            'help' => __d('cake_acl', 'Syncronize acos')
+
         ])->epilog(
             [
                 'Node and parent arguments can be in one of the following formats:',
