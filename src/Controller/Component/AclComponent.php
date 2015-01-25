@@ -14,11 +14,11 @@
 namespace Acl\Controller\Component;
 
 use Acl\AclInterface;
-use Cake\Configure\Engine\IniConfig;
 use Cake\Controller\Component;
 use Cake\Controller\ComponentRegistry;
 use Cake\Core\App;
 use Cake\Core\Configure;
+use Cake\Core\Configure\Engine\IniConfig;
 use Cake\Core\Exception\Exception;
 use Cake\Utility\ClassRegistry;
 use Cake\Utility\Inflector;

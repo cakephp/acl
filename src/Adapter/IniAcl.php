@@ -14,8 +14,8 @@
 namespace Acl\Adapter;
 
 use Acl\AclInterface;
-use Cake\Configure\Engine\IniConfig;
 use Cake\Controller\Component;
+use Cake\Core\Configure\Engine\IniConfig;
 use Cake\Core\InstanceConfigTrait;
 use Cake\Utility\Hash;
 
@@ -63,7 +63,7 @@ class IniAcl implements AclInterface
     public function config($key = null, $value = null, $merge = true)
     {
         if (!$this->_configInitialized) {
-            $this->_defaultConfig = $this->readConfigFile(APP . 'Config/acl.ini');
+            $this->_defaultConfig = $this->readConfigFile(APP . 'Config/acl');
         }
 
         if (is_array($key) || func_num_args() >= 2) {

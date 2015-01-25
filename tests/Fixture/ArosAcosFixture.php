@@ -27,7 +27,7 @@ class ArosAcosFixture extends TestFixture
      *
      * @var array
      */
-    public $fields = array(
+    public $fields = [
         'id' => ['type' => 'integer'],
         'aro_id' => ['type' => 'integer', 'length' => 10, 'null' => false],
         'aco_id' => ['type' => 'integer', 'length' => 10, 'null' => false],
@@ -36,12 +36,12 @@ class ArosAcosFixture extends TestFixture
         '_update' => ['type' => 'string', 'length' => 2, 'default' => 0],
         '_delete' => ['type' => 'string', 'length' => 2, 'default' => 0],
         '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]]
-    );
+    ];
 
     /**
      * records property
      *
      * @var array
      */
-    public $records = array();
+    public $records = [];
 }

@@ -31,7 +31,7 @@ class IniAclTest extends TestCase
      */
     public function testCheck()
     {
-        $iniFile = TEST_APP . 'TestApp/Config/acl.ini';
+        $iniFile = TEST_APP . 'TestApp/Config/acl';
 
         $Ini = new IniAcl();
         $Ini->config = $Ini->readConfigFile($iniFile);
@@ -55,15 +55,15 @@ class IniAclTest extends TestCase
      */
     public function testCheckArray()
     {
-        $iniFile = TEST_APP . 'TestApp/Config/acl.ini';
+        $iniFile = TEST_APP . 'TestApp/Config/acl';
 
         $Ini = new IniAcl();
         $Ini->config = $Ini->readConfigFile($iniFile);
         $Ini->userPath = 'User.username';
 
-        $user = array(
-            'User' => array('username' => 'admin')
-        );
+        $user = [
+            'User' => ['username' => 'admin']
+        ];
         $this->assertTrue($Ini->check($user, 'posts'));
     }
 }

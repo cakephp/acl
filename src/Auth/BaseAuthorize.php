@@ -58,15 +58,17 @@ abstract class BaseAuthorize extends ParentAuthorize
      * @param string $path Path
      * @return string The action path for the given request.
      */
-    public function action(Request $request, $path = '/:plugin/:controller/:action')
+    public function action(Request $request, $path = '/:plugin/:prefix/:controller/:action')
     {
         $plugin = empty($request['plugin']) ? null : Inflector::camelize($request['plugin']) . '/';
+        $prefix = empty($request['prefix']) ? null : $request['prefix'] . '/';
         $path = str_replace(
-            array(':controller', ':action', ':plugin/'),
-            array(Inflector::camelize($request['controller']), $request['action'], $plugin),
+            [':controller', ':action', ':plugin/', ':prefix/'],
+            [Inflector::camelize($request['controller']), $request['action'], $plugin, $prefix],
             $this->_config['actionPath'] . $path
         );
         $path = str_replace('//', '/', $path);
+
         return trim($path, '/');
     }
 
@@ -77,19 +79,19 @@ abstract class BaseAuthorize extends ParentAuthorize
      * Create additional mappings for a standard CRUD operation:
      *
      * {{{
-     * $this->Auth->mapActions(array('create' => array('add', 'register'));
+     * $this->Auth->mapActions(['create' => ['add', 'register']);
      * }}}
      *
      * Or equivalently:
      *
      * {{{
-     * $this->Auth->mapActions(array('register' => 'create', 'add' => 'create'));
+     * $this->Auth->mapActions(['register' => 'create', 'add' => 'create']);
      * }}}
      *
      * Create mappings for custom CRUD operations:
      *
      * {{{
-     * $this->Auth->mapActions(array('range' => 'search'));
+     * $this->Auth->mapActions([range' => 'search']);
      * }}}
      *
      * You can use the custom CRUD operations to create additional generic
@@ -103,7 +105,7 @@ abstract class BaseAuthorize extends ParentAuthorize
      * @return mixed Either the current mappings or null when setting.
      * @see AuthComponent::mapActions()
      */
-    public function mapActions(array $map = array())
+    public function mapActions(array $map = [])
     {
         if (empty($map)) {
             return $this->_config['actionMap'];

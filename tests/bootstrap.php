@@ -18,7 +18,6 @@ use Cake\Log\Log;
 
 require_once 'vendor/autoload.php';
 
-define('DS', DIRECTORY_SEPARATOR);
 define('ROOT', dirname(__DIR__));
 define('APP_DIR', 'TestApp');
 define('WEBROOT_DIR', 'webroot');

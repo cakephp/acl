@@ -18,8 +18,8 @@ namespace Acl\Adapter;
 use Acl\AclInterface;
 use Acl\Adapter\Utility\PhpAco;
 use Acl\Adapter\Utility\PhpAro;
-use Cake\Configure\Engine\PhpConfig;
 use Cake\Controller\Component;
+use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\Core\Exception\Exception;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
@@ -53,7 +53,7 @@ class PhpAcl implements AclInterface
      *
      * @var array
      */
-    public $options = array();
+    public $options = [];
 
     /**
      * Aro Object
@@ -76,10 +76,10 @@ class PhpAcl implements AclInterface
      */
     public function __construct()
     {
-        $this->options = array(
+        $this->options = [
             'policy' => static::DENY,
-            'config' => APP . 'Config/acl.php',
-        );
+            'config' => APP . 'Config/acl',
+        ];
     }
 
     /**
@@ -119,11 +119,11 @@ class PhpAcl implements AclInterface
             throw new Exception('Neither "allow" nor "deny" rules were provided in ACL configuration.');
         }
 
-        $rules['allow'] = !empty($config['rules']['allow']) ? $config['rules']['allow'] : array();
-        $rules['deny'] = !empty($config['rules']['deny']) ? $config['rules']['deny'] : array();
-        $roles = !empty($config['roles']) ? $config['roles'] : array();
-        $map = !empty($config['map']) ? $config['map'] : array();
-        $alias = !empty($config['alias']) ? $config['alias'] : array();
+        $rules['allow'] = !empty($config['rules']['allow']) ? $config['rules']['allow'] : [];
+        $rules['deny'] = !empty($config['rules']['deny']) ? $config['rules']['deny'] : [];
+        $roles = !empty($config['roles']) ? $config['roles'] : [];
+        $map = !empty($config['map']) ? $config['map'] : [];
+        $alias = !empty($config['alias']) ? $config['alias'] : [];
 
         $this->Aro = new PhpAro($roles, $map, $alias);
         $this->Aco = new PhpAco($rules);

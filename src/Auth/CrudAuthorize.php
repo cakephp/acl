@@ -40,7 +40,7 @@ class CrudAuthorize extends BaseAuthorize
      * @param ComponentRegistry $registry The component registry from the controller.
      * @param array $config An array of config. This class does not use any config.
      */
-    public function __construct(ComponentRegistry $registry, $config = array())
+    public function __construct(ComponentRegistry $registry, $config = [])
     {
         parent::__construct($registry, $config);
     }
@@ -67,7 +67,7 @@ class CrudAuthorize extends BaseAuthorize
             );
             return false;
         }
-        $user = array($this->_config['userModel'] => $user);
+        $user = [$this->_config['userModel'] => $user];
         $Acl = $this->_registry->load('Acl');
         return $Acl->check(
             $user,

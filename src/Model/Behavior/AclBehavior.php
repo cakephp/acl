@@ -42,7 +42,7 @@ class AclBehavior extends Behavior
      *
      * @var array
      */
-    protected $_typeMaps = array('requester' => 'Aro', 'controlled' => 'Aco', 'both' => array('Aro', 'Aco'));
+    protected $_typeMaps = ['requester' => 'Aro', 'controlled' => 'Aco', 'both' => ['Aro', 'Aco']];
 
     /**
      * Sets up the configuration for the model, and loads ACL models if they haven't been already
@@ -66,7 +66,7 @@ class AclBehavior extends Behavior
         $types = $this->_typeMaps[$this->config()['type']];
 
         if (!is_array($types)) {
-            $types = array($types);
+            $types = [$types];
         }
         foreach ($types as $type) {
             $alias = Inflector::pluralize($type);
@@ -124,18 +124,18 @@ class AclBehavior extends Behavior
         $model = $event->subject();
         $types = $this->_typeMaps[$this->config('type')];
         if (!is_array($types)) {
-            $types = array($types);
+            $types = [$types];
         }
         foreach ($types as $type) {
             $parent = $entity->parentNode();
             if (!empty($parent)) {
                 $parent = $this->node($parent, $type)->first();
             }
-            $data = array(
+            $data = [
                 'parent_id' => isset($parent->id) ? $parent->id : null,
                 'model' => $model->alias(),
                 'foreign_key' => $entity->id,
-            );
+            ];
 
             if (!$entity->isNew()) {
                 $node = $this->node($entity, $type)->first();
@@ -157,7 +157,7 @@ class AclBehavior extends Behavior
     {
         $types = $this->_typeMaps[$this->config('type')];
         if (!is_array($types)) {
-            $types = array($types);
+            $types = [$types];
         }
         foreach ($types as $type) {
             $node = $this->node($entity, $type)->toArray();

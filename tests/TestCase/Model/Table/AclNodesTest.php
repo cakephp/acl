@@ -151,7 +151,7 @@ class DbAroUserTest extends Entity
         if (Configure::read('DbAclbindMode') === 'string') {
             return 'ROOT/admins/Gandalf';
         } elseif (Configure::read('DbAclbindMode') === 'array') {
-            return array('DbAroTest' => array('DbAroTest.model' => 'AuthUser', 'DbAroTest.foreign_key' => 2));
+            return ['DbAroTest' => ['DbAroTest.model' => 'AuthUser', 'DbAroTest.foreign_key' => 2]];
         }
     }
 }
@@ -212,32 +212,32 @@ class AclNodeTest extends TestCase
 
         $result = $Aco->node('Controller1');
         $result = $result->extract('id')->toArray();
-        $expected = array(2, 1);
+        $expected = [2, 1];
         $this->assertEquals($expected, $result);
 
         $result = $Aco->node('Controller1/action1');
         $result = $result->extract('id')->toArray();
-        $expected = array(3, 2, 1);
+        $expected = [3, 2, 1];
         $this->assertEquals($expected, $result);
 
         $result = $Aco->node('Controller2/action1');
         $result = $result->extract('id')->toArray();
-        $expected = array(7, 6, 1);
+        $expected = [7, 6, 1];
         $this->assertEquals($expected, $result);
 
         $result = $Aco->node('Controller1/action2');
         $result = $result->extract('id')->toArray();
-        $expected = array(5, 2, 1);
+        $expected = [5, 2, 1];
         $this->assertEquals($expected, $result);
 
         $result = $Aco->node('Controller1/action1/record1');
         $result = $result->extract('id')->toArray();
-        $expected = array(4, 3, 2, 1);
+        $expected = [4, 3, 2, 1];
         $this->assertEquals($expected, $result);
 
         $result = $Aco->node('Controller2/action1/record1');
         $result = $result->extract('id')->toArray();
-        $expected = array(8, 7, 6, 1);
+        $expected = [8, 7, 6, 1];
         $this->assertEquals($expected, $result);
 
         $this->assertFalse($Aco->node('Controller2/action3'));
@@ -270,13 +270,13 @@ class AclNodeTest extends TestCase
         $Aro = TableRegistry::get('DbAroTest');
         $Aro->entityClass(__NAMESPACE__ . '\DbAroUserTest');
         Configure::write('DbAclbindMode', 'string');
-        $result = $Aro->node(['DbAroUserTest' => ['id' => '1', 'foreign_key' => '1']])->extract('id')->toArray();
-        $expected = array(3, 2, 1);
+        $result = $Aro->node(['DbAroTest' => ['id' => '1', 'foreign_key' => '1']])->extract('id')->toArray();
+        $expected = [3, 2, 1];
         $this->assertEquals($expected, $result);
 
         Configure::write('DbAclbindMode', 'array');
-        $result = $Aro->node(['DbAroUserTest' => ['id' => 4, 'foreign_key' => 2]])->extract('id')->toArray();
-        $expected = array(4);
+        $result = $Aro->node(['DbAroTest' => ['id' => 4, 'foreign_key' => 2]])->extract('id')->toArray();
+        $expected = [4];
         $this->assertEquals($expected, $result);
     }
 
@@ -291,12 +291,12 @@ class AclNodeTest extends TestCase
         $Model = new DbAroUserTest(['id' => 1]);
         $Model->source('AuthUser');
         $result = $Aro->node($Model)->extract('id')->toArray();
-        $expected = array(3, 2, 1);
+        $expected = [3, 2, 1];
         $this->assertEquals($expected, $result);
 
         $Model->id = 2;
         $result = $Aro->node($Model)->extract('id')->toArray();
-        $expected = array(4, 2, 1);
+        $expected = [4, 2, 1];
         $this->assertEquals($expected, $result);
     }
 

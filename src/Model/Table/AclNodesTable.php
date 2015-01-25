@@ -17,6 +17,7 @@ use Cake\Core\Configure;
 use Cake\Core\Exception;
 use Cake\ORM\Entity;
 use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 
 /**
  * ACL Nodes
@@ -66,7 +67,7 @@ class AclNodesTable extends Table
                         'table' => $table,
                         'alias' => "{$type}0",
                         'type' => 'INNER',
-                        'conditions' => array("{$type}0.alias" => $start)
+                        'conditions' => ["{$type}0.alias" => $start]
                 ]],
                 'order' => "{$type}.lft" . ' DESC'
             ];
@@ -105,18 +106,20 @@ class AclNodesTable extends Table
                 return false;
             }
         } elseif (is_object($ref) && $ref instanceof Entity) {
-            $ref = array('model' => $ref->source(), 'foreign_key' => $ref->id);
+            $ref = ['model' => $ref->source(), 'foreign_key' => $ref->id];
         } elseif (is_array($ref) && !(isset($ref['model']) && isset($ref['foreign_key']))) {
             $name = key($ref);
             list(, $alias) = pluginSplit($name);
 
-            $entityClass = $this->entityClass();
+            $bindTable = TableRegistry::get($name);
+            $entityClass = $bindTable->entityClass();
+
             if ($entityClass) {
                 $entity = new $entityClass();
             }
 
             if (empty($entity)) {
-                throw new Exception\Exception(__d('cake_dev', "Entity class '{0}' not found in AclNode::node() when trying to bind {1} object", [$type, $this->alias()]));
+                throw new Exception\Exception(__d('cake_dev', "Entity class {0} not found in AclNode::node() when trying to bind {1} object", [$type, $this->alias()]));
             }
 
             $tmpRef = null;

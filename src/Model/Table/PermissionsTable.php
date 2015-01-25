@@ -64,11 +64,11 @@ class PermissionsTable extends AclNodesTable
         $aroPath = $this->Aro->node($aro);
         $acoPath = $this->Aco->node($aco);
 
-        if (!$aroPath || !$acoPath) {
+        if (!$aroPath) {
             trigger_error(
                 __d(
                     'cake_dev',
-                    "{0} - Failed ARO/ACO node lookup in permissions check. Node references:\nAro: {1}\nAco: {2}",
+                    "{0} - Failed ARO node lookup in permissions check. Node references:\nAro: {1}\nAco: {2}",
                     'DbAcl::check()',
                     print_r($aro, true),
                     print_r($aco, true)
@@ -97,7 +97,7 @@ class PermissionsTable extends AclNodesTable
             return false;
         }
 
-        $inherited = array();
+        $inherited = [];
         $acoIDs = $acoPath->extract('id')->toArray();
 
         $count = $aroPath->count();
@@ -163,7 +163,7 @@ class PermissionsTable extends AclNodesTable
         $perms = $this->getAclLink($aro, $aco);
         $permKeys = $this->getAcoKeys($this->schema()->columns());
         $alias = $this->alias();
-        $save = array();
+        $save = [];
 
         if (!$perms) {
             trigger_error(__d('cake_dev', '{0} - Invalid node', ['DbAcl::allow()']), E_USER_WARNING);
@@ -174,10 +174,10 @@ class PermissionsTable extends AclNodesTable
         }
 
         if ($actions === '*') {
-            $save = array_combine($permKeys, array_pad(array(), count($permKeys), $value));
+            $save = array_combine($permKeys, array_pad([], count($permKeys), $value));
         } else {
             if (!is_array($actions)) {
-                $actions = array('_' . $actions);
+                $actions = ['_' . $actions];
             }
             foreach ($actions as $action) {
                 if ($action{0} !== '_') {
@@ -189,7 +189,7 @@ class PermissionsTable extends AclNodesTable
                 $save[$action] = $value;
             }
         }
-        list($save['aro_id'], $save['aco_id']) = array($perms['aro'], $perms['aco']);
+        list($save['aro_id'], $save['aco_id']) = [$perms['aro'], $perms['aco']];
 
         if ($perms['link'] && !empty($perms['link'][$alias])) {
             $save['id'] = $perms['link'][$alias][0]['id'];
@@ -211,7 +211,7 @@ class PermissionsTable extends AclNodesTable
      */
     public function getAclLink($aro, $aco)
     {
-        $obj = array();
+        $obj = [];
         $obj['Aro'] = $this->Aro->node($aro);
         $obj['Aco'] = $this->Aco->node($aco);
 
@@ -224,7 +224,7 @@ class PermissionsTable extends AclNodesTable
         $aco = current($aco);
         $alias = $this->alias();
 
-        $result = array(
+        $result = [
             'aro' => $aro,
             'aco' => $aco,
             'link' => [
@@ -235,7 +235,7 @@ class PermissionsTable extends AclNodesTable
                     ]
                 ])->hydrate(false)->toArray()
             ],
-        );
+        ];
         return $result;
     }
 
@@ -247,9 +247,9 @@ class PermissionsTable extends AclNodesTable
      */
     public function getAcoKeys($keys)
     {
-        $newKeys = array();
+        $newKeys = [];
         foreach ($keys as $key) {
-            if (!in_array($key, array('id', 'aro_id', 'aco_id'))) {
+            if (!in_array($key, ['id', 'aro_id', 'aco_id'])) {
                 $newKeys[] = $key;
             }
         }

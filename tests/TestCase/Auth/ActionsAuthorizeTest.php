@@ -32,8 +32,8 @@ class ActionsAuthorizeTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->controller = $this->getMock('Cake\Controller\Controller', array(), array(), '', false);
-        $this->Acl = $this->getMock('Acl\Controller\Component\AclComponent', array(), array(), '', false);
+        $this->controller = $this->getMock('Cake\Controller\Controller', [], [], '', false);
+        $this->Acl = $this->getMock('Acl\Controller\Component\AclComponent', [], [], '', false);
         $this->Collection = $this->getMock('Cake\Controller\ComponentRegistry');
 
         $this->auth = new ActionsAuthorize($this->Collection);
@@ -60,18 +60,18 @@ class ActionsAuthorizeTest extends TestCase
      */
     public function testAuthorizeFailure()
     {
-        $user = array(
-            'Users' => array(
+        $user = [
+            'Users' => [
                 'id' => 1,
                 'user' => 'mariano'
-            )
-        );
+            ]
+        ];
         $request = new Request('/posts/index');
-        $request->addParams(array(
+        $request->addParams([
             'plugin' => null,
             'controller' => 'posts',
             'action' => 'index'
-        ));
+        ]);
 
         $this->_mockAcl();
 
@@ -90,18 +90,18 @@ class ActionsAuthorizeTest extends TestCase
      */
     public function testAuthorizeSuccess()
     {
-        $user = array(
-            'Users' => array(
+        $user = [
+            'Users' => [
                 'id' => 1,
                 'user' => 'mariano'
-            )
-        );
+            ]
+        ];
         $request = new Request('/posts/index');
-        $request->addParams(array(
+        $request->addParams([
             'plugin' => null,
             'controller' => 'posts',
             'action' => 'index'
-        ));
+        ]);
 
         $this->_mockAcl();
 
@@ -121,21 +121,21 @@ class ActionsAuthorizeTest extends TestCase
     public function testAuthorizeSettings()
     {
         $request = new Request('/posts/index');
-        $request->addParams(array(
+        $request->addParams([
             'plugin' => null,
             'controller' => 'posts',
             'action' => 'index'
-        ));
+        ]);
 
         $this->_mockAcl();
 
         $this->auth->config('userModel', 'TestPlugin.AuthUser');
-        $user = array(
+        $user = [
             'id' => 1,
             'username' => 'mariano'
-        );
+        ];
 
-        $expected = array('TestPlugin.AuthUser' => array('id' => 1, 'username' => 'mariano'));
+        $expected = ['TestPlugin.AuthUser' => ['id' => 1, 'username' => 'mariano']];
         $this->Acl->expects($this->once())
             ->method('check')
             ->with($expected, 'controllers/Posts/index')
@@ -152,11 +152,11 @@ class ActionsAuthorizeTest extends TestCase
     public function testActionMethod()
     {
         $request = new Request('/posts/index');
-        $request->addParams(array(
+        $request->addParams([
             'plugin' => null,
             'controller' => 'posts',
             'action' => 'index'
-        ));
+        ]);
 
         $result = $this->auth->action($request);
         $this->assertEquals('controllers/Posts/index', $result);
@@ -171,11 +171,11 @@ class ActionsAuthorizeTest extends TestCase
     {
         $this->auth->config('actionPath', '/controllers/');
         $request = new Request('/posts/index', false);
-        $request->addParams(array(
+        $request->addParams([
             'plugin' => null,
             'controller' => 'posts',
             'action' => 'index'
-        ));
+        ]);
         $result = $this->auth->action($request);
         $this->assertEquals('controllers/Posts/index', $result);
     }
@@ -188,13 +188,41 @@ class ActionsAuthorizeTest extends TestCase
     public function testActionWithPlugin()
     {
         $request = new Request('/debug_kit/posts/index');
-        $request->addParams(array(
+        $request->addParams([
             'plugin' => 'debug_kit',
             'controller' => 'posts',
             'action' => 'index'
-        ));
+        ]);
 
         $result = $this->auth->action($request);
         $this->assertEquals('controllers/DebugKit/Posts/index', $result);
+    }
+
+    public function testActionWithPluginAndPrefix()
+    {
+        $request = new Request('/debug_kit/admin/posts/index');
+        $request->addParams([
+            'plugin' => 'debug_kit',
+            'prefix' => 'admin',
+            'controller' => 'posts',
+            'action' => 'index'
+        ]);
+
+        $result = $this->auth->action($request);
+        $this->assertEquals('controllers/DebugKit/admin/Posts/index', $result);
+    }
+
+    public function testActionWithPrefix()
+    {
+        $request = new Request('/admin/posts/index');
+        $request->addParams([
+            'plugin' => null,
+            'prefix' => 'admin',
+            'controller' => 'posts',
+            'action' => 'index'
+        ]);
+
+        $result = $this->auth->action($request);
+        $this->assertEquals('controllers/admin/Posts/index', $result);
     }
 }
