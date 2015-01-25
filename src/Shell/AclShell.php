@@ -70,7 +70,6 @@ class AclShell extends Shell
         }
 
         $class = Configure::read('Acl.classname');
-
         $className = App::classname('Acl.' . $class, 'Adapter');
         if (
             $class !== 'DbAcl' &&
@@ -108,7 +107,6 @@ class AclShell extends Shell
      */
     public function main()
     {
-        // $this->AcoSync->main();
         $this->out($this->OptionParser->help());
     }
 
@@ -134,15 +132,15 @@ class AclShell extends Shell
         if (is_string($data) && $data !== '/') {
             $data = ['alias' => $data];
         } elseif (is_string($data)) {
-            $this->error(__d('cake_acl', '/ can not be used as an alias!') . __d('cake_acl', "  / is the root, please supply a sub alias"));
+            $this->error(__d('cake_acl', '/ can not be used as an alias!') . __d('cake_acl', "	/ is the root, please supply a sub alias"));
         }
 
         $data['parent_id'] = $parent;
         $entity = $this->Acl->{$class}->newEntity($data);
         if ($this->Acl->{$class}->save($entity)) {
-            $this->out(__d('cake_acl', "<success>New {0}</success> '{1}' created.", [$class, $this->args[2]]), 2);
+            $this->out(__d('cake_acl', "<success>New {0}</success> {1} created.", [$class, $this->args[2]]), 2);
         } else {
-            $this->err(__d('cake_acl', "There was a problem creating a new {0} '{1}'.", [$class, $this->args[2]]));
+            $this->err(__d('cake_acl', "There was a problem creating a new {0} {1}.", [$class, $this->args[2]]));
         }
     }
 
@@ -205,7 +203,7 @@ class AclShell extends Shell
 
         if (empty($nodes) || $nodes->count() === 0) {
             $this->error(
-                __d('cake_acl', "Supplied Node '{0}' not found", [$this->args[1]]),
+                __d('cake_acl', "Supplied Node {0} not found", [$this->args[1]]),
                 __d('cake_acl', 'No tree returned.')
             );
         }
@@ -312,16 +310,16 @@ class AclShell extends Shell
         if (isset($this->args[1])) {
             $identity = $this->parseIdentifier($this->args[1]);
 
-            $topNode = $this->Acl->{$alias}->find('all', [
+            $topNode = $this->Acl->{$class}->find('all', [
                 'conditions' => [$alias . '.id' => $this->_getNodeId($class, $identity)]
             ])->first();
 
-            $nodes = $this->Acl->{$alias}->find('all', [
+            $nodes = $this->Acl->{$class}->find('all', [
                 'conditions' => [
-                    $alias . '.lft >=' => $topNode[$class]['lft'],
-                    $alias . '.lft <=' => $topNode[$class]['rght']
+                    $alias . '.lft >=' => $topNode->lft,
+                    $alias . '.lft <=' => $topNode->rght
                 ],
-                'order' => $class . '.lft ASC'
+                'order' => $alias . '.lft ASC'
             ]);
         } else {
             $nodes = $this->Acl->{$class}->find('all', ['order' => $alias . '.lft ASC']);
@@ -369,7 +367,10 @@ class AclShell extends Shell
      */
     public function initdb()
     {
-        return $this->dispatchShell('schema create DbAcl');
+        $_SERVER['argv'][1]='migrations';
+        $_SERVER['argv'][2]='migrate';
+        $_SERVER['argv'][3]='--plugin=acl';
+        return $this->dispatchShell('migrations migrate --plugin=acl');
     }
 
     /**
@@ -378,7 +379,7 @@ class AclShell extends Shell
      * @return mixed
      */
     public function acosync(){
-        $this->AcoSync->main();
+        return $this->AcoSync->main();
     }
 
     /**

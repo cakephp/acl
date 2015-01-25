@@ -95,7 +95,7 @@ class AcoSyncTask extends Shell {
         } else {
             $plugin = $params['plugin'];
             if (!in_array($plugin, App::objects('plugin')) || !CakePlugin::loaded($plugin)) {
-                $this->err(__d('cake_acl', "Plugin {0} not found or not activated.", [$plugin]));
+                $this->err(__d('cake_acl', "<error>Plugin {0} not found or not activated.</error>", [$plugin]));
                 return false;
             }
             $plugins = array($params['plugin']);
@@ -106,7 +106,7 @@ class AcoSyncTask extends Shell {
             $pluginRoot = $this->_checkNode($path, $plugin, $root->id);
             $this->_updateControllers($pluginRoot, $controllers, $plugin);
         }
-        $this->out(__d('cake_acl','Aco Update Complete'));
+        $this->out(__d('cake_acl','<success>Aco Update Complete</success>'));
         return true;
     }
 /**
@@ -153,7 +153,7 @@ class AcoSyncTask extends Shell {
                     $entity = $this->Aco->get($ctrlNode->id);
                     if ($this->Aco->delete($entity)) {
                         $this->out(__d('cake_acl',
-                            'Deleted {0} and all children',
+                            'Deleted <warning>{0}</warning> and all children',
                             $this->rootNode . '/' .$plugin.'/'. $ctrlNode->alias
                         ));
                     }
@@ -200,7 +200,7 @@ class AcoSyncTask extends Shell {
             ];
             $entity = $this->Aco->newEntity($data);
             $node = $this->Aco->save($entity);
-            $this->out(__('Created Aco node: <success>{0}</success>', $path));
+            $this->out(__d('cake_acl','Created Aco node: <success>{0}</success>', $path));
         } else {
             $node = $node->first();
         }
@@ -255,7 +255,7 @@ class AcoSyncTask extends Shell {
         $prefix = $this->get_prefix($namespace, $pluginPath);
 
         if ($actions == null) {
-            $this->err(__('Unable to get methods for {0}', $className));
+            $this->err(__d('cake_acl','Unable to get methods for {0}', $className));
             return false;
         }
         $methods = array_diff($actions, $baseMethods);
@@ -277,7 +277,7 @@ class AcoSyncTask extends Shell {
                     $entity = $this->Aco->get($action->id);
                     if ($this->Aco->delete($entity)) {
                         $path = $this->rootNode . '/' . $controllerName . '/' . $action->alias;
-                        $this->out(__('Deleted Aco node: <warning>{0}</warning>', $path));
+                        $this->out(__d('cake_acl','Deleted Aco node: <warning>{0}</warning>', $path));
                     }
                 }
             }
