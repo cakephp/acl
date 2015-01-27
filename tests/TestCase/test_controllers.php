@@ -1,5 +1,7 @@
 <?php
 
+use Cake\Controller\Controller;
+
 class CommentsController extends Controller {
 
 	public function add() {
