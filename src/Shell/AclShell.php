@@ -71,10 +71,7 @@ class AclShell extends Shell
 
         $class = Configure::read('Acl.classname');
         $className = App::classname('Acl.' . $class, 'Adapter');
-        if (
-            $class !== 'DbAcl' &&
-            !is_subclass_of($className, 'Acl\Adapter\DbAcl')
-        ) {
+        if ($class !== 'DbAcl' && !is_subclass_of($className, 'Acl\Adapter\DbAcl')) {
             $out = "--------------------------------------------------\n";
             $out .= __d('cake_acl', 'Error: Your current CakePHP configuration is set to an ACL implementation other than DB.') . "\n";
             $out .= __d('cake_acl', 'Please change your core config to reflect your decision to use DbAcl before attempting to use this script') . "\n";
