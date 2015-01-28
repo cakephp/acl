@@ -98,8 +98,8 @@ class AclNodesTable extends Table
             $result = $query->toArray();
             $path = array_values($path);
 
-            if (!isset($result[0]) 
-                || (!empty($path) && $result[0]->alias != $path[count($path) - 1]) 
+            if (!isset($result[0])
+                || (!empty($path) && $result[0]->alias != $path[count($path) - 1])
                 || (empty($path) && $result[0]->alias != $start)
             ) {
                 return false;
