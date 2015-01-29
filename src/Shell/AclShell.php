@@ -92,11 +92,9 @@ class AclShell extends Shell
                 return $this->DbConfig->execute();
             }
 
-            if (!in_array($this->command, ['initdb'])) {
-                $registry = new ComponentRegistry();
-                $this->Acl = new AclComponent($registry);
-                $controller = new Controller();
-            }
+            $registry = new ComponentRegistry();
+            $this->Acl = new AclComponent($registry);
+            $controller = new Controller();
         }
     }
 
@@ -361,16 +359,6 @@ class AclShell extends Shell
     }
 
     /**
-     * Initialize ACL database.
-     *
-     * @return mixed
-     */
-    public function initdb()
-    {
-        return $this->dispatchShell('schema create DbAcl');
-    }
-
-    /**
      * Gets the option parser instance and configures it.
      *
      * @return ConsoleOptionParser
@@ -508,8 +496,6 @@ class AclShell extends Shell
                     'node' => ['help' => __d('cake_acl', 'The optional node to view the subtree of.')]
                 ]
             ]
-        ])->addSubcommand('initdb', [
-            'help' => __d('cake_acl', 'Initialize the DbAcl tables. Uses this command : cake schema create DbAcl')
         ])->epilog(
             [
                 'Node and parent arguments can be in one of the following formats:',
