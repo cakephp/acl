@@ -59,6 +59,18 @@ class AclExtrasShell extends Shell
         parent::startup();
         $this->AclExtras->startup();
         $this->AclExtras->Shell = $this;
+
+        if ($this->command) {
+            try {
+                \Cake\ORM\TableRegistry::get('Aros')->schema();
+            } catch (\Cake\Database\Exception $e) {
+                $this->out(__d('cake_acl', 'Acl database tables not found. To create them, run:'));
+                $this->out();
+                $this->out('  bin/cake Migrations.migrations migrate -p Acl');
+                $this->out();
+                return $this->_stop();
+            }
+        }
     }
 
 /**
