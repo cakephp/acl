@@ -25,9 +25,6 @@ use Cake\Filesystem\Folder;
 
 /**
  * Shell for ACO extras
- *
- * @package		acl_extras
- * @subpackage	acl_extras.Console.Command
  */
 class AclExtras
 {
@@ -36,7 +33,6 @@ class AclExtras
  * Contains instance of AclComponent
  *
  * @var AclComponent
- * @access public
  */
     public $Acl;
 
@@ -44,7 +40,6 @@ class AclExtras
  * Contains arguments parsed from the command line.
  *
  * @var array
- * @access public
  */
     public $args;
 
@@ -52,7 +47,6 @@ class AclExtras
  * Contains database source to use
  *
  * @var string
- * @access public
  */
     public $dataSource = 'default';
 
@@ -60,21 +54,21 @@ class AclExtras
  * Root node name.
  *
  * @var string
- **/
+ */
     public $rootNode = 'controllers';
 
 /**
  * Internal Clean Actions switch
  *
- * @var boolean
- **/
+ * @var bool
+ */
     protected $_clean = false;
 
 /**
  * Start up And load Acl Component / Aco model
  *
  * @return void
- **/
+ */
     public function startup($controller = null)
     {
         if (!$controller) {
@@ -104,22 +98,24 @@ class AclExtras
         }
     }
 
-/**
- * Sync the ACO table
- *
- * @return void
- **/
+    /**
+     * Sync the ACO table
+     *
+     * @param array $params An array of parameters
+     * @return void
+     */
     public function aco_sync($params = [])
     {
         $this->_clean = true;
         $this->aco_update($params);
     }
 
-/**
- * Updates the Aco Tree with new controller actions.
- *
- * @return void
- **/
+    /**
+     * Updates the Aco Tree with new controller actions.
+     *
+     * @param array $params An array of parameters
+     * @return void
+     */
     public function aco_update($params = [])
     {
         $root = $this->_checkNode($this->rootNode, $this->rootNode, null);
@@ -145,14 +141,14 @@ class AclExtras
         return true;
     }
 
-/**
- * Updates a collection of controllers.
- *
- * @param array $root Array or ACO information for root node.
- * @param array $controllers Array of Controllers
- * @param string $plugin Name of the plugin you are making controllers for.
- * @return void
- */
+    /**
+     * Updates a collection of controllers.
+     *
+     * @param array $root Array or ACO information for root node.
+     * @param array $controllers Array of Controllers
+     * @param string $plugin Name of the plugin you are making controllers for.
+     * @return void
+     */
     protected function _updateControllers($root, $controllers, $plugin = null)
     {
         $dotPlugin = $pluginPath = $plugin;
@@ -196,14 +192,14 @@ class AclExtras
         }
     }
 
-/**
- * Get a list of controllers in the app and plugins.
- *
- * Returns an array of path => import notation.
- *
- * @param string $plugin Name of plugin to get controllers for
- * @return array
- **/
+    /**
+     * Get a list of controllers in the app and plugins.
+     *
+     * Returns an array of path => import notation.
+     *
+     * @param string $plugin Name of plugin to get controllers for
+     * @return array
+     */
     public function getControllerList($plugin = null)
     {
         if (!$plugin) {
@@ -219,14 +215,14 @@ class AclExtras
         return $controllers;
     }
 
-/**
- * Check a node for existance, create it if it doesn't exist.
- *
- * @param string $path
- * @param string $alias
- * @param int $parentId
- * @return array Aco Node array
- */
+    /**
+     * Check a node for existance, create it if it doesn't exist.
+     *
+     * @param string $path
+     * @param string $alias
+     * @param int $parentId
+     * @return array Aco Node array
+     */
     protected function _checkNode($path, $alias, $parentId = null)
     {
         $node = $this->Aco->node($path);
@@ -245,9 +241,13 @@ class AclExtras
         return $node;
     }
 
-/**
- * Get a list of registered callback methods
- */
+    /**
+     * Get a list of registered callback methods
+     *
+     * @param string $className The class to reflect on.
+     * @param string $pluginPath The plugin path.
+     * @return array
+     */
     protected function _getCallbacks($className, $pluginPath = false)
     {
         $callbacks = array();
@@ -280,14 +280,14 @@ class AclExtras
         return $callbacks;
     }
 
-/**
- * Check and Add/delete controller Methods
- *
- * @param string $controller
- * @param array $node
- * @param string $plugin Name of plugin
- * @return void
- */
+    /**
+     * Check and Add/delete controller Methods
+     *
+     * @param string $controller
+     * @param array $node
+     * @param string $plugin Name of plugin
+     * @return void
+     */
     protected function _checkMethods($className, $controllerName, $node, $pluginPath = false)
     {
         $excludes = $this->_getCallbacks($className, $pluginPath);
@@ -325,13 +325,12 @@ class AclExtras
         return true;
     }
 
-/**
- * Verify a Acl Tree
- *
- * @param string $type The type of Acl Node to verify
- * @access public
- * @return void
- */
+    /**
+     * Verify a Acl Tree
+     *
+     * @param string $type The type of Acl Node to verify
+     * @return void
+     */
     public function verify()
     {
         $type = Inflector::camelize($this->args[0]);
@@ -344,13 +343,12 @@ class AclExtras
         }
     }
 
-/**
- * Recover an Acl Tree
- *
- * @param string $type The Type of Acl Node to recover
- * @access public
- * @return void
- */
+    /**
+     * Recover an Acl Tree
+     *
+     * @param string $type The Type of Acl Node to recover
+     * @return void
+     */
     public function recover()
     {
         $type = Inflector::camelize($this->args[0]);
@@ -358,6 +356,13 @@ class AclExtras
         $this->out(__('Tree has been recovered, or tree did not need recovery.'));
     }
 
+    /**
+     * Get the namespace for a given class.
+     *
+     * @param string $className The class you want a namespace for.
+     * @param string $pluginPath The plugin path.
+     * @return string
+     */
     protected function _getNamespace($className, $pluginPath = false)
     {
         $namespace = preg_replace('/(.*)Controller\//', '', $className);
@@ -372,6 +377,13 @@ class AclExtras
         return $namespace;
     }
 
+
+    /**
+     * Get the prefix for a namespace.
+     *
+     * @param string|null $namespace The namespace to get a prefix from.
+     * @return string|null
+     */
     protected function _getPrefix($namespace = null)
     {
         if (empty($namespace)) {
@@ -384,6 +396,11 @@ class AclExtras
         return null;
     }
 
+    /**
+     * Get the list of plugins in the application.
+     *
+     * @return array
+     */
     protected function _getPluginList()
     {
         $path = App::path('Plugin');

@@ -15,44 +15,46 @@
 namespace Acl\Shell;
 
 use Cake\Console\Shell;
+use Cake\Console\ConsoleIo;
 use Acl\AclExtras;
+
 
 /**
  * Shell for ACO extras
- *
- * @package     acl_extras
- * @subpackage  acl_extras.Console.Command
  */
 class AclExtrasShell extends Shell
 {
 
-/**
- * Contains arguments parsed from the command line.
- *
- * @var array
- * @access public
- */
+    /**
+     * Contains arguments parsed from the command line.
+     *
+     * @var array
+     */
     public $args;
 
-/**
- * AclExtras instance
- */
+    /**
+     * AclExtras instance
+     *
+     * @var \Cake\Acl\AclExtras
+     */
     public $AclExtras;
 
-/**
- * Constructor
- */
+    /**
+     * Constructor
+     *
+     * @param \Cake\Console\ConsoleIo $io
+     */
     public function __construct(ConsoleIo $io = null)
     {
         parent::__construct($io);
         $this->AclExtras = new AclExtras();
     }
 
-/**
- * Start up And load Acl Component / Aco model
- *
- * @return void
- **/
+    /**
+     * Start up And load Acl Component / Aco model
+     *
+     * @return void
+     */
     public function startup()
     {
         parent::startup();
@@ -72,27 +74,32 @@ class AclExtrasShell extends Shell
         }
     }
 
-/**
- * Sync the ACO table
- *
- * @return void
- **/
+    /**
+     * Sync the ACO table
+     *
+     * @return void
+     */
     public function acoSync()
     {
         $this->AclExtras->aco_sync($this->params);
     }
 
-/**
- * Updates the Aco Tree with new controller actions.
- *
- * @return void
- **/
+    /**
+     * Updates the Aco Tree with new controller actions.
+     *
+     * @return void
+     */
     public function acoUpdate()
     {
         $this->AclExtras->aco_update($this->params);
         return true;
     }
 
+    /**
+     * Get the option parser for this shell.
+     *
+     * @return \Cake\Console\ConsoleOptionParser
+     */
     public function getOptionParser()
     {
         $parser = parent::getOptionParser();
@@ -140,26 +147,24 @@ class AclExtrasShell extends Shell
         return $parser;
     }
 
-/**
- * Verify a Acl Tree
- *
- * @param string $type The type of Acl Node to verify
- * @access public
- * @return void
- */
+    /**
+     * Verify a Acl Tree
+     *
+     * @param string $type The type of Acl Node to verify
+     * @return void
+     */
     public function verify()
     {
         $this->AclExtras->args = $this->args;
         return $this->AclExtras->verify();
     }
 
-/**
- * Recover an Acl Tree
- *
- * @param string $type The Type of Acl Node to recover
- * @access public
- * @return void
- */
+    /**
+     * Recover an Acl Tree
+     *
+     * @param string $type The Type of Acl Node to recover
+     * @return void
+     */
     public function recover()
     {
         $this->AclExtras->args = $this->args;
