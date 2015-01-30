@@ -297,7 +297,10 @@ class AclExtras
         $reflectionClass = new \ReflectionClass( $namespace );
         $actions = null;
         if ($reflectionClass->IsInstantiable()) {
-            $actions = get_class_methods(new $namespace);
+            $methods = $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC);
+            foreach ($methods as $method) {
+                $actions[] = $method->getName();
+            }
         }
         $prefix = $this->get_prefix($namespace, $pluginPath);
         if ($actions == null) {
