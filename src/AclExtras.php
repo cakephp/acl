@@ -23,7 +23,6 @@ use Cake\Core\App;
 use Cake\Utility\Inflector;
 use Cake\Filesystem\Folder;
 
-
 /**
  * Shell for ACO extras
  *
@@ -127,7 +126,7 @@ class AclExtras
         if (empty($params['plugin'])) {
             $controllers = $this->getControllerList();
             $this->_updateControllers($root, $controllers);
-            $plugins = $this->get_plugin_list();
+            $plugins = $this->_getPluginList();
         } else {
             $plugin = $params['plugin'];
             if (!in_array($plugin, App::objects('plugin')) || !CakePlugin::loaded($plugin)) {
@@ -174,7 +173,7 @@ class AclExtras
         }
         if ($this->_clean) {
             if (!$plugin) {
-                $controllers = array_merge($controllersNames, $this->get_plugin_list());
+                $controllers = array_merge($controllersNames, $this->_getPluginList());
             } else {
                 $controllers = $controllersNames;
             }
@@ -252,7 +251,7 @@ class AclExtras
     protected function _getCallbacks($className, $pluginPath = false)
     {
         $callbacks = array();
-        $namespace = $this->get_namesapce($className, $pluginPath);
+        $namespace = $this->_getNamespace($className, $pluginPath);
         $reflection = new \ReflectionClass($namespace);
         if ($reflection->isAbstract()) {
             return $callbacks;
@@ -293,9 +292,9 @@ class AclExtras
     {
         $excludes = $this->_getCallbacks($className, $pluginPath);
         $baseMethods = get_class_methods(new Controller);
-        $namespace = $this->get_namesapce($className, $pluginPath);
+        $namespace = $this->_getNamespace($className, $pluginPath);
         $actions = get_class_methods(new $namespace);
-        $prefix = $this->get_prefix($namespace, $pluginPath);
+        $prefix = $this->_getPrefix($namespace, $pluginPath);
         if ($actions == null) {
             $this->err(__d('cake_acl', 'Unable to get methods for {0}', $className));
             return false;
@@ -359,35 +358,38 @@ class AclExtras
         $this->out(__('Tree has been recovered, or tree did not need recovery.'));
     }
 
-    protected function get_namesapce($className, $pluginPath = false)
+    protected function _getNamespace($className, $pluginPath = false)
     {
         $namespace = preg_replace('/(.*)Controller\//', '', $className);
         $namespace = preg_replace('/\//', '\\', $namespace);
         $namespace = preg_replace('/\.php/', '', $namespace);
         if (!$pluginPath) {
-            $namespace = '\App\Controller\\'.$namespace;
+            $namespace = '\App\Controller\\' . $namespace;
         } else {
             $pluginPath = preg_replace('/\//', '\\', $pluginPath);
-            $namespace = '\\'.$pluginPath.'Controller\\'.$namespace;
+            $namespace = '\\' . $pluginPath . 'Controller\\' . $namespace;
         }
         return $namespace;
     }
-    protected function get_prefix($namespace = null)
+
+    protected function _getPrefix($namespace = null)
     {
         if (empty($namespace)) {
             return null;
         }
         $path_array = explode('\\', $namespace);
-        if (count($path_array)>=5) {
-            return Inflector::dasherize($path_array[3]).'_';
+        if (count($path_array) >= 5) {
+            return Inflector::dasherize($path_array[3]) . '_';
         }
         return null;
     }
-    protected function get_plugin_list()
+
+    protected function _getPluginList()
     {
         $path = App::path('Plugin');
         $dir = new Folder($path[0]);
         $plugins = $dir->read();
         return $plugins[0];
     }
+
 }

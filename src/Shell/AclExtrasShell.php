@@ -17,7 +17,6 @@ namespace Acl\Shell;
 use Cake\Console\Shell;
 use Acl\AclExtras;
 
-
 /**
  * Shell for ACO extras
  *
@@ -153,6 +152,7 @@ class AclExtrasShell extends Shell
         $this->AclExtras->args = $this->args;
         return $this->AclExtras->verify();
     }
+
 /**
  * Recover an Acl Tree
  *
@@ -165,4 +165,5 @@ class AclExtrasShell extends Shell
         $this->AclExtras->args = $this->args;
         $this->AclExtras->recover();
     }
+
 }
