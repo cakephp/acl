@@ -188,8 +188,8 @@ class AclShell extends Shell
                 'parent_id' => $this->_getNodeId($class, $parent)
             ]
         ];
-        $this->Acl->{$class}->create();
-        if (!$this->Acl->{$class}->save($data)) {
+        $entity = $this->Acl->{$class}->newEntity($data);
+        if (!$this->Acl->{$class}->save($entity)) {
             $this->out(__d('cake_acl', 'Error in setting new parent. Please make sure the parent node exists, and is not a descendant of the node specified.'));
         } else {
             $this->out(__d('cake_acl', 'Node parent set to {0}', [$this->args[2]]) . "\n");
