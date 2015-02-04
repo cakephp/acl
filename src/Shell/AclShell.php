@@ -71,10 +71,7 @@ class AclShell extends Shell
 
         $class = Configure::read('Acl.classname');
         $className = App::classname('Acl.' . $class, 'Adapter');
-        if (
-            $class !== 'DbAcl' &&
-            !is_subclass_of($className, 'Acl\Adapter\DbAcl')
-        ) {
+        if ($class !== 'DbAcl' && !is_subclass_of($className, 'Acl\Adapter\DbAcl')) {
             $out = "--------------------------------------------------\n";
             $out .= __d('cake_acl', 'Error: Your current CakePHP configuration is set to an ACL implementation other than DB.') . "\n";
             $out .= __d('cake_acl', 'Please change your core config to reflect your decision to use DbAcl before attempting to use this script') . "\n";
@@ -164,6 +161,7 @@ class AclShell extends Shell
         $identifier = $this->parseIdentifier($this->args[1]);
         $nodeId = $this->_getNodeId($class, $identifier);
         $entity = $this->Acl->{$class}->newEntity(['id' => $nodeId]);
+        $entity->isNew(false);
 
         if (!$this->Acl->{$class}->delete($entity)) {
             $this->error(__d('cake_acl', 'Node Not Deleted') . __d('cake_acl', 'There was an error deleting the {0}. Check that the node exists.', [$class]) . "\n");
