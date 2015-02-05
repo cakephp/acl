@@ -24,8 +24,6 @@ use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 
-
-
 //import test controller class names.
 include ((dirname(__FILE__))) . DS . 'test_controllers.php';
 
@@ -43,7 +41,8 @@ class AclExtrasShellTestCase extends TestCase
      *
      * @return void
      */
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         Configure::write('Acl.classname', 'DbAcl');
         Configure::write('Acl.database', 'test');
@@ -59,7 +58,8 @@ class AclExtrasShellTestCase extends TestCase
      *
      * @return void
      */
-    public function tearDown() {
+    public function tearDown()
+    {
         parent::tearDown();
         unset($this->Task);
     }
@@ -69,7 +69,8 @@ class AclExtrasShellTestCase extends TestCase
      *
      * @return void
      */
-    public function testRecover() {
+    public function testRecover()
+    {
         $this->markTestIncomplete('This test needs to be updated for cake3.');
         $this->Task->startup();
         $this->Task->args = array('Aco');
@@ -90,7 +91,8 @@ class AclExtrasShellTestCase extends TestCase
      *
      * @return void
      */
-    public function testVerify() {
+    public function testVerify()
+    {
         $this->markTestIncomplete('This test needs to be updated for cake3.');
         $this->Task->startup();
         $this->Task->args = array('Aco');
@@ -111,7 +113,8 @@ class AclExtrasShellTestCase extends TestCase
      *
      * @return void
      */
-    public function testStartup() {
+    public function testStartup()
+    {
         $this->markTestIncomplete('This test needs to be updated for cake3.');
         $this->assertEquals($this->Task->Acl, null);
         $this->Task->startup();
@@ -123,7 +126,8 @@ class AclExtrasShellTestCase extends TestCase
      *
      * @return void
      */
-    protected function _cleanAndSetup() {
+    protected function _cleanAndSetup()
+    {
         $this->markTestIncomplete('This test needs to be updated for cake3.');
         $tableName = $this->db->fullTableName('acos');
         $this->db->execute('DELETE FROM ' . $tableName);
@@ -139,7 +143,8 @@ class AclExtrasShellTestCase extends TestCase
      *
      * @return void
      */
-    public function testAcoUpdate() {
+    public function testAcoUpdate()
+    {
         $this->markTestIncomplete('This test needs to be updated for cake3.');
         $this->_cleanAndSetup();
         $this->Task->aco_update();
@@ -171,7 +176,8 @@ class AclExtrasShellTestCase extends TestCase
      *
      * @return void
      */
-    public function testAcoSyncRemoveMethods() {
+    public function testAcoSyncRemoveMethods()
+    {
         $this->_cleanAndSetup();
         $this->Task->aco_update();
 
@@ -201,7 +207,8 @@ class AclExtrasShellTestCase extends TestCase
      *
      * @return void
      */
-    public function testAcoUpdateAddingMethods() {
+    public function testAcoUpdateAddingMethods()
+    {
         $this->_cleanAndSetup();
         $this->Task->aco_update();
 
@@ -225,7 +232,8 @@ class AclExtrasShellTestCase extends TestCase
      *
      * @return void
      */
-    public function testAddingControllers() {
+    public function testAddingControllers()
+    {
         $this->_cleanAndSetup();
         $this->Task->aco_update();
 
