@@ -163,7 +163,13 @@ class AclExtras
             $tmp = explode('/', $controller);
             $controllerName = str_replace('Controller.php', '', array_pop($tmp));
             $controllersNames[] = $controllerName;
-            $path = $this->rootNode . '/' . $pluginPath . $controllerName;
+            $namespace = $this->_getNamespace($controller, $pluginPath);
+            $prefix = $this->_getPrefix($namespace, $pluginPath);
+            $prefixPath = $this->rootNode . '/' . $pluginPath .   (empty($prefix) ? '' : $prefix);
+            $path = $prefixPath . (empty($prefix) ? '' : '/') .$controllerName;
+            if(!empty($prefix)){
+                $root = $this->_checkNode($prefixPath, $prefix, $root->id);
+            }
             $controllerNode = $this->_checkNode($path, $controllerName, $root->id);
             $this->_checkMethods($controller, $controllerName, $controllerNode, $pluginPath);
         }
@@ -173,6 +179,7 @@ class AclExtras
             } else {
                 $controllers = $controllersNames;
             }
+            $controllers = array_merge($controllers,$this->_getPrefixList());
             $controllerFlip = array_flip($controllers);
             $this->Aco->id = $root->id;
             $controllerNodes = $this->Aco->find()->where(['parent_id'=>$root->id]);
@@ -305,9 +312,9 @@ class AclExtras
             if (strpos($action, '_', 0) === 0) {
                 continue;
             }
-            $path = $this->rootNode . '/' . $pluginPath . $controllerName . '/' . $prefix.$action;
-            $this->_checkNode($path, $prefix.$action, $node->id);
-            $methods[$key]=$prefix.$action;
+            $path = $this->rootNode . '/' . $pluginPath . (empty($prefix) ? '' : $prefix .'/') . $controllerName . '/' . $action;
+            $this->_checkNode($path, $action, $node->id);
+            $methods[$key]=$action;
         }
         if ($this->_clean) {
             $actionNodes = $this->Aco->find('children', ['for'=>$node->id]);
@@ -316,7 +323,7 @@ class AclExtras
                 if (!isset($methodFlip[$action->alias])) {
                     $entity = $this->Aco->get($action->id);
                     if ($this->Aco->delete($entity)) {
-                        $path = $this->rootNode . '/' . $controllerName . '/' . $action->alias;
+                        $path = $this->rootNode . '/' . $pluginPath . (empty($prefix) ? '' : $prefix .'/') . $controllerName . '/' . $action->alias;
                         $this->out(__d('cake_acl', 'Deleted Aco node: <warning>{0}</warning>', $path));
                     }
                 }
@@ -391,7 +398,7 @@ class AclExtras
         }
         $path_array = explode('\\', $namespace);
         if (count($path_array) >= 5) {
-            return Inflector::dasherize($path_array[3]) . '_';
+            return Inflector::dasherize($path_array[3]);
         }
         return null;
     }
@@ -407,6 +414,18 @@ class AclExtras
         $dir = new Folder($path[0]);
         $plugins = $dir->read();
         return $plugins[0];
+    }
+
+    /**
+     * Get the list of prefixes in the application.
+     *
+     * @return array
+     */
+    protected function _getPrefixList(){
+        $path = App::path('Controller');
+        $dir = new Folder($path[0]);
+        $prefixes = $dir->read();
+        return $prefixes[0];
     }
 
 }
