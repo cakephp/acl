@@ -34,7 +34,7 @@ include ((dirname(__FILE__))) . DS . 'test_controllers.php';
 class AclExtrasShellTestCase extends TestCase
 {
 
-    public $fixtures = array('app.acos', 'app.aros', 'app.aros_acos');
+    public $fixtures = ['app.acos', 'app.aros', 'app.aros_acos'];
 
     /**
      * setUp
@@ -49,7 +49,7 @@ class AclExtrasShellTestCase extends TestCase
 
         $this->Task = $this->getMock(
             'AclExtras',
-            array('in', 'out', 'hr', 'createFile', 'error', 'err', 'clear', 'getControllerList')
+            ['in', 'out', 'hr', 'createFile', 'error', 'err', 'clear', 'getControllerList']
         );
     }
 
@@ -73,8 +73,8 @@ class AclExtrasShellTestCase extends TestCase
     {
         $this->markTestIncomplete('This test needs to be updated for cake3.');
         $this->Task->startup();
-        $this->Task->args = array('Aco');
-        $this->Task->Acl->Aco = $this->getMock('Aco', array('recover'));
+        $this->Task->args = ['Aco'];
+        $this->Task->Acl->Aco = $this->getMock('Aco', ['recover']);
         $this->Task->Acl->Aco->expects($this->once())
             ->method('recover')
             ->will($this->returnValue(true));
@@ -95,8 +95,8 @@ class AclExtrasShellTestCase extends TestCase
     {
         $this->markTestIncomplete('This test needs to be updated for cake3.');
         $this->Task->startup();
-        $this->Task->args = array('Aco');
-        $this->Task->Acl->Aco = $this->getMock('Aco', array('verify'));
+        $this->Task->args = ['Aco'];
+        $this->Task->Acl->Aco = $this->getMock('Aco', ['verify']);
         $this->Task->Acl->Aco->expects($this->once())
             ->method('verify')
             ->will($this->returnValue(true));
@@ -133,7 +133,7 @@ class AclExtrasShellTestCase extends TestCase
         $this->db->execute('DELETE FROM ' . $tableName);
         $this->Task->expects($this->any())
             ->method('getControllerList')
-            ->will($this->returnValue(array('CommentsController', 'PostsController', 'BigLongNamesController')));
+            ->will($this->returnValue(['CommentsController', 'PostsController', 'BigLongNamesController']));
 
         $this->Task->startup();
     }
@@ -185,10 +185,10 @@ class AclExtrasShellTestCase extends TestCase
         $Aco->cacheQueries = false;
 
         $result = $Aco->node('controllers/Comments');
-        $new = array(
+        $new = [
             'parent_id' => $result[0]['Aco']['id'],
             'alias' => 'some_method'
-        );
+        ];
         $Aco->create($new);
         $Aco->save();
         $children = $Aco->children($result[0]['Aco']['id']);

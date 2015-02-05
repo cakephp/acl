@@ -129,7 +129,7 @@ class AclExtras
                 $this->err(__d('cake_acl', "<error>Plugin {0} not found or not activated.</error>", [$plugin]));
                 return false;
             }
-            $plugins = array($params['plugin']);
+            $plugins = [$params['plugin']];
         }
         foreach ($plugins as $plugin) {
             $controllers = $this->getControllerList($plugin);
@@ -158,7 +158,7 @@ class AclExtras
         }
         $appIndex = array_search($plugin . 'AppController', $controllers);
         // look at each controller
-        $controllersNames = array();
+        $controllersNames = [];
         foreach ($controllers as $controller) {
             $tmp = explode('/', $controller);
             $controllerName = str_replace('Controller.php', '', array_pop($tmp));
@@ -251,7 +251,7 @@ class AclExtras
      */
     protected function _getCallbacks($className, $pluginPath = false)
     {
-        $callbacks = array();
+        $callbacks = [];
         $namespace = $this->_getNamespace($className, $pluginPath);
         $reflection = new \ReflectionClass($namespace);
         if ($reflection->isAbstract()) {
