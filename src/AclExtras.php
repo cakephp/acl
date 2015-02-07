@@ -12,16 +12,16 @@
  */
 namespace Acl;
 
+use Acl\Controller\Component\AclComponent;
 use Cake\Console\ConsoleIo;
 use Cake\Console\Shell;
-use Acl\Controller\Component\AclComponent;
 use Cake\Controller\ComponentRegistry;
 use Cake\Controller\Controller;
-use Cake\Network\Request;
-use Cake\Core\Configure;
 use Cake\Core\App;
-use Cake\Utility\Inflector;
+use Cake\Core\Configure;
 use Cake\Filesystem\Folder;
+use Cake\Network\Request;
+use Cake\Utility\Inflector;
 
 /**
  * Shell for ACO extras
@@ -129,7 +129,7 @@ class AclExtras
                 $this->err(__d('cake_acl', "<error>Plugin {0} not found or not activated.</error>", [$plugin]));
                 return false;
             }
-            $plugins = array($params['plugin']);
+            $plugins = [$params['plugin']];
         }
         foreach ($plugins as $plugin) {
             $controllers = $this->getControllerList($plugin);
@@ -158,7 +158,7 @@ class AclExtras
         }
         $appIndex = array_search($plugin . 'AppController', $controllers);
         // look at each controller
-        $controllersNames=array();
+        $controllersNames = [];
         foreach ($controllers as $controller) {
             $tmp = explode('/', $controller);
             $controllerName = str_replace('Controller.php', '', array_pop($tmp));
@@ -175,16 +175,17 @@ class AclExtras
             }
             $controllerFlip = array_flip($controllers);
             $this->Aco->id = $root->id;
-            $controllerNodes = $this->Aco->find()->where(['parent_id'=>$root->id]);
+            $controllerNodes = $this->Aco->find()->where(['parent_id' => $root->id]);
             foreach ($controllerNodes as $ctrlNode) {
                 $alias = $ctrlNode->alias;
                 $name = $alias . 'Controller';
                 if (!isset($controllerFlip[$name]) && !isset($controllerFlip[$alias])) {
                     $entity = $this->Aco->get($ctrlNode->id);
                     if ($this->Aco->delete($entity)) {
-                        $this->out(__d('cake_acl',
+                        $this->out(__d(
+                            'cake_acl',
                             'Deleted <warning>{0}</warning> and all children',
-                            $this->rootNode . '/' .$plugin.'/'. $ctrlNode->alias
+                            $this->rootNode . '/' . $plugin . '/' . $ctrlNode->alias
                         ));
                     }
                 }
@@ -250,7 +251,7 @@ class AclExtras
      */
     protected function _getCallbacks($className, $pluginPath = false)
     {
-        $callbacks = array();
+        $callbacks = [];
         $namespace = $this->_getNamespace($className, $pluginPath);
         $reflection = new \ReflectionClass($namespace);
         if ($reflection->isAbstract()) {
@@ -301,16 +302,16 @@ class AclExtras
         }
         $methods = array_diff($actions, $baseMethods);
         $methods = array_diff($methods, $excludes);
-        foreach ($methods as $key=>$action) {
+        foreach ($methods as $key => $action) {
             if (strpos($action, '_', 0) === 0) {
                 continue;
             }
-            $path = $this->rootNode . '/' . $pluginPath . $controllerName . '/' . $prefix.$action;
-            $this->_checkNode($path, $prefix.$action, $node->id);
-            $methods[$key]=$prefix.$action;
+            $path = $this->rootNode . '/' . $pluginPath . $controllerName . '/' . $prefix . $action;
+            $this->_checkNode($path, $prefix . $action, $node->id);
+            $methods[$key] = $prefix . $action;
         }
         if ($this->_clean) {
-            $actionNodes = $this->Aco->find('children', ['for'=>$node->id]);
+            $actionNodes = $this->Aco->find('children', ['for' => $node->id]);
             $methodFlip = array_flip($methods);
             foreach ($actionNodes as $action) {
                 if (!isset($methodFlip[$action->alias])) {
@@ -328,7 +329,6 @@ class AclExtras
     /**
      * Verify a Acl Tree
      *
-     * @param string $type The type of Acl Node to verify
      * @return void
      */
     public function verify()
@@ -346,7 +346,6 @@ class AclExtras
     /**
      * Recover an Acl Tree
      *
-     * @param string $type The Type of Acl Node to recover
      * @return void
      */
     public function recover()
@@ -389,9 +388,9 @@ class AclExtras
         if (empty($namespace)) {
             return null;
         }
-        $path_array = explode('\\', $namespace);
-        if (count($path_array) >= 5) {
-            return Inflector::dasherize($path_array[3]) . '_';
+        $pathArray = explode('\\', $namespace);
+        if (count($pathArray) >= 5) {
+            return Inflector::dasherize($pathArray[3]) . '_';
         }
         return null;
     }
@@ -408,5 +407,4 @@ class AclExtras
         $plugins = $dir->read();
         return $plugins[0];
     }
-
 }

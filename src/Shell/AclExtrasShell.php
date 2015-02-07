@@ -14,10 +14,9 @@
  */
 namespace Acl\Shell;
 
-use Cake\Console\Shell;
-use Cake\Console\ConsoleIo;
 use Acl\AclExtras;
-
+use Cake\Console\ConsoleIo;
+use Cake\Console\Shell;
 
 /**
  * Shell for ACO extras
@@ -42,7 +41,7 @@ class AclExtrasShell extends Shell
     /**
      * Constructor
      *
-     * @param \Cake\Console\ConsoleIo $io
+     * @param \Cake\Console\ConsoleIo $io An io instance.
      */
     public function __construct(ConsoleIo $io = null)
     {
@@ -150,7 +149,6 @@ class AclExtrasShell extends Shell
     /**
      * Verify a Acl Tree
      *
-     * @param string $type The type of Acl Node to verify
      * @return void
      */
     public function verify()
@@ -162,7 +160,6 @@ class AclExtrasShell extends Shell
     /**
      * Recover an Acl Tree
      *
-     * @param string $type The Type of Acl Node to recover
      * @return void
      */
     public function recover()
@@ -170,5 +167,4 @@ class AclExtrasShell extends Shell
         $this->AclExtras->args = $this->args;
         $this->AclExtras->recover();
     }
-
 }
