@@ -63,7 +63,7 @@ class IniAcl implements AclInterface
     public function config($key = null, $value = null, $merge = true)
     {
         if (!$this->_configInitialized) {
-            $this->_defaultConfig = $this->readConfigFile(APP . 'Config/acl');
+            $this->_defaultConfig = $this->readConfigFile(ROOT . DS . 'config/acl');
         }
 
         if (is_array($key) || func_num_args() >= 2) {
