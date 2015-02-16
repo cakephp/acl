@@ -24,51 +24,52 @@ use Cake\Network\Request;
 use Cake\Utility\Inflector;
 
 /**
- * Shell for ACO extras
+ * Provides features for additional ACL operations.
+ * Can be used in either a CLI or Web context.
  */
 class AclExtras
 {
 
-/**
- * Contains instance of AclComponent
- *
- * @var AclComponent
- */
+    /**
+     * Contains instance of AclComponent
+     *
+     * @var \Acl\Controller\Component\AclComponent
+     */
     public $Acl;
 
-/**
- * Contains arguments parsed from the command line.
- *
- * @var array
- */
+    /**
+     * Contains arguments parsed from the command line.
+     *
+     * @var array
+     */
     public $args;
 
-/**
- * Contains database source to use
- *
- * @var string
- */
+    /**
+     * Contains database source to use
+     *
+     * @var string
+     */
     public $dataSource = 'default';
 
-/**
- * Root node name.
- *
- * @var string
- */
+    /**
+     * Root node name.
+     *
+     * @var string
+     */
     public $rootNode = 'controllers';
 
-/**
- * Internal Clean Actions switch
- *
- * @var bool
- */
+    /**
+     * Internal Clean Actions switch
+     *
+     * @var bool
+     */
     protected $_clean = false;
 
-/**
- * Start up And load Acl Component / Aco model
- *
- * @return void
- */
+    /**
+     * Start up And load Acl Component / Aco model
+     *
+     * @return void
+     */
     public function startup($controller = null)
     {
         if (!$controller) {
@@ -219,9 +220,9 @@ class AclExtras
     /**
      * Check a node for existance, create it if it doesn't exist.
      *
-     * @param string $path
-     * @param string $alias
-     * @param int $parentId
+     * @param string $path The path to check
+     * @param string $alias The alias to create
+     * @param int $parentId The parent id to use when creating.
      * @return array Aco Node array
      */
     protected function _checkNode($path, $alias, $parentId = null)
