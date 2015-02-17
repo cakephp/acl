@@ -385,7 +385,8 @@ class AclExtras
         $namespace = preg_replace('/\//', '\\', $namespace);
         $namespace = preg_replace('/\.php/', '', $namespace);
         if (!$pluginPath) {
-            $namespace = '\App\Controller\\' . $namespace;
+            $appNamespace = Configure::read('App.namespace');
+            $namespace = '\\' . $appNamespace . '\\Controller\\' . $namespace;
         } else {
             $pluginPath = preg_replace('/\//', '\\', $pluginPath);
             $namespace = '\\' . $pluginPath . 'Controller\\' . $namespace;
