@@ -81,6 +81,14 @@ class AclExtras
         $this->controller = $controller;
     }
 
+    /**
+     * Output a message.
+     *
+     * Will either use shell->out, or controller->Flash->success()
+     *
+     * @param string $msg The message to output.
+     * @return void
+     */
     public function out($msg)
     {
         if (!empty($this->controller->Flash)) {
@@ -90,6 +98,14 @@ class AclExtras
         }
     }
 
+    /**
+     * Output an error message.
+     *
+     * Will either use shell->err, or controller->Flash->error()
+     *
+     * @param string $msg The message to output.
+     * @return void
+     */
     public function err($msg)
     {
         if (!empty($this->controller->Flash)) {
@@ -105,10 +121,10 @@ class AclExtras
      * @param array $params An array of parameters
      * @return void
      */
-    public function aco_sync($params = [])
+    public function acoSync($params = [])
     {
         $this->_clean = true;
-        $this->aco_update($params);
+        $this->acoUpdate($params);
     }
 
     /**
@@ -117,7 +133,7 @@ class AclExtras
      * @param array $params An array of parameters
      * @return void
      */
-    public function aco_update($params = [])
+    public function acoUpdate($params = [])
     {
         $root = $this->_checkNode($this->rootNode, $this->rootNode, null);
         if (empty($params['plugin'])) {

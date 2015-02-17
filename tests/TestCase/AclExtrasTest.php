@@ -139,7 +139,7 @@ class AclExtrasShellTestCase extends TestCase
     }
 
     /**
-     * Test aco_update method.
+     * Test acoUpdate method.
      *
      * @return void
      */
@@ -147,7 +147,7 @@ class AclExtrasShellTestCase extends TestCase
     {
         $this->markTestIncomplete('This test needs to be updated for cake3.');
         $this->_cleanAndSetup();
-        $this->Task->aco_update();
+        $this->Task->acoUpdate();
 
         $Aco = $this->Task->Acl->Aco;
 
@@ -179,7 +179,7 @@ class AclExtrasShellTestCase extends TestCase
     public function testAcoSyncRemoveMethods()
     {
         $this->_cleanAndSetup();
-        $this->Task->aco_update();
+        $this->Task->acoUpdate();
 
         $Aco = $this->Task->Acl->Aco;
         $Aco->cacheQueries = false;
@@ -194,7 +194,7 @@ class AclExtrasShellTestCase extends TestCase
         $children = $Aco->children($result[0]['Aco']['id']);
         $this->assertEquals(count($children), 4);
 
-        $this->Task->aco_sync();
+        $this->Task->acoSync();
         $children = $Aco->children($result[0]['Aco']['id']);
         $this->assertEquals(count($children), 3);
 
@@ -203,14 +203,14 @@ class AclExtrasShellTestCase extends TestCase
     }
 
     /**
-     * test adding methods with aco_update
+     * test adding methods with acoUpdate
      *
      * @return void
      */
     public function testAcoUpdateAddingMethods()
     {
         $this->_cleanAndSetup();
-        $this->Task->aco_update();
+        $this->Task->acoUpdate();
 
         $Aco = $this->Task->Acl->Aco;
         $Aco->cacheQueries = false;
@@ -221,7 +221,7 @@ class AclExtrasShellTestCase extends TestCase
 
         $Aco->delete($children[0]['Aco']['id']);
         $Aco->delete($children[1]['Aco']['id']);
-        $this->Task->aco_update();
+        $this->Task->acoUpdate();
 
         $children = $Aco->children($result[0]['Aco']['id']);
         $this->assertEquals(count($children), 3);
@@ -235,7 +235,7 @@ class AclExtrasShellTestCase extends TestCase
     public function testAddingControllers()
     {
         $this->_cleanAndSetup();
-        $this->Task->aco_update();
+        $this->Task->acoUpdate();
 
         $Aco = $this->Task->Acl->Aco;
         $Aco->cacheQueries = false;
@@ -243,7 +243,7 @@ class AclExtrasShellTestCase extends TestCase
         $result = $Aco->node('controllers/Comments');
         $Aco->delete($result[0]['Aco']['id']);
 
-        $this->Task->aco_update();
+        $this->Task->acoUpdate();
         $newResult = $Aco->node('controllers/Comments');
         $this->assertNotEqual($newResult[0]['Aco']['id'], $result[0]['Aco']['id']);
     }

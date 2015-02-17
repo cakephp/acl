@@ -80,7 +80,7 @@ class AclExtrasShell extends Shell
      */
     public function acoSync()
     {
-        $this->AclExtras->aco_sync($this->params);
+        $this->AclExtras->acoSync($this->params);
     }
 
     /**
@@ -90,7 +90,7 @@ class AclExtrasShell extends Shell
      */
     public function acoUpdate()
     {
-        $this->AclExtras->aco_update($this->params);
+        $this->AclExtras->acoUpdate($this->params);
         return true;
     }
 
