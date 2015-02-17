@@ -153,7 +153,7 @@ class AclExtrasTestCase extends TestCase
     {
         $this->_clean();
         $this->_setup();
-        $this->Task->aco_update();
+        $this->Task->acoUpdate();
 
         $Aco = $this->Task->Acl->Aco;
 
@@ -186,7 +186,7 @@ class AclExtrasTestCase extends TestCase
     {
         $this->_clean();
         $this->_setup();
-        $this->Task->aco_update();
+        $this->Task->acoUpdate();
 
         $Aco = $this->Task->Acl->Aco;
         $Aco->cacheQueries = false;
@@ -201,7 +201,7 @@ class AclExtrasTestCase extends TestCase
         $children = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
         $this->assertEquals(count($children), 4);
 
-        $this->Task->aco_sync();
+        $this->Task->acoSync();
         $children = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
         $this->assertEquals(count($children), 3);
 
@@ -218,7 +218,7 @@ class AclExtrasTestCase extends TestCase
     {
         $this->_clean();
         $this->_setup();
-        $this->Task->aco_update();
+        $this->Task->acoUpdate();
 
         $Aco = $this->Task->Acl->Aco;
         $Aco->cacheQueries = false;
@@ -229,7 +229,7 @@ class AclExtrasTestCase extends TestCase
 
         $Aco->delete($children[0]);
         $Aco->delete($children[1]);
-        $this->Task->aco_update();
+        $this->Task->acoUpdate();
 
         $children = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
         $this->assertEquals(count($children), 3);
@@ -244,7 +244,7 @@ class AclExtrasTestCase extends TestCase
     {
         $this->_clean();
         $this->_setup();
-        $this->Task->aco_update();
+        $this->Task->acoUpdate();
 
         $Aco = $this->Task->Acl->Aco;
         $Aco->cacheQueries = false;
@@ -252,7 +252,7 @@ class AclExtrasTestCase extends TestCase
         $result = $Aco->node('controllers/Comments')->toArray();
         $Aco->delete($result[0]);
 
-        $this->Task->aco_update();
+        $this->Task->acoUpdate();
         $newResult = $Aco->node('controllers/Comments')->toArray();
         $this->assertNotEquals($newResult[0]['id'], $result[0]['id']);
         $this->assertEquals($newResult[0]['alias'], $result[0]['alias']);
@@ -284,7 +284,7 @@ class AclExtrasTestCase extends TestCase
 
         $this->Task->startup();
 
-        $this->Task->aco_update();
+        $this->Task->acoUpdate();
 
         $Aco = $this->Task->Acl->Aco;
 
