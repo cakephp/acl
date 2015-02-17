@@ -408,7 +408,7 @@ class AclExtras
             return null;
         }
         $pathArray = explode('\\', $namespace);
-        if (count($pathArray) >= 5) {
+        if (count($pathArray) >= 5 && $pathArray[3] !== 'Controller') {
             return Inflector::dasherize($pathArray[3]) . '_';
         }
         return null;
