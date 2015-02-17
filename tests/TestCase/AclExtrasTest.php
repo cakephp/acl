@@ -160,7 +160,7 @@ class AclExtrasTestCase extends TestCase
         $result = $Aco->node('controllers/Comments')->toArray();
         $this->assertEquals($result[0]['alias'], 'Comments');
 
-        $result = $Aco->find('children', ['for' => $result[0]->id])->toArray();
+        $result = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
         $this->assertEquals(count($result), 3);
         $this->assertEquals($result[0]['alias'], 'add');
         $this->assertEquals($result[1]['alias'], 'index');
@@ -292,7 +292,7 @@ class AclExtrasTestCase extends TestCase
         $this->assertNotFalse($result);
         $this->assertEquals($result->toArray()[0]['alias'], 'Plugin');
 
-        $result = $Aco->node('controllers/Nested/TestPluginTwo/PluginTwo');
+        $result = $Aco->node('controllers/Nested\TestPluginTwo/PluginTwo');
         $this->assertNotFalse($result);
         $this->assertEquals($result->toArray()[0]['alias'], 'PluginTwo');
     }

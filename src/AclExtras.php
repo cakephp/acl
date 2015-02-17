@@ -152,7 +152,7 @@ class AclExtras
         foreach ($plugins as $plugin) {
             $controllers = $this->getControllerList($plugin);
             $path = $this->rootNode . '/' . $plugin;
-            $pluginRoot = $this->_checkNode($path, $plugin, $root->id);
+            $pluginRoot = $this->_checkNode($path, preg_replace('/\//', '\\', Inflector::camelize($plugin)), $root->id);
             $this->_updateControllers($pluginRoot, $controllers, $plugin);
         }
         $this->out(__d('cake_acl', '<success>Aco Update Complete</success>'));

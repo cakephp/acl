@@ -60,7 +60,7 @@ abstract class BaseAuthorize extends ParentAuthorize
      */
     public function action(Request $request, $path = '/:plugin/:prefix/:controller/:action')
     {
-        $plugin = empty($request['plugin']) ? null : Inflector::camelize($request['plugin']) . '/';
+        $plugin = empty($request['plugin']) ? null : preg_replace('/\//', '\\', Inflector::camelize($request['plugin'])) . '/';
         $prefix = empty($request['prefix']) ? null : $request['prefix'] . '/';
         $path = str_replace(
             [':controller', ':action', ':plugin/', ':prefix/'],
