@@ -24,6 +24,7 @@ use Acl\Model\Table\AcosTable;
 use Cake\Console\Shell;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
+use Cake\Core\Plugin;
 use Cake\Datasource\ConnectionManager;
 use Cake\TestSuite\TestCase;
 
@@ -126,13 +127,18 @@ class AclExtrasTestCase extends TestCase
      *
      * @return void
      */
-    protected function _cleanAndSetup()
+    protected function _clean()
     {
         $tableName = 'acos';
         $db = ConnectionManager::get('test');
         $db->execute('DELETE FROM ' . $tableName);
+    }
+
+    protected function _setup()
+    {
         $this->Task->expects($this->any())
             ->method('getControllerList')
+            ->with(null)
             ->will($this->returnValue(['CommentsController.php', 'PostsController.php', 'BigLongNamesController.php']));
 
         $this->Task->startup();
@@ -145,8 +151,9 @@ class AclExtrasTestCase extends TestCase
      */
     public function testAcoUpdate()
     {
-        $this->_cleanAndSetup();
-        $this->Task->acoUpdate();
+        $this->_clean();
+        $this->_setup();
+        $this->Task->aco_update();
 
         $Aco = $this->Task->Acl->Aco;
 
@@ -177,8 +184,9 @@ class AclExtrasTestCase extends TestCase
      */
     public function testAcoSyncRemoveMethods()
     {
-        $this->_cleanAndSetup();
-        $this->Task->acoUpdate();
+        $this->_clean();
+        $this->_setup();
+        $this->Task->aco_update();
 
         $Aco = $this->Task->Acl->Aco;
         $Aco->cacheQueries = false;
@@ -208,8 +216,9 @@ class AclExtrasTestCase extends TestCase
      */
     public function testAcoUpdateAddingMethods()
     {
-        $this->_cleanAndSetup();
-        $this->Task->acoUpdate();
+        $this->_clean();
+        $this->_setup();
+        $this->Task->aco_update();
 
         $Aco = $this->Task->Acl->Aco;
         $Aco->cacheQueries = false;
@@ -233,8 +242,9 @@ class AclExtrasTestCase extends TestCase
      */
     public function testAddingControllers()
     {
-        $this->_cleanAndSetup();
-        $this->Task->acoUpdate();
+        $this->_clean();
+        $this->_setup();
+        $this->Task->aco_update();
 
         $Aco = $this->Task->Acl->Aco;
         $Aco->cacheQueries = false;
@@ -246,5 +256,44 @@ class AclExtrasTestCase extends TestCase
         $newResult = $Aco->node('controllers/Comments')->toArray();
         $this->assertNotEquals($newResult[0]['id'], $result[0]['id']);
         $this->assertEquals($newResult[0]['alias'], $result[0]['alias']);
+    }
+
+    public function testUpdateWithPlugins()
+    {
+        Plugin::load('TestPlugin');
+        Plugin::load('Nested/TestPluginTwo');
+        $this->_clean();
+
+        $this->Task->expects($this->exactly(3))
+            ->method('getControllerList')
+            ->with($this->logicalOr(
+                $this->equalTo(null),
+                $this->equalTo('TestPlugin'),
+                $this->equalTo('Nested/TestPluginTwo')
+            ))
+            ->will($this->returnCallback(function ($param) {
+                switch ($param) {
+                    case 'TestPlugin':
+                        return ['PluginController.php'];
+                    case 'Nested/TestPluginTwo':
+                        return ['PluginTwoController.php'];
+                    default:
+                        return ['CommentsController.php', 'PostsController.php', 'BigLongNamesController.php'];
+                }
+            }));
+
+        $this->Task->startup();
+
+        $this->Task->aco_update();
+
+        $Aco = $this->Task->Acl->Aco;
+
+        $result = $Aco->node('controllers/TestPlugin/Plugin');
+        $this->assertNotFalse($result);
+        $this->assertEquals($result->toArray()[0]['alias'], 'Plugin');
+
+        $result = $Aco->node('controllers/Nested/TestPluginTwo/PluginTwo');
+        $this->assertNotFalse($result);
+        $this->assertEquals($result->toArray()[0]['alias'], 'PluginTwo');
     }
 }
