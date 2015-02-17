@@ -294,6 +294,12 @@ class AclExtrasTestCase extends TestCase
 
         $result = $Aco->node('controllers/Nested\TestPluginTwo/PluginTwo');
         $this->assertNotFalse($result);
-        $this->assertEquals($result->toArray()[0]['alias'], 'PluginTwo');
+        $result = $result->toArray();
+        $this->assertEquals($result[0]['alias'], 'PluginTwo');
+        $result = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
+        $this->assertEquals(count($result), 3);
+        $this->assertEquals($result[0]['alias'], 'index');
+        $this->assertEquals($result[1]['alias'], 'add');
+        $this->assertEquals($result[2]['alias'], 'edit');
     }
 }
