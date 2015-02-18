@@ -56,7 +56,7 @@ $loader->register();
 $loader->addNamespace('Cake\Test\Fixture', ROOT . '/vendor/cakephp/cakephp/tests/Fixture');
 $loader->addNamespace('TestApp', APP);
 $loader->addNamespace('TestPlugin', TEST_APP . 'Plugin/TestPlugin/src');
-$loader->addNamespace('TestPluginTwo', TEST_APP . 'Plugin/TestPluginTwo/src');
+$loader->addNamespace('Nested\TestPluginTwo', TEST_APP . 'Plugin/Nested/TestPluginTwo/src');
 $loader->addNamespace('PluginJs', TEST_APP . 'Plugin/PluginJs/src');
 
 require_once CORE_PATH . 'config' . DS . 'bootstrap.php';

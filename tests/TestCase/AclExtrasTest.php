@@ -16,12 +16,16 @@
  * @author Mark Story <mark@mark-story.com>
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  */
+namespace Acl\Test\TestCase;
+
 use Acl\AclExtras;
 use Acl\Controller\Component\AclComponent;
 use Acl\Model\Table\AcosTable;
 use Cake\Console\Shell;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
+use Cake\Core\Plugin;
+use Cake\Datasource\ConnectionManager;
 use Cake\TestSuite\TestCase;
 
 //import test controller class names.
@@ -31,7 +35,7 @@ include ((dirname(__FILE__))) . DS . 'test_controllers.php';
  * AclExtras Shell Test case
  *
  */
-class AclExtrasShellTestCase extends TestCase
+class AclExtrasTestCase extends TestCase
 {
 
     public $fixtures = ['app.acos', 'app.aros', 'app.aros_acos'];
@@ -48,7 +52,7 @@ class AclExtrasShellTestCase extends TestCase
         Configure::write('Acl.database', 'test');
 
         $this->Task = $this->getMock(
-            'AclExtras',
+            'Acl\AclExtras',
             ['in', 'out', 'hr', 'createFile', 'error', 'err', 'clear', 'getControllerList']
         );
     }
@@ -71,7 +75,6 @@ class AclExtrasShellTestCase extends TestCase
      */
     public function testRecover()
     {
-        $this->markTestIncomplete('This test needs to be updated for cake3.');
         $this->Task->startup();
         $this->Task->args = ['Aco'];
         $this->Task->Acl->Aco = $this->getMock('Aco', ['recover']);
@@ -93,7 +96,6 @@ class AclExtrasShellTestCase extends TestCase
      */
     public function testVerify()
     {
-        $this->markTestIncomplete('This test needs to be updated for cake3.');
         $this->Task->startup();
         $this->Task->args = ['Aco'];
         $this->Task->Acl->Aco = $this->getMock('Aco', ['verify']);
@@ -115,10 +117,9 @@ class AclExtrasShellTestCase extends TestCase
      */
     public function testStartup()
     {
-        $this->markTestIncomplete('This test needs to be updated for cake3.');
         $this->assertEquals($this->Task->Acl, null);
         $this->Task->startup();
-        $this->assertInstanceOf('AclComponent', $this->Task->Acl);
+        $this->assertInstanceOf('Acl\Controller\Component\AclComponent', $this->Task->Acl);
     }
 
     /**
@@ -126,14 +127,19 @@ class AclExtrasShellTestCase extends TestCase
      *
      * @return void
      */
-    protected function _cleanAndSetup()
+    protected function _clean()
     {
-        $this->markTestIncomplete('This test needs to be updated for cake3.');
-        $tableName = $this->db->fullTableName('acos');
-        $this->db->execute('DELETE FROM ' . $tableName);
+        $tableName = 'acos';
+        $db = ConnectionManager::get('test');
+        $db->execute('DELETE FROM ' . $tableName);
+    }
+
+    protected function _setup()
+    {
         $this->Task->expects($this->any())
             ->method('getControllerList')
-            ->will($this->returnValue(['CommentsController', 'PostsController', 'BigLongNamesController']));
+            ->with(null)
+            ->will($this->returnValue(['CommentsController.php', 'PostsController.php', 'BigLongNamesController.php']));
 
         $this->Task->startup();
     }
@@ -145,29 +151,29 @@ class AclExtrasShellTestCase extends TestCase
      */
     public function testAcoUpdate()
     {
-        $this->markTestIncomplete('This test needs to be updated for cake3.');
-        $this->_cleanAndSetup();
+        $this->_clean();
+        $this->_setup();
         $this->Task->acoUpdate();
 
         $Aco = $this->Task->Acl->Aco;
 
-        $result = $Aco->node('controllers/Comments');
-        $this->assertEquals($result[0]['Aco']['alias'], 'Comments');
+        $result = $Aco->node('controllers/Comments')->toArray();
+        $this->assertEquals($result[0]['alias'], 'Comments');
 
-        $result = $Aco->children($result[0]['Aco']['id']);
+        $result = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
         $this->assertEquals(count($result), 3);
-        $this->assertEquals($result[0]['Aco']['alias'], 'add');
-        $this->assertEquals($result[1]['Aco']['alias'], 'index');
-        $this->assertEquals($result[2]['Aco']['alias'], 'delete');
+        $this->assertEquals($result[0]['alias'], 'add');
+        $this->assertEquals($result[1]['alias'], 'index');
+        $this->assertEquals($result[2]['alias'], 'delete');
 
-        $result = $Aco->node('controllers/Posts');
-        $this->assertEquals($result[0]['Aco']['alias'], 'Posts');
-        $result = $Aco->children($result[0]['Aco']['id']);
+        $result = $Aco->node('controllers/Posts')->toArray();
+        $this->assertEquals($result[0]['alias'], 'Posts');
+        $result = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
         $this->assertEquals(count($result), 3);
 
-        $result = $Aco->node('controllers/BigLongNames');
-        $this->assertEquals($result[0]['Aco']['alias'], 'BigLongNames');
-        $result = $Aco->children($result[0]['Aco']['id']);
+        $result = $Aco->node('controllers/BigLongNames')->toArray();
+        $this->assertEquals($result[0]['alias'], 'BigLongNames');
+        $result = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
         $this->assertEquals(count($result), 4);
     }
 
@@ -178,24 +184,25 @@ class AclExtrasShellTestCase extends TestCase
      */
     public function testAcoSyncRemoveMethods()
     {
-        $this->_cleanAndSetup();
+        $this->_clean();
+        $this->_setup();
         $this->Task->acoUpdate();
 
         $Aco = $this->Task->Acl->Aco;
         $Aco->cacheQueries = false;
 
-        $result = $Aco->node('controllers/Comments');
+        $result = $Aco->node('controllers/Comments')->toArray();
         $new = [
-            'parent_id' => $result[0]['Aco']['id'],
+            'parent_id' => $result[0]['id'],
             'alias' => 'some_method'
         ];
-        $Aco->create($new);
-        $Aco->save();
-        $children = $Aco->children($result[0]['Aco']['id']);
+        $new = $Aco->newEntity($new);
+        $Aco->save($new);
+        $children = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
         $this->assertEquals(count($children), 4);
 
         $this->Task->acoSync();
-        $children = $Aco->children($result[0]['Aco']['id']);
+        $children = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
         $this->assertEquals(count($children), 3);
 
         $method = $Aco->node('controllers/Commments/some_method');
@@ -209,21 +216,22 @@ class AclExtrasShellTestCase extends TestCase
      */
     public function testAcoUpdateAddingMethods()
     {
-        $this->_cleanAndSetup();
+        $this->_clean();
+        $this->_setup();
         $this->Task->acoUpdate();
 
         $Aco = $this->Task->Acl->Aco;
         $Aco->cacheQueries = false;
 
-        $result = $Aco->node('controllers/Comments');
-        $children = $Aco->children($result[0]['Aco']['id']);
+        $result = $Aco->node('controllers/Comments')->toArray();
+        $children = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
         $this->assertEquals(count($children), 3);
 
-        $Aco->delete($children[0]['Aco']['id']);
-        $Aco->delete($children[1]['Aco']['id']);
+        $Aco->delete($children[0]);
+        $Aco->delete($children[1]);
         $this->Task->acoUpdate();
 
-        $children = $Aco->children($result[0]['Aco']['id']);
+        $children = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
         $this->assertEquals(count($children), 3);
     }
 
@@ -234,17 +242,64 @@ class AclExtrasShellTestCase extends TestCase
      */
     public function testAddingControllers()
     {
-        $this->_cleanAndSetup();
+        $this->_clean();
+        $this->_setup();
         $this->Task->acoUpdate();
 
         $Aco = $this->Task->Acl->Aco;
         $Aco->cacheQueries = false;
 
-        $result = $Aco->node('controllers/Comments');
-        $Aco->delete($result[0]['Aco']['id']);
+        $result = $Aco->node('controllers/Comments')->toArray();
+        $Aco->delete($result[0]);
 
         $this->Task->acoUpdate();
-        $newResult = $Aco->node('controllers/Comments');
-        $this->assertNotEqual($newResult[0]['Aco']['id'], $result[0]['Aco']['id']);
+        $newResult = $Aco->node('controllers/Comments')->toArray();
+        $this->assertNotEquals($newResult[0]['id'], $result[0]['id']);
+        $this->assertEquals($newResult[0]['alias'], $result[0]['alias']);
+    }
+
+    public function testUpdateWithPlugins()
+    {
+        Plugin::load('TestPlugin');
+        Plugin::load('Nested/TestPluginTwo');
+        $this->_clean();
+
+        $this->Task->expects($this->exactly(3))
+            ->method('getControllerList')
+            ->with($this->logicalOr(
+                $this->equalTo(null),
+                $this->equalTo('TestPlugin'),
+                $this->equalTo('Nested/TestPluginTwo')
+            ))
+            ->will($this->returnCallback(function ($param) {
+                switch ($param) {
+                    case 'TestPlugin':
+                        return ['PluginController.php'];
+                    case 'Nested/TestPluginTwo':
+                        return ['PluginTwoController.php'];
+                    default:
+                        return ['CommentsController.php', 'PostsController.php', 'BigLongNamesController.php'];
+                }
+            }));
+
+        $this->Task->startup();
+
+        $this->Task->acoUpdate();
+
+        $Aco = $this->Task->Acl->Aco;
+
+        $result = $Aco->node('controllers/TestPlugin/Plugin');
+        $this->assertNotFalse($result);
+        $this->assertEquals($result->toArray()[0]['alias'], 'Plugin');
+
+        $result = $Aco->node('controllers/Nested\TestPluginTwo/PluginTwo');
+        $this->assertNotFalse($result);
+        $result = $result->toArray();
+        $this->assertEquals($result[0]['alias'], 'PluginTwo');
+        $result = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
+        $this->assertEquals(count($result), 3);
+        $this->assertEquals($result[0]['alias'], 'index');
+        $this->assertEquals($result[1]['alias'], 'add');
+        $this->assertEquals($result[2]['alias'], 'edit');
     }
 }

@@ -19,6 +19,7 @@ use Cake\Controller\ComponentRegistry;
 use Cake\Controller\Controller;
 use Cake\Core\App;
 use Cake\Core\Configure;
+use Cake\Core\Plugin;
 use Cake\Filesystem\Folder;
 use Cake\Network\Request;
 use Cake\Utility\Inflector;
@@ -142,7 +143,7 @@ class AclExtras
             $plugins = $this->_getPluginList();
         } else {
             $plugin = $params['plugin'];
-            if (!in_array($plugin, App::objects('plugin')) || !CakePlugin::loaded($plugin)) {
+            if (!Plugin::loaded($plugin)) {
                 $this->err(__d('cake_acl', "<error>Plugin {0} not found or not activated.</error>", [$plugin]));
                 return false;
             }
@@ -151,7 +152,7 @@ class AclExtras
         foreach ($plugins as $plugin) {
             $controllers = $this->getControllerList($plugin);
             $path = $this->rootNode . '/' . $plugin;
-            $pluginRoot = $this->_checkNode($path, $plugin, $root->id);
+            $pluginRoot = $this->_checkNode($path, preg_replace('/\//', '\\', Inflector::camelize($plugin)), $root->id);
             $this->_updateControllers($pluginRoot, $controllers, $plugin);
         }
         $this->out(__d('cake_acl', '<success>Aco Update Complete</success>'));
@@ -224,12 +225,12 @@ class AclExtras
             $path = App::path('Controller');
             $dir = new Folder($path[0]);
             $controllers = $dir->findRecursive('.*Controller\.php');
-            unset($controllers[0]);
         } else {
             $path = App::path('Controller', $plugin);
             $dir = new Folder($path[0]);
             $controllers = $dir->findRecursive('.*Controller\.php');
         }
+
         return $controllers;
     }
 
@@ -407,7 +408,7 @@ class AclExtras
             return null;
         }
         $pathArray = explode('\\', $namespace);
-        if (count($pathArray) >= 5) {
+        if (count($pathArray) >= 5 && $pathArray[3] !== 'Controller') {
             return Inflector::dasherize($pathArray[3]) . '_';
         }
         return null;
@@ -420,9 +421,6 @@ class AclExtras
      */
     protected function _getPluginList()
     {
-        $path = App::path('Plugin');
-        $dir = new Folder($path[0]);
-        $plugins = $dir->read();
-        return $plugins[0];
+        return Plugin::loaded();
     }
 }
