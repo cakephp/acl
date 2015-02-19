@@ -302,9 +302,10 @@ class AclExtras
     /**
      * Check and Add/delete controller Methods
      *
-     * @param string $controller
+     * @param string $className The classname to check
+     * @param string $controllerName The controller name
      * @param array $node
-     * @param string $plugin Name of plugin
+     * @param string $pluginPath
      * @return void
      */
     protected function _checkMethods($className, $controllerName, $node, $pluginPath = false)
