@@ -78,7 +78,7 @@ class PhpAcl implements AclInterface
     {
         $this->options = [
             'policy' => static::DENY,
-            'config' => ROOT . 'config/acl',
+            'config' => ROOT . DS . 'config/acl',
         ];
     }
 
