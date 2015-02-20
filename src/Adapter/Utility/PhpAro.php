@@ -36,7 +36,7 @@ class PhpAro
     /**
      * map external identifiers. E.g. if
      *
-     * ['User' => ['username' => 'jeff', 'role' => 'editor']]
+     * ['Users' => ['username' => 'jeff', 'role' => 'editor']]
      *
      * is passed as an ARO to one of the methods of AclComponent, PhpAcl
      * will check if it can be resolved to an User or a Role defined in the
@@ -46,8 +46,8 @@ class PhpAro
      * @see app/Config/acl.php
      */
     public $map = [
-        'User' => 'User/username',
-        'Role' => 'User/role',
+        'User' => 'Users/username',
+        'Role' => 'Users/role',
     ];
 
     /**
@@ -115,8 +115,8 @@ class PhpAro
      * resolve an ARO identifier to an internal ARO string using
      * the internal mapping information.
      *
-     * @param string|array $aro ARO identifier (User.jeff, ['User' => ...], etc)
-     * @return string internal aro string (e.g. User/jeff, Role/default)
+     * @param string|array $aro ARO identifier (Users.jeff, ['Users' => ...], etc)
+     * @return string internal aro string (e.g. Users/jeff, Role/default)
      */
     public function resolve($aro)
     {
