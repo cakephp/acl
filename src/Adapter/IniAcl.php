@@ -27,10 +27,6 @@ use Cake\Utility\Hash;
 class IniAcl implements AclInterface
 {
 
-    use InstanceConfigTrait {
-        config as protected _traitConfig;
-    }
-
     /**
      * The Hash::extract() path to the user/aro identifier in the
      * acl.ini file. This path will be used to extract the string
@@ -48,29 +44,15 @@ class IniAcl implements AclInterface
     protected $_defaultConfig = [];
 
     /**
-     * read/write config
+     * Constructor
      *
-     * Load acl config on first access, rather than on creation, so that there's no
-     * needless overhead if the class is loaded but not referenced.
-     * Wraps the InstanceConfigTrait method, taking care of the trait's implementation
-     * of determining intent from the number ofpassed arguments.
-     *
-     * @param string|array|null $key The key to get/set, or a complete array of configs.
-     * @param mixed|null $value The value to set.
-     * @param bool $merge Whether to merge or overwrite existing config defaults to true.
-     * @return mixed Config value being read, or the object itself on write operations.
+     * Sets a few default settings up.
      */
-    public function config($key = null, $value = null, $merge = true)
+    public function __construct()
     {
-        if (!$this->_configInitialized) {
-            $this->_defaultConfig = $this->readConfigFile(APP . 'Config/acl');
-        }
-
-        if (is_array($key) || func_num_args() >= 2) {
-            return $this->_traitConfig($key, $value, $merge);
-        }
-
-        return $this->_traitConfig($key);
+        $this->options = [
+            'config' => ROOT . DS . 'config/acl',
+        ];
     }
 
     /**
@@ -81,6 +63,13 @@ class IniAcl implements AclInterface
      */
     public function initialize(Component $component)
     {
+        $adapter = $component->config('adapter');
+        if (is_array($adapter)) {
+            $this->options = $adapter + $this->options;
+        }
+
+        $engine = new IniConfig(dirname($this->options['config']) . DS);
+        $this->options = $engine->read(basename($this->options['config']));
     }
 
     /**
@@ -131,7 +120,7 @@ class IniAcl implements AclInterface
      */
     public function check($aro, $aco, $action = null)
     {
-        $aclConfig = $this->config();
+        $aclConfig = $this->options;
 
         if (is_array($aro)) {
             $aro = Hash::get($aro, $this->userPath);

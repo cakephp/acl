@@ -71,8 +71,7 @@ class AclShell extends Shell
 
         $class = Configure::read('Acl.classname');
         $className = App::classname('Acl.' . $class, 'Adapter');
-        if (
-            $class !== 'DbAcl' &&
+        if ($class !== 'DbAcl' &&
             !is_subclass_of($className, 'Acl\Adapter\DbAcl')
         ) {
             $out = "--------------------------------------------------\n";
@@ -94,6 +93,7 @@ class AclShell extends Shell
 
             try {
                 \Cake\ORM\TableRegistry::get('Aros')->schema();
+                \Cake\ORM\TableRegistry::remove('Aros');
             } catch (\Cake\Database\Exception $e) {
                 $this->out(__d('cake_acl', 'Acl database tables not found. To create them, run:'));
                 $this->out();

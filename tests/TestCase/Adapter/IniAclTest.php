@@ -15,6 +15,8 @@ namespace Acl\Test\TestCase\Adapter;
 
 use Acl\Adapter\IniAcl;
 use Acl\Controller\Component\AclComponent;
+use Cake\Controller\ComponentRegistry;
+use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 
 /**
@@ -25,27 +27,40 @@ class IniAclTest extends TestCase
 {
 
     /**
+     * Setup
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        parent::setUp();
+        Configure::write('Acl.classname', 'IniAcl');
+        $Collection = new ComponentRegistry();
+        $this->IniAcl = new IniAcl();
+        $this->Acl = new AclComponent($Collection, [
+            'adapter' => [
+                'config' => TEST_APP . 'config/acl',
+            ],
+        ]);
+    }
+
+    /**
      * testIniCheck method
      *
      * @return void
      */
     public function testCheck()
     {
-        $iniFile = TEST_APP . 'TestApp/Config/acl';
+        $this->assertFalse($this->Acl->check('admin', 'ads'));
+        $this->assertTrue($this->Acl->check('admin', 'posts'));
 
-        $Ini = new IniAcl();
-        $Ini->config = $Ini->readConfigFile($iniFile);
+        $this->assertTrue($this->Acl->check('jenny', 'posts'));
+        $this->assertTrue($this->Acl->check('jenny', 'ads'));
 
-        $this->assertFalse($Ini->check('admin', 'ads'));
-        $this->assertTrue($Ini->check('admin', 'posts'));
+        $this->assertTrue($this->Acl->check('paul', 'posts'));
+        $this->assertFalse($this->Acl->check('paul', 'ads'));
 
-        $this->assertTrue($Ini->check('jenny', 'posts'));
-        $this->assertTrue($Ini->check('jenny', 'ads'));
-
-        $this->assertTrue($Ini->check('paul', 'posts'));
-        $this->assertFalse($Ini->check('paul', 'ads'));
-
-        $this->assertFalse($Ini->check('nobody', 'comments'));
+        $this->assertFalse($this->Acl->check('nobody', 'comments'));
     }
 
     /**
@@ -55,15 +70,9 @@ class IniAclTest extends TestCase
      */
     public function testCheckArray()
     {
-        $iniFile = TEST_APP . 'TestApp/Config/acl';
-
-        $Ini = new IniAcl();
-        $Ini->config = $Ini->readConfigFile($iniFile);
-        $Ini->userPath = 'User.username';
-
         $user = [
             'User' => ['username' => 'admin']
         ];
-        $this->assertTrue($Ini->check($user, 'posts'));
+        $this->assertTrue($this->Acl->check($user, 'posts'));
     }
 }

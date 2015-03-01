@@ -41,7 +41,7 @@ class PhpAclTest extends TestCase
         $this->PhpAcl = new PhpAcl();
         $this->Acl = new AclComponent($Collection, [
             'adapter' => [
-                'config' => TEST_APP . 'TestApp/Config/acl',
+                'config' => TEST_APP . 'config/acl',
             ],
         ]);
     }
@@ -168,23 +168,23 @@ class PhpAclTest extends TestCase
         $this->assertTrue($this->Acl->check('Role/admin', 'foo/bar'));
         $this->assertTrue($this->Acl->check('role/admin', '/foo/bar'));
         $this->assertTrue($this->Acl->check('jan', 'foo/bar'));
-        $this->assertTrue($this->Acl->check('user/jan', 'foo/bar'));
+        $this->assertTrue($this->Acl->check('users/jan', 'foo/bar'));
         $this->assertTrue($this->Acl->check('Role/admin', 'controllers/bar'));
-        $this->assertTrue($this->Acl->check(['User' => ['username' => 'jan']], '/controllers/bar/bll'));
+        $this->assertTrue($this->Acl->check(['Users' => ['username' => 'jan']], '/controllers/bar/bll'));
         $this->assertTrue($this->Acl->check('Role/database_manager', 'controllers/db/create'));
-        $this->assertTrue($this->Acl->check('User/db_manager_2', 'controllers/db/create'));
+        $this->assertTrue($this->Acl->check('Users/db_manager_2', 'controllers/db/create'));
         $this->assertFalse($this->Acl->check('db_manager_2', '/controllers/users/Dashboard'));
 
         // inheritance: hardy -> reports -> data_analyst -> database_manager
-        $this->assertTrue($this->Acl->check('User/hardy', 'controllers/db/create'));
-        $this->assertFalse($this->Acl->check('User/jeff', 'controllers/db/create'));
+        $this->assertTrue($this->Acl->check('Users/hardy', 'controllers/db/create'));
+        $this->assertFalse($this->Acl->check('Users/jeff', 'controllers/db/create'));
 
         $this->assertTrue($this->Acl->check('Role/database_manager', 'controllers/db/select'));
-        $this->assertTrue($this->Acl->check('User/db_manager_2', 'controllers/db/select'));
-        $this->assertFalse($this->Acl->check('User/jeff', 'controllers/db/select'));
+        $this->assertTrue($this->Acl->check('Users/db_manager_2', 'controllers/db/select'));
+        $this->assertFalse($this->Acl->check('Users/jeff', 'controllers/db/select'));
 
         $this->assertTrue($this->Acl->check('Role/database_manager', 'controllers/db/drop'));
-        $this->assertTrue($this->Acl->check('User/db_manager_1', 'controllers/db/drop'));
+        $this->assertTrue($this->Acl->check('Users/db_manager_1', 'controllers/db/drop'));
         $this->assertFalse($this->Acl->check('db_manager_2', 'controllers/db/drop'));
 
         $this->assertTrue($this->Acl->check('db_manager_2', 'controllers/invoices/edit'));
@@ -194,15 +194,15 @@ class PhpAclTest extends TestCase
         // Role/manager is allowed /controllers/*/*_manager
         $this->assertTrue($this->Acl->check('stan', 'controllers/invoices/manager_edit'));
         $this->assertTrue($this->Acl->check('Role/manager', 'controllers/baz/manager_foo'));
-        $this->assertFalse($this->Acl->check('User/stan', 'custom/foo/manager_edit'));
+        $this->assertFalse($this->Acl->check('Users/stan', 'custom/foo/manager_edit'));
         $this->assertFalse($this->Acl->check('stan', 'bar/baz/manager_foo'));
         $this->assertFalse($this->Acl->check('Role/accounting', 'bar/baz/manager_foo'));
         $this->assertFalse($this->Acl->check('accounting', 'controllers/baz/manager_foo'));
 
-        $this->assertTrue($this->Acl->check('User/stan', 'controllers/articles/edit'));
+        $this->assertTrue($this->Acl->check('Users/stan', 'controllers/articles/edit'));
         $this->assertTrue($this->Acl->check('stan', 'controllers/articles/add'));
         $this->assertTrue($this->Acl->check('stan', 'controllers/articles/publish'));
-        $this->assertFalse($this->Acl->check('User/stan', 'controllers/articles/delete'));
+        $this->assertFalse($this->Acl->check('Users/stan', 'controllers/articles/delete'));
         $this->assertFalse($this->Acl->check('accounting', 'controllers/articles/edit'));
         $this->assertFalse($this->Acl->check('accounting', 'controllers/articles/add'));
         $this->assertFalse($this->Acl->check('role/accounting', 'controllers/articles/publish'));

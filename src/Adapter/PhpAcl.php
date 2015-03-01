@@ -78,7 +78,7 @@ class PhpAcl implements AclInterface
     {
         $this->options = [
             'policy' => static::DENY,
-            'config' => APP . 'Config/acl',
+            'config' => ROOT . DS . 'config/acl',
         ];
     }
 
@@ -91,7 +91,7 @@ class PhpAcl implements AclInterface
     public function initialize(Component $Component)
     {
         $adapter = $Component->config('adapter');
-        if ($adapter) {
+        if (is_array($adapter)) {
             $this->options = $adapter + $this->options;
         }
 

@@ -19,11 +19,10 @@
 	},
 	"minimum-stability": "dev",
 	"require": {
-		"cakephp/cakephp": "~3.0",
-		"cakephp/plugin-installer": "*"
+		"cakephp/cakephp": "~3.0"
 	},
 	"require-dev": {
-		"cakephp/cakephp-codesniffer": "2.0.*-dev",
+		"cakephp/cakephp-codesniffer": "master-dev",
 		"phpunit/phpunit": "4.*"
 	},
 	"autoload": {

@@ -21,11 +21,13 @@ use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Filesystem\Folder;
-use Cake\Network\Request;
-use Cake\Utility\Inflector;
-use Cake\Filesystem\Folder;
+<<<<<<< HEAD
 use Cake\Core\Plugin;
 use Cake\Routing\Router;
+=======
+use Cake\Network\Request;
+use Cake\Utility\Inflector;
+>>>>>>> composer/master
 
 /**
  * Provides features for additional ACL operations.
@@ -69,6 +71,7 @@ class AclExtras
      */
     protected $_clean = false;
 
+<<<<<<< HEAD
 /**
  * Contains app route prefixes
  *
@@ -95,6 +98,13 @@ class AclExtras
  *
  * @return void
  */
+=======
+    /**
+     * Start up And load Acl Component / Aco model
+     *
+     * @return void
+     */
+>>>>>>> composer/master
     public function startup($controller = null)
     {
         if (!$controller) {
@@ -169,11 +179,12 @@ class AclExtras
             $plugins = $this->_getPluginList();
         } else {
             $plugin = $params['plugin'];
-            if (!in_array($plugin, App::objects('plugin')) || !CakePlugin::loaded($plugin)) {
+            if (!Plugin::loaded($plugin)) {
                 $this->err(__d('cake_acl', "<error>Plugin {0} not found or not activated.</error>", [$plugin]));
                 return false;
             }
             $plugins = [$params['plugin']];
+<<<<<<< HEAD
         }
         $this->_processPlugins($root,$plugins);
         if ($this->_clean) {
@@ -217,6 +228,8 @@ class AclExtras
                     $this->foundACOs[$pathNode->id] = $this->_updateControllers($pathNode, $controllers, $prefix['template'], null, $prefix['prefix']);
                 }
             }
+=======
+>>>>>>> composer/master
         }
     }
 
@@ -232,6 +245,7 @@ class AclExtras
             $controllers = [];
             $controllers = $this->getControllerList($plugin);
             $path = $this->rootNode . '/' . $plugin;
+<<<<<<< HEAD
             $pathNode = $this->_checkNode($path, $plugin, $root->id);
             $this->foundACOs[$root->id][] = $plugin;
             $template = '/' . $plugin . '/:controller';
@@ -274,6 +288,10 @@ class AclExtras
                     }
                 }
             }
+=======
+            $pluginRoot = $this->_checkNode($path, preg_replace('/\//', '\\', Inflector::camelize($plugin)), $root->id);
+            $this->_updateControllers($pluginRoot, $controllers, $plugin);
+>>>>>>> composer/master
         }
     }
 
@@ -311,7 +329,35 @@ class AclExtras
             $path = str_replace(':controller', $controllerName, $template);
             $path = $this->rootNode . $path;
             $controllerNode = $this->_checkNode($path, $controllerName, $root->id);
+<<<<<<< HEAD
             $this->_checkMethods($controller, $controllerName, $controllerNode, $template . '/:action', $pluginPath, $prefixPath);
+=======
+            $this->_checkMethods($controller, $controllerName, $controllerNode, $pluginPath);
+        }
+        if ($this->_clean) {
+            if (!$plugin) {
+                $controllers = array_merge($controllersNames, $this->_getPluginList());
+            } else {
+                $controllers = $controllersNames;
+            }
+            $controllerFlip = array_flip($controllers);
+            $this->Aco->id = $root->id;
+            $controllerNodes = $this->Aco->find()->where(['parent_id' => $root->id]);
+            foreach ($controllerNodes as $ctrlNode) {
+                $alias = $ctrlNode->alias;
+                $name = $alias . 'Controller';
+                if (!isset($controllerFlip[$name]) && !isset($controllerFlip[$alias])) {
+                    $entity = $this->Aco->get($ctrlNode->id);
+                    if ($this->Aco->delete($entity)) {
+                        $this->out(__d(
+                            'cake_acl',
+                            'Deleted <warning>{0}</warning> and all children',
+                            $this->rootNode . '/' . $plugin . '/' . $ctrlNode->alias
+                        ));
+                    }
+                }
+            }
+>>>>>>> composer/master
         }
         return $controllersNames;
     }
@@ -330,7 +376,11 @@ class AclExtras
         if (!$plugin) {
             $path = App::path('Controller' . (empty($prefix) ? '' : DS . Inflector::camelize($prefix)));
             $dir = new Folder($path[0]);
+<<<<<<< HEAD
             $controllers = $dir->find('.*Controller\.php');
+=======
+            $controllers = $dir->findRecursive('.*Controller\.php');
+>>>>>>> composer/master
         } else {
             $path = App::path('Controller' . (empty($prefix) ? '' : DS . Inflector::camelize($prefix)), $plugin);
             $dir = new Folder($path[0]);
@@ -377,7 +427,11 @@ class AclExtras
     protected function _getCallbacks($className, $pluginPath = false, $prefixPath = false)
     {
         $callbacks = [];
+<<<<<<< HEAD
         $namespace = $this->_getNamespace($className, $pluginPath, $prefixPath);
+=======
+        $namespace = $this->_getNamespace($className, $pluginPath);
+>>>>>>> composer/master
         $reflection = new \ReflectionClass($namespace);
         if ($reflection->isAbstract()) {
             return $callbacks;
@@ -431,14 +485,33 @@ class AclExtras
             if (strpos($action, '_', 0) === 0) {
                 continue;
             }
+<<<<<<< HEAD
             $path = str_replace(':controller', $controllerName, $template);
             $path = str_replace(':action', $action, $path);
             $path = $this->rootNode . $path;
             $this->_checkNode($path, $action, $node->id);
-            $methods[$key] = $action;
+            $methods[$key]=$action;
         }
         if ($this->_clean) {
             $this->_cleaner($node->id,$methods);
+=======
+            $path = $this->rootNode . '/' . $pluginPath . $controllerName . '/' . $prefix . $action;
+            $this->_checkNode($path, $prefix . $action, $node->id);
+            $methods[$key] = $prefix . $action;
+        }
+        if ($this->_clean) {
+            $actionNodes = $this->Aco->find('children', ['for' => $node->id]);
+            $methodFlip = array_flip($methods);
+            foreach ($actionNodes as $action) {
+                if (!isset($methodFlip[$action->alias])) {
+                    $entity = $this->Aco->get($action->id);
+                    if ($this->Aco->delete($entity)) {
+                        $path = $this->rootNode . '/' . $controllerName . '/' . $action->alias;
+                        $this->out(__d('cake_acl', 'Deleted Aco node: <warning>{0}</warning>', $path));
+                    }
+                }
+            }
+>>>>>>> composer/master
         }
         return true;
     }
@@ -446,7 +519,6 @@ class AclExtras
     /**
      * Verify a Acl Tree
      *
-     * @param string $type The type of Acl Node to verify
      * @return void
      */
     public function verify()
@@ -464,7 +536,6 @@ class AclExtras
     /**
      * Recover an Acl Tree
      *
-     * @param string $type The Type of Acl Node to recover
      * @return void
      */
     public function recover()
@@ -489,8 +560,12 @@ class AclExtras
         $namespace = preg_replace('/\.php/', '', $namespace);
         $prefixPath = preg_replace('/\//', '\\', Inflector::camelize($prefixPath));
         if (!$pluginPath) {
+<<<<<<< HEAD
+            $namespace = '\App\Controller\\' . $prefixPath .$namespace;
+=======
             $appNamespace = Configure::read('App.namespace');
-            $namespace = '\\' . $appNamespace . '\\Controller\\' . $prefixPath . $namespace;
+            $namespace = '\\' . $appNamespace . '\\Controller\\' . $namespace;
+>>>>>>> composer/master
         } else {
             $pluginPath = preg_replace('/\//', '\\', $pluginPath);
             $namespace = '\\' . $pluginPath . 'Controller\\' . $prefixPath . $namespace;
@@ -506,7 +581,18 @@ class AclExtras
      */
     protected function _getPluginList()
     {
+<<<<<<< HEAD
         return Plugin::loaded();
+=======
+        if (empty($namespace)) {
+            return null;
+        }
+        $pathArray = explode('\\', $namespace);
+        if (count($pathArray) >= 5 && $pathArray[3] !== 'Controller') {
+            return Inflector::dasherize($pathArray[3]) . '_';
+        }
+        return null;
+>>>>>>> composer/master
     }
 
     /**
@@ -516,6 +602,7 @@ class AclExtras
      */
     protected function _buildPrefixes()
     {
+<<<<<<< HEAD
         $routes = Router::routes();
         $routesList = [];
         foreach ($routes as $key => $route) {
@@ -562,4 +649,8 @@ class AclExtras
             }
         }
     }
+=======
+        return Plugin::loaded();
+    }
+>>>>>>> composer/master
 }

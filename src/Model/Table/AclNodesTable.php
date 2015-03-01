@@ -98,8 +98,7 @@ class AclNodesTable extends Table
             $result = $query->toArray();
             $path = array_values($path);
 
-            if (
-                !isset($result[0]) ||
+            if (!isset($result[0]) ||
                 (!empty($path) && $result[0]->alias != $path[count($path) - 1]) ||
                 (empty($path) && $result[0]->alias != $start)
             ) {
@@ -111,7 +110,13 @@ class AclNodesTable extends Table
             $name = key($ref);
             list(, $alias) = pluginSplit($name);
 
-            $bindTable = TableRegistry::get($name);
+            if (TableRegistry::exists($name)) {
+                $bindTable = TableRegistry::get($name);
+            } else {
+                $bindTable = TableRegistry::get($name, [
+                    'connection' => Configure::read('Acl.database')
+                ]);
+            }
             $entityClass = $bindTable->entityClass();
 
             if ($entityClass) {
