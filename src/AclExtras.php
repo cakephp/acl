@@ -23,8 +23,6 @@ use Cake\Core\Plugin;
 use Cake\Filesystem\Folder;
 use Cake\Network\Request;
 use Cake\Utility\Inflector;
-use Cake\Filesystem\Folder;
-use Cake\Core\Plugin;
 use Cake\Routing\Router;
 
 /**
