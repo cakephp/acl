@@ -90,27 +90,6 @@ class AclExtrasTestCase extends TestCase
     }
 
     /**
-     * test verify
-     *
-     * @return void
-     */
-    public function testVerify()
-    {
-        $this->Task->startup();
-        $this->Task->args = ['Aco'];
-        $this->Task->Acl->Aco = $this->getMock('Aco', ['verify']);
-        $this->Task->Acl->Aco->expects($this->once())
-            ->method('verify')
-            ->will($this->returnValue(true));
-
-        $this->Task->expects($this->once())
-            ->method('out')
-            ->with($this->matchesRegularExpression('/valid/'));
-
-        $this->Task->verify();
-    }
-
-    /**
      * test startup
      *
      * @return void

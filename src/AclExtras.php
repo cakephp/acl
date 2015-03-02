@@ -346,23 +346,6 @@ class AclExtras
     }
 
     /**
-     * Verify a Acl Tree
-     *
-     * @return void
-     */
-    public function verify()
-    {
-        $type = Inflector::camelize($this->args[0]);
-        $return = $this->Acl->{$type}->verify();
-        if ($return === true) {
-            $this->out(__('<success>Tree is valid and strong</success>'));
-        } else {
-            $this->err(print_r($return, true));
-            return false;
-        }
-    }
-
-    /**
      * Recover an Acl Tree
      *
      * @return void
