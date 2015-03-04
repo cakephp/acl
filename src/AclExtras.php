@@ -304,8 +304,8 @@ class AclExtras
      *
      * @param string $className The classname to check
      * @param string $controllerName The controller name
-     * @param array $node
-     * @param string $pluginPath
+     * @param array $node The node to check.
+     * @param string $pluginPath The plugin path to use.
      * @return void
      */
     protected function _checkMethods($className, $controllerName, $node, $pluginPath = false)
