@@ -67,32 +67,32 @@ class AclExtras
      */
     protected $_clean = false;
 
-/**
- * Contains app route prefixes
- *
- * @var array
- */
+    /**
+     * Contains app route prefixes
+     *
+     * @var array
+     */
     protected $prefixes = [];
 
-/**
- * Contains plugins route prefixes
- *
- * @var array
- */
+    /**
+     * Contains plugins route prefixes
+     *
+     * @var array
+     */
     protected $pluginPrefixes = [];
 
-/**
- * List of ACOs found during synchronization
- *
- * @var array
- */
+    /**
+     * List of ACOs found during synchronization
+     *
+     * @var array
+     */
     protected $foundACOs = [];
 
-/**
- * Start up And load Acl Component / Aco model
- *
- * @return void
- */
+    /**
+     * Start up And load Acl Component / Aco model
+     *
+     * @return void
+     */
     public function startup($controller = null)
     {
         if (!$controller) {
@@ -162,18 +162,20 @@ class AclExtras
     {
         $root = $this->_checkNode($this->rootNode, $this->rootNode, null);
         if (empty($params['plugin'])) {
+            $plugins = Plugin::loaded();
             $this->_processControllers($root);
             $this->_processPrefixes($root);
-            $plugins = $this->_getPluginList();
+            $this->_processPlugins($root,$plugins);
         } else {
             $plugin = $params['plugin'];
-            if (!in_array($plugin, App::objects('plugin')) || !CakePlugin::loaded($plugin)) {
+            if (!Plugin::loaded($plugin)) {
                 $this->err(__d('cake_acl', "<error>Plugin {0} not found or not activated.</error>", [$plugin]));
                 return false;
             }
             $plugins = [$params['plugin']];
+            $this->_processPlugins($root,$plugins);
+            $this->foundACOs = array_slice($this->foundACOs, 1, NULL, true);
         }
-        $this->_processPlugins($root,$plugins);
         if ($this->_clean) {
             foreach ($this->foundACOs as $parent_id => $acosList) {
                 $this->_cleaner($parent_id, $acosList);
@@ -283,7 +285,7 @@ class AclExtras
      * @param string $template Template to generate the path of ACO
      * @param string $plugin Name of the plugin you are making controllers for.
      * @param string $prefix Name of the prefix you are making controllers for.
-     * @return void
+     * @return array
      */
     protected function _updateControllers($root, $controllers, $template, $plugin = null, $prefix = null)
     {
@@ -409,8 +411,8 @@ class AclExtras
      *
      * @param string $className The classname to check
      * @param string $controllerName The controller name
-     * @param array $node
-     * @param string $pluginPath
+     * @param array $node The node to check.
+     * @param string $pluginPath The plugin path to use.
      * @return void
      */
     protected function _checkMethods($className, $controllerName, $node, $template, $pluginPath = false, $prefixPath = null)
@@ -439,24 +441,6 @@ class AclExtras
             $this->_cleaner($node->id,$methods);
         }
         return true;
-    }
-
-    /**
-     * Verify a Acl Tree
-     *
-     * @param string $type The type of Acl Node to verify
-     * @return void
-     */
-    public function verify()
-    {
-        $type = Inflector::camelize($this->args[0]);
-        $return = $this->Acl->{$type}->verify();
-        if ($return === true) {
-            $this->out(__('<success>Tree is valid and strong</success>'));
-        } else {
-            $this->err(print_r($return, true));
-            return false;
-        }
     }
 
     /**
@@ -494,17 +478,6 @@ class AclExtras
             $namespace = '\\' . $pluginPath . 'Controller\\' . $prefixPath . $namespace;
         }
         return $namespace;
-    }
-
-
-    /**
-     * Get the list of plugins in the application.
-     *
-     * @return array
-     */
-    protected function _getPluginList()
-    {
-        return Plugin::loaded();
     }
 
     /**

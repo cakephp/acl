@@ -120,17 +120,6 @@ class AclExtrasShell extends Shell
                 'help' => __('Perform a full sync on the ACO table.' .
                     'Will create new ACOs or missing controllers and actions.' .
                     'Will also remove orphaned entries that no longer have a matching controller/action')
-            ])->addSubcommand('verify', [
-                'help' => __('Verify the tree structure of either your Aco or Aro Trees'),
-                'parser' => [
-                    'arguments' => [
-                        'type' => [
-                            'required' => true,
-                            'help' => __('The type of tree to verify'),
-                            'choices' => ['aco', 'aro']
-                        ]
-                    ]
-                ]
             ])->addSubcommand('recover', [
                 'help' => __('Recover a corrupted Tree'),
                 'parser' => [
@@ -143,18 +132,7 @@ class AclExtrasShell extends Shell
                     ]
                 ]
             ]);
-            return $parser;
-    }
-
-    /**
-     * Verify a Acl Tree
-     *
-     * @return void
-     */
-    public function verify()
-    {
-        $this->AclExtras->args = $this->args;
-        return $this->AclExtras->verify();
+        return $parser;
     }
 
     /**

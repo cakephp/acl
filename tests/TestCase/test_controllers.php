@@ -18,7 +18,7 @@ class CommentsController extends Controller
     {
     }
 
-    public function _secret_method()
+    protected function _secret_method()
     {
     }
 }
