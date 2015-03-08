@@ -530,11 +530,10 @@ class AclExtras
         foreach ($nodes as $node) {
             if (!isset($methodFlip[$node->alias])) {
                 $crumbs = $this->Aco->find('path', ['for' => $node->id, 'order' => 'lft']);
-                $path = '/';
+                $path = null;
                 foreach ($crumbs as $crumb) {
-                    $path .= $crumb->alias . '/';
+                    $path .= '/' . $crumb->alias;
                 }
-                $path = substr($path,0,-1);
                 $entity = $this->Aco->get($node->id);
                 if ($this->Aco->delete($entity)) {
                     $this->out(__d('cake_acl', 'Deleted Aco node: <warning>{0}</warning> and all children', $path));
