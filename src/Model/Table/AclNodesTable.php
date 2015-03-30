@@ -18,6 +18,7 @@ use Cake\Core\Exception;
 use Cake\ORM\Entity;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
+use Cake\Datasource\ConnectionManager;
 
 /**
  * ACL Nodes
@@ -114,7 +115,7 @@ class AclNodesTable extends Table
                 $bindTable = TableRegistry::get($name);
             } else {
                 $bindTable = TableRegistry::get($name, [
-                    'connection' => Configure::read('Acl.database')
+                    'connection' => ConnectionManager::get(Configure::read('Acl.database'))
                 ]);
             }
             $entityClass = $bindTable->entityClass();
