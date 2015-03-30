@@ -113,8 +113,9 @@ class AclNodesTable extends Table
             if (TableRegistry::exists($name)) {
                 $bindTable = TableRegistry::get($name);
             } else {
+                $connection = Configure::read('Acl.database');
                 $bindTable = TableRegistry::get($name, [
-                    'connection' => Configure::read('Acl.database')
+                    'connection' => ConnectionManager::get($connection)
                 ]);
             }
             $entityClass = $bindTable->entityClass();
