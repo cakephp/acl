@@ -13,7 +13,6 @@
 namespace Acl;
 
 use Acl\Controller\Component\AclComponent;
-use Cake\Console\Shell;
 use Cake\Controller\ComponentRegistry;
 use Cake\Controller\Controller;
 use Cake\Core\App;
@@ -21,8 +20,8 @@ use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Filesystem\Folder;
 use Cake\Network\Request;
-use Cake\Utility\Inflector;
 use Cake\Routing\Router;
+use Cake\Utility\Inflector;
 
 /**
  * Provides features for additional ACL operations.

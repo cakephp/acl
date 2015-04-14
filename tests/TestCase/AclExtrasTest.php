@@ -311,7 +311,7 @@ class AclExtrasTestCase extends TestCase
 
     /**
      * Tests that aco sync works correctly with nested plugins
-     * 
+     *
      * @return void
      */
     public function testSyncWithNestedPlugin()
