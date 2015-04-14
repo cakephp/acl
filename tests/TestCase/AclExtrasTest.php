@@ -31,6 +31,9 @@ use Cake\TestSuite\TestCase;
 //import test controller class names.
 include ((dirname(__FILE__))) . DS . 'test_controllers.php';
 include ((dirname(__FILE__))) . DS . 'test_admin_controllers.php';
+include ((dirname(__FILE__))) . DS . 'test_plugin_controllers.php';
+include ((dirname(__FILE__))) . DS . 'test_nested_plugin_controllers.php';
+include ((dirname(__FILE__))) . DS . 'test_plugin_admin_controllers.php';
 
 /**
  * AclExtras Shell Test case
@@ -257,23 +260,26 @@ class AclExtrasTestCase extends TestCase
     public function testUpdateWithPlugins()
     {
         Plugin::unload();
-        Plugin::load('TestPlugin');
+        Plugin::load('TestPlugin', ['routes' => true]);
         Plugin::load('Nested/TestPluginTwo');
+        Plugin::routes();
         $this->_clean();
 
         $this->Task->expects($this->atLeast(3))
             ->method('getControllerList')
             ->will($this->returnCallback(function ($plugin, $prefix) {
-                if ($prefix !== null) {
-                    return [];
-                }
-
                 switch ($plugin) {
                     case 'TestPlugin':
                         return ['PluginController.php'];
                     case 'Nested/TestPluginTwo':
+                        if ($prefix !== null) {
+                            return [];
+                        }
                         return ['PluginTwoController.php'];
                     default:
+                        if ($prefix !== null) {
+                            return [];
+                        }
                         return ['CommentsController.php', 'PostsController.php', 'BigLongNamesController.php'];
                 }
             }));
@@ -285,6 +291,10 @@ class AclExtrasTestCase extends TestCase
         $Aco = $this->Task->Acl->Aco;
 
         $result = $Aco->node('controllers/TestPlugin/Plugin');
+        $this->assertNotFalse($result);
+        $this->assertEquals($result->toArray()[0]['alias'], 'Plugin');
+
+        $result = $Aco->node('controllers/Admin/TestPlugin/Plugin');
         $this->assertNotFalse($result);
         $this->assertEquals($result->toArray()[0]['alias'], 'Plugin');
 
