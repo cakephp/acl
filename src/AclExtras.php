@@ -449,8 +449,7 @@ class AclExtras
             if (strpos($action, '_', 0) === 0) {
                 continue;
             }
-            $path = str_replace(':controller', $controllerName, $template);
-            $path = str_replace(':action', $action, $path);
+            $path = str_replace([':controller', ':action'], [$controllerName, $action], $template);
             $path = $this->rootNode . $path;
             $this->_checkNode($path, $action, $node->id);
             $methods[$key] = $action;
