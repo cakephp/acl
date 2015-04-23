@@ -1,5 +1,5 @@
 {
-	"name": "geraldurbas/acl",
+	"name": "geraldurbas/acl.git",
 	"description": "Acl Plugin for CakePHP 3.x framework",
 	"type": "cakephp-plugin",
 	"keywords": ["cakephp", "acl"],
@@ -15,7 +15,7 @@
 		"issues": "https://github.com/cakephp/acl/issues",
 		"forum": "http://stackoverflow.com/tags/cakephp",
 		"irc": "irc://irc.freenode.org/cakephp",
-		"source": "https://github.com/cakephp/acl"
+		"source": "https://github.com/geraldurbas/acl.git"
 	},
 	"minimum-stability": "dev",
 	"require": {
