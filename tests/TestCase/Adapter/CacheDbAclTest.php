@@ -61,6 +61,12 @@ class CachedDbAclTwoTest extends CachedDbAcl
  */
 class CacheDbAclTest extends TestCase
 {
+    /**
+     * fixtures property
+     *
+     * @var array
+     */
+    public $fixtures = ['core.users'];
 
     /**
      * setUp method
@@ -103,13 +109,13 @@ class CacheDbAclTest extends TestCase
     {
         $this->assertSame('samir_print_read', $this->CachedDb->getCacheKey('Samir', 'print', 'read'));
         $this->assertSame('samir_root_tpsreports_update', $this->CachedDb->getCacheKey('Samir', 'ROOT/tpsReports/update', '*'));
-        $this->assertSame('user_1_print', $this->CachedDb->getCacheKey(['User' => ['id' => 1]], 'print', '*'));
-        $this->assertSame('user_1_print', $this->CachedDb->getCacheKey(['model' => 'User', 'foreign_key' => 1], 'print', '*'));
+        $this->assertSame('users_1_print', $this->CachedDb->getCacheKey(['Users' => ['id' => 1]], 'print', '*'));
+        $this->assertSame('users_1_print', $this->CachedDb->getCacheKey(['model' => 'Users', 'foreign_key' => 1], 'print', '*'));
 
         $entity = new Entity([
             'id' => '1'
-        ], ['source' => 'User']);
-        $this->assertSame('user_1_print', $this->CachedDb->getCacheKey($entity, 'print', '*'));
+        ], ['source' => 'Users']);
+        $this->assertSame('users_1_print', $this->CachedDb->getCacheKey($entity, 'print', '*'));
     }
 
     /**
