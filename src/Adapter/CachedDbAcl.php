@@ -128,9 +128,6 @@ class CachedDbAcl extends DbAcl implements AclInterface
                     'foreign_key' => $ref[$name][$bindTable->primaryKey()]
                 ];
             } else {
-                /*if (is_string($tmpRef)) {
-                    return $entity->node($tmpRef);
-                }*/
                 $ref = $tmpRef;
             }
 
