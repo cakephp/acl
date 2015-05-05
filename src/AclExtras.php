@@ -6,9 +6,9 @@
  * Redistributions of files must retain the above copyright notice.
  *
  * @copyright Copyright 2008-2013, Mark Story.
- * @link http://mark-story.com
- * @author Mark Story <mark@mark-story.com>
- * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ * @link      http://mark-story.com
+ * @author    Mark Story <mark@mark-story.com>
+ * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
  */
 namespace Acl;
 
@@ -66,24 +66,24 @@ class AclExtras
     protected $_clean = false;
 
     /**
-    * App routes.
-    *
-    * @var array
-    */
+     * App routes.
+     *
+     * @var array
+     */
     protected $routes = [];
 
     /**
-    * App Plugins.
-    *
-    * @var array
-    */
+     * App Plugins.
+     *
+     * @var array
+     */
     protected $plugins = [];
 
     /**
-    * App Prefixes.
-    *
-    * @var array
-    */
+     * App Prefixes.
+     *
+     * @var array
+     */
     protected $prefixes = [];
 
     /**
@@ -108,7 +108,7 @@ class AclExtras
      *
      * Will either use shell->out, or controller->Flash->success()
      *
-     * @param string $msg The message to output.
+     * @param  string $msg The message to output.
      * @return void
      */
     public function out($msg)
@@ -125,7 +125,7 @@ class AclExtras
      *
      * Will either use shell->err, or controller->Flash->error()
      *
-     * @param string $msg The message to output.
+     * @param  string $msg The message to output.
      * @return void
      */
     public function err($msg)
@@ -140,7 +140,7 @@ class AclExtras
     /**
      * Sync the ACO table
      *
-     * @param array $params An array of parameters
+     * @param  array $params An array of parameters
      * @return void
      */
     public function acoSync($params = [])
@@ -152,7 +152,7 @@ class AclExtras
     /**
      * Updates the Aco Tree with new controller actions.
      *
-     * @param array $params An array of parameters
+     * @param  array $params An array of parameters
      * @return void
      */
     public function acoUpdate($params = [])
@@ -161,7 +161,7 @@ class AclExtras
             $plugin = $params['plugin'];
             $this->plugins[] = $plugin;
             $pluginPath = Plugin::path($plugin);
-            $routesFile = $pluginPath  . 'config' . DS . 'routes.php';
+            $routesFile = $pluginPath . 'config' . DS . 'routes.php';
             if (is_file($routesFile)) {
                 include $routesFile;
             }
@@ -169,7 +169,7 @@ class AclExtras
             $plugin = null;
             $this->plugins = Plugin::loaded();
         }
-        $this->routes = $this->getRoutes(Router::routes(), $plugin);
+        $this->routes = $this->_getRoutes(Router::routes(), $plugin);
         $controllersNames = [];
         foreach ($this->routes as $route) {
             if ($plugin && $route['plugin'] != $plugin) {
@@ -187,7 +187,7 @@ class AclExtras
                 if ($plugin && $route['plugin'] != $plugin) {
                     continue;
                 }
-                $node = $this->getNode($route);
+                $node = $this->_getNode($route);
                 $controllers = $controllersNames[$route['template']];
                 if (empty($route['plugin'])) {
                     $controllers = array_merge($controllers, $plugins);
@@ -204,18 +204,18 @@ class AclExtras
     /**
      * Updates a collection of controllers.
      *
-     * @param array $route Array
+     * @param  array $route Array
      * @return array
      */
     protected function _updateControllers($route)
     {
-        $rootNode = $this->getNode($route);
+        $rootNode = $this->_getNode($route);
         $controllers = $this->getControllerList($route['plugin'], $route['prefix']);
         $controllersNames = [];
         foreach ($controllers as $controller) {
             $tmp = explode('/', $controller);
             $controllerName = str_replace('Controller.php', '', array_pop($tmp));
-            if($controllerName == 'App'){
+            if ($controllerName == 'App') {
                 continue;
             }
             $controllersNames[] = $controllerName;
@@ -230,8 +230,8 @@ class AclExtras
      *
      * Returns an array of path => import notation.
      *
-     * @param string $plugin Name of plugin to get controllers for
-     * @param string $prefix Name of prefix to get controllers for
+     * @param  string $plugin Name of plugin to get controllers for
+     * @param  string $prefix Name of prefix to get controllers for
      * @return array
      */
     public function getControllerList($plugin = null, $prefix = null)
@@ -245,9 +245,9 @@ class AclExtras
     /**
      * Check a node for existance, create it if it doesn't exist.
      *
-     * @param string $path The path to check
-     * @param string $alias The alias to create
-     * @param int $parentId The parent id to use when creating.
+     * @param  string $path     The path to check
+     * @param  string $alias    The alias to create
+     * @param  int    $parentId The parent id to use when creating.
      * @return array Aco Node array
      */
     protected function _checkNode($path, $alias, $parentId = null)
@@ -268,12 +268,12 @@ class AclExtras
         return $node;
     }
 
-     /**
+    /**
      * Get a list of registered callback methods
      *
-     * @param string $className The class to reflect on.
-     * @param string $pluginPath The plugin path.
-     * @param string $prefixPath The prefix path.
+     * @param  string $className  The class to reflect on.
+     * @param  string $pluginPath The plugin path.
+     * @param  string $prefixPath The prefix path.
      * @return array
      */
     protected function _getCallbacks($className, $pluginPath = false, $prefixPath = false)
@@ -312,7 +312,7 @@ class AclExtras
     /**
      * Check and Add/delete controller Methods
      *
-     * @param array $route
+     * @param  array $route App routes, with path template, plugin and prefix
      * @return void
      */
     protected function _checkMethods($route)
@@ -375,9 +375,9 @@ class AclExtras
     /**
      * Get the namespace for a given class.
      *
-     * @param string $className The class you want a namespace for.
-     * @param string $pluginPath The plugin path.
-     * @param string $prefixPath The prefix path.
+     * @param  string $className  The class you want a namespace for.
+     * @param  string $pluginPath The plugin path.
+     * @param  string $prefixPath The prefix path.
      * @return string
      */
     protected function _getNamespace($className, $pluginPath = null, $prefixPath = null)
@@ -399,15 +399,15 @@ class AclExtras
     /**
      * Get all app and plugins routes
      *
-     * @param Cake\Routing\Route\Route $routes List of all loaded routes.
-     * @param string $plugin if param plugin was passed.
+     * @param  Cake\Routing\Route\Route $routes List of all loaded routes.
+     * @param  string                   $plugin if param plugin was passed.
      * @return array
      */
-    protected function getRoutes($routes = [], $plugin = null)
+    protected function _getRoutes($routes = [], $plugin = null)
     {
         $once = [];
         $returnRoutes = [];
-        $i=0;
+        $i = 0;
         foreach ($routes as $route) {
             if (strpos($route->template, ':controller') !== false) {
                 $template = $route->template;
@@ -445,7 +445,7 @@ class AclExtras
         }
         /* generating default routes for loaded Plugins */
         foreach ($this->plugins as $plugin) {
-            $template = '/'. $this->_pluginAlias($plugin);
+            $template = '/' . $this->_pluginAlias($plugin);
             if (!isset($once[$template])) {
                 $returnRoutes[$i]['template'] = $template;
                 $returnRoutes[$i]['prefix'] = null;
@@ -459,7 +459,7 @@ class AclExtras
     /**
      * Returns the aliased name for the plugin (Needed in order to correctly handle nested plugins)
      *
-     * @param string $plugin The name of the plugin to alias
+     * @param  string $plugin The name of the plugin to alias
      * @return string
      */
     protected function _pluginAlias($plugin)
@@ -470,11 +470,12 @@ class AclExtras
     /**
      *  Return node for the path and create all necessary nodes
      *
-     * @param array $route
+     * @param  array $route app route, with path template, plugin and prefix
      * @return array Aco Node array
      */
-    protected function getNode($route) {
-        if(is_array($route)) {
+    protected function _getNode($route)
+    {
+        if (is_array($route)) {
             $template = $route['template'];
         } else {
             $template = $route;
@@ -483,7 +484,7 @@ class AclExtras
         $path = $this->rootNode;
         foreach ($pathArray as $part) {
             $path .= $part . '/';
-            if(!isset($lastNode)){
+            if (!isset($lastNode)) {
                 $lastNode = $this->_checkNode(substr($path, 0, -1), substr($path, 0, -1));
             } else {
                 $lastNode = $this->_checkNode(substr($path, 0, -1), $part, $lastNode->id);
@@ -495,8 +496,8 @@ class AclExtras
     /**
      * Delete unused ACOs.
      *
-     * @param int $parentId Id of the parent node.
-     * @param array $preservedItems list of items that will not be erased.
+     * @param  int   $parentId       Id of the parent node.
+     * @param  array $preservedItems list of items that will not be erased.
      * @return void
      */
     protected function _cleaner($parentId, $preservedItems = [])
