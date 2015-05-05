@@ -125,7 +125,11 @@ class AclExtrasTestCase extends TestCase
                 if ($prefix === null) {
                     return ['CommentsController.php', 'PostsController.php', 'BigLongNamesController.php'];
                 } else {
-                    return ['PostsController.php'];
+                    if($plugin === null){
+                        return ['PostsController.php'];
+                    } else {
+                        return ['PluginController.php'];
+                    }
                 }
             }));
 
