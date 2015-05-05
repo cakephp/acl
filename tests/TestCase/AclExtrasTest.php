@@ -121,7 +121,6 @@ class AclExtrasTestCase extends TestCase
     {
         $this->Task->expects($this->any())
             ->method('getControllerList')
-            ->with(null)
             ->will($this->returnCallback(function ($plugin, $prefix) {
                 if ($prefix === null) {
                     return ['CommentsController.php', 'PostsController.php', 'BigLongNamesController.php'];
