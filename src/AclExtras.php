@@ -6,9 +6,9 @@
  * Redistributions of files must retain the above copyright notice.
  *
  * @copyright Copyright 2008-2013, Mark Story.
- * @link      http://mark-story.com
- * @author    Mark Story <mark@mark-story.com>
- * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
+ * @link http://mark-story.com
+ * @author Mark Story <mark@mark-story.com>
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  */
 namespace Acl;
 
@@ -108,7 +108,7 @@ class AclExtras
      *
      * Will either use shell->out, or controller->Flash->success()
      *
-     * @param  string $msg The message to output.
+     * @param string $msg The message to output.
      * @return void
      */
     public function out($msg)
@@ -125,7 +125,7 @@ class AclExtras
      *
      * Will either use shell->err, or controller->Flash->error()
      *
-     * @param  string $msg The message to output.
+     * @param string $msg The message to output.
      * @return void
      */
     public function err($msg)
@@ -140,7 +140,7 @@ class AclExtras
     /**
      * Sync the ACO table
      *
-     * @param  array $params An array of parameters
+     * @param array $params An array of parameters
      * @return void
      */
     public function acoSync($params = [])
@@ -152,13 +152,17 @@ class AclExtras
     /**
      * Updates the Aco Tree with new controller actions.
      *
-     * @param  array $params An array of parameters
+     * @param array $params An array of parameters
      * @return void
      */
     public function acoUpdate($params = [])
     {
         if (isset($params['plugin'])) {
             $plugin = $params['plugin'];
+            if (!Plugin::loaded($plugin)) {
+                $this->err(__d('cake_acl', "<error>Plugin {0} not found or not activated.</error>", [$plugin]));
+                return false;
+            }
             $this->plugins[] = $plugin;
             $pluginPath = Plugin::path($plugin);
             $routesFile = $pluginPath . 'config' . DS . 'routes.php';
@@ -204,7 +208,7 @@ class AclExtras
     /**
      * Updates a collection of controllers.
      *
-     * @param  array $route Array
+     * @param array $route Array
      * @return array
      */
     protected function _updateControllers($route)
@@ -230,8 +234,8 @@ class AclExtras
      *
      * Returns an array of path => import notation.
      *
-     * @param  string $plugin Name of plugin to get controllers for
-     * @param  string $prefix Name of prefix to get controllers for
+     * @param string $plugin Name of plugin to get controllers for
+     * @param string $prefix Name of prefix to get controllers for
      * @return array
      */
     public function getControllerList($plugin = null, $prefix = null)
@@ -245,9 +249,9 @@ class AclExtras
     /**
      * Check a node for existance, create it if it doesn't exist.
      *
-     * @param  string $path     The path to check
-     * @param  string $alias    The alias to create
-     * @param  int    $parentId The parent id to use when creating.
+     * @param string $path     The path to check
+     * @param string $alias    The alias to create
+     * @param int    $parentId The parent id to use when creating.
      * @return array Aco Node array
      */
     protected function _checkNode($path, $alias, $parentId = null)
@@ -271,9 +275,9 @@ class AclExtras
     /**
      * Get a list of registered callback methods
      *
-     * @param  string $className  The class to reflect on.
-     * @param  string $pluginPath The plugin path.
-     * @param  string $prefixPath The prefix path.
+     * @param string $className  The class to reflect on.
+     * @param string $pluginPath The plugin path.
+     * @param string $prefixPath The prefix path.
      * @return array
      */
     protected function _getCallbacks($className, $pluginPath = false, $prefixPath = false)
@@ -312,7 +316,7 @@ class AclExtras
     /**
      * Check and Add/delete controller Methods
      *
-     * @param  array $route App routes, with path template, plugin and prefix
+     * @param array $route App routes, with path template, plugin and prefix
      * @return void
      */
     protected function _checkMethods($route)
@@ -375,9 +379,9 @@ class AclExtras
     /**
      * Get the namespace for a given class.
      *
-     * @param  string $className  The class you want a namespace for.
-     * @param  string $pluginPath The plugin path.
-     * @param  string $prefixPath The prefix path.
+     * @param string $className  The class you want a namespace for.
+     * @param string $pluginPath The plugin path.
+     * @param string $prefixPath The prefix path.
      * @return string
      */
     protected function _getNamespace($className, $pluginPath = null, $prefixPath = null)
@@ -399,8 +403,8 @@ class AclExtras
     /**
      * Get all app and plugins routes
      *
-     * @param  Cake\Routing\Route\Route $routes List of all loaded routes.
-     * @param  string                   $plugin if param plugin was passed.
+     * @param Cake\Routing\Route\Route $routes List of all loaded routes.
+     * @param string                   $plugin if param plugin was passed.
      * @return array
      */
     protected function _getRoutes($routes = [], $plugin = null)
@@ -459,7 +463,7 @@ class AclExtras
     /**
      * Returns the aliased name for the plugin (Needed in order to correctly handle nested plugins)
      *
-     * @param  string $plugin The name of the plugin to alias
+     * @param string $plugin The name of the plugin to alias
      * @return string
      */
     protected function _pluginAlias($plugin)
@@ -470,7 +474,7 @@ class AclExtras
     /**
      *  Return node for the path and create all necessary nodes
      *
-     * @param  array $route app route, with path template, plugin and prefix
+     * @param array $route app route, with path template, plugin and prefix
      * @return array Aco Node array
      */
     protected function _getNode($route)
@@ -496,8 +500,8 @@ class AclExtras
     /**
      * Delete unused ACOs.
      *
-     * @param  int   $parentId       Id of the parent node.
-     * @param  array $preservedItems list of items that will not be erased.
+     * @param int   $parentId       Id of the parent node.
+     * @param array $preservedItems list of items that will not be erased.
      * @return void
      */
     protected function _cleaner($parentId, $preservedItems = [])
