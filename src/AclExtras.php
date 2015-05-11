@@ -401,10 +401,10 @@ class AclExtras
     }
 
     /**
-     * Get all app and plugins routes
+     * Get default app route, all plugins defaults routes and all prefixes routes
      *
      * @param Cake\Routing\Route\Route $routes List of all loaded routes.
-     * @param string                   $plugin if param plugin was passed.
+     * @param string $plugin if param plugin was passed.
      * @return array
      */
     protected function _getRoutes($routes = [], $plugin = null)
@@ -412,49 +412,44 @@ class AclExtras
         $once = [];
         $returnRoutes = [];
         $i = 0;
+        // app default route
+        if (!$plugin) {
+            $returnRoutes[$i]['template'] = null;
+            $returnRoutes[$i]['prefix'] = null;
+            $returnRoutes[$i++]['plugin'] = null;
+        }
+        // default routes for loaded Plugins
+        foreach ($this->plugins as $pluginName) {
+            $template = '/' . $this->_pluginAlias($pluginName);
+            if (!isset($once[$template])) {
+                $returnRoutes[$i]['template'] = $template;
+                $returnRoutes[$i]['prefix'] = null;
+                $returnRoutes[$i++]['plugin'] = $pluginName;
+                $once[$template] = true;
+            }
+        }
+        // All prefixes routes
         foreach ($routes as $route) {
-            if (strpos($route->template, ':controller') !== false) {
-                $template = $route->template;
-                if (isset($route->defaults['plugin']) && !empty($route->defaults['plugin'])) {
-                    $pluginSearch = '/' . Inflector::underscore($route->defaults['plugin']) . '/';
-                    $pluginReplace = '/' . Inflector::camelize($route->defaults['plugin']) . '/';
-                    $template = str_replace($pluginSearch, $pluginReplace, $template);
-                }
-                if (isset($route->defaults['prefix']) && !empty($route->defaults['prefix'])) {
-                    $prefixSearch = '/' . Inflector::underscore($route->defaults['prefix']) . '/';
-                    $prefixReplace = '/' . Inflector::camelize($route->defaults['prefix']) . '/';
-                    $template = str_replace($prefixSearch, $prefixReplace, $template);
-                }
-                $template = str_replace(['/:controller', '/:action', '/*'], '', $template);
-                if (isset($route->defaults['prefix'])) {
-                    $this->prefixes[] = Inflector::camelize($route->defaults['prefix']);
-                }
+            if (isset($route->defaults['prefix']) && !empty($route->defaults['prefix'])) {
+                $template = '/' . $route->defaults['plugin'];
+                $template .= '/' . Inflector::underscore($route->defaults['prefix']);
+                $template = str_replace('//', '/', $template);
+                $this->prefixes[] = $route->defaults['prefix'];
                 if (!isset($once[$template])) {
-                    if ($plugin) {
+                    if (!$plugin) {
+                        $returnRoutes[$i]['template'] = $template;
+                        $returnRoutes[$i]['prefix'] = isset($route->defaults['prefix']) ? $route->defaults['prefix'] : null;
+                        $returnRoutes[$i++]['plugin'] = isset($route->defaults['plugin']) ? $route->defaults['plugin'] : null;
+                    } else {
                         if ($route->defaults['plugin'] != $plugin) {
                             continue;
                         }
                         $returnRoutes[$i]['template'] = $template;
-                        $returnRoutes[$i]['prefix'] = isset($route->defaults['prefix']) ? $route->defaults['prefix'] : null;
-                        $returnRoutes[$i++]['plugin'] = isset($route->defaults['plugin']) ? $route->defaults['plugin'] : null;
-                        $once[$template] = true;
-                    } else {
-                        $returnRoutes[$i]['template'] = $template;
-                        $returnRoutes[$i]['prefix'] = isset($route->defaults['prefix']) ? $route->defaults['prefix'] : null;
-                        $returnRoutes[$i++]['plugin'] = isset($route->defaults['plugin']) ? $route->defaults['plugin'] : null;
-                        $once[$template] = true;
+                        $returnRoutes[$i]['prefix'] = $route->defaults['prefix'];
+                        $returnRoutes[$i++]['plugin'] = $plugin;
                     }
+                    $once[$template] = true;
                 }
-            }
-        }
-        /* generating default routes for loaded Plugins */
-        foreach ($this->plugins as $plugin) {
-            $template = '/' . $this->_pluginAlias($plugin);
-            if (!isset($once[$template])) {
-                $returnRoutes[$i]['template'] = $template;
-                $returnRoutes[$i]['prefix'] = null;
-                $returnRoutes[$i++]['plugin'] = $plugin;
-                $once[$template] = true;
             }
         }
         return $returnRoutes;
