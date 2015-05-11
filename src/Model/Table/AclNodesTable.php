@@ -106,7 +106,9 @@ class AclNodesTable extends Table
                 return false;
             }
         } elseif (is_object($ref) && $ref instanceof Entity) {
-            $ref = ['model' => $ref->source(), 'foreign_key' => $ref->id];
+			list(, $alias) = pluginSplit($ref->source());
+
+			$ref = ['model' => $alias, 'foreign_key' => $ref->id];
         } elseif (is_array($ref) && !(isset($ref['model']) && isset($ref['foreign_key']))) {
             $name = key($ref);
             list(, $alias) = pluginSplit($name);
