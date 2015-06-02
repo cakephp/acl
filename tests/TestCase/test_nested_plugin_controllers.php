@@ -5,6 +5,7 @@ use Cake\Controller\Controller;
 
 class PluginTwoController extends Controller
 {
+
     public function index()
     {
     }
