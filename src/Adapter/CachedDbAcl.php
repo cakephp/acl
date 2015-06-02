@@ -18,6 +18,7 @@ use Cake\Cache\Cache;
 use Cake\Controller\Component;
 use Cake\Core\Configure;
 use Cake\ORM\Entity;
+use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 
 /**
@@ -98,7 +99,39 @@ class CachedDbAcl extends DbAcl implements AclInterface
         } elseif (is_array($ref) && !(isset($ref['model']) && isset($ref['foreign_key']))) {
             $name = key($ref);
             list(, $alias) = pluginSplit($name);
-            return $alias . '_' . $ref[$name]['id'];
+
+            $bindTable = TableRegistry::get($name);
+            $entityClass = $bindTable->entityClass();
+
+            if ($entityClass) {
+                $entity = new $entityClass();
+            }
+
+            if (empty($entity)) {
+                throw new Exception\Exception(
+                    __d(
+                        'cake_dev',
+                        "Entity class {0} not found in CachedDbAcl::_getNodeCacheKey() when trying to bind {1} object",
+                        [$type, $this->alias()]
+                    )
+                );
+            }
+
+            $tmpRef = null;
+            if (method_exists($entity, 'bindNode')) {
+                $tmpRef = $entity->bindNode($ref);
+            }
+
+            if (empty($tmpRef)) {
+                $ref = [
+                    'model' => $alias,
+                    'foreign_key' => $ref[$name][$bindTable->primaryKey()]
+                ];
+            } else {
+                $ref = $tmpRef;
+            }
+
+            return $ref['model'] . '_' . $ref['foreign_key'];
         } elseif (is_array($ref)) {
             return $ref['model'] . '_' . $ref['foreign_key'];
         }
