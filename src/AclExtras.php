@@ -178,7 +178,7 @@ class AclExtras
         // look at each controller
         $controllersNames = [];
         foreach ($controllers as $controller) {
-            $tmp = explode('/', $controller);
+            $tmp = explode(DS, $controller);
             $controllerName = str_replace('Controller.php', '', array_pop($tmp));
             $controllersNames[] = $controllerName;
             $path = $this->rootNode . '/' . $pluginPath . $controllerName;
