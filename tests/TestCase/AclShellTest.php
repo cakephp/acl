@@ -8,8 +8,8 @@ use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
-class AclShellTest extends TestCase {
-
+class AclShellTest extends TestCase
+{
     public $fixtures = [
         'app.acos', 'app.aros', 'app.aros_acos',
     ];
@@ -43,5 +43,4 @@ class AclShellTest extends TestCase {
         $node = $this->Acos->node('ROOT/Controller3');
         $this->assertEmpty($node);
     }
-
 }
