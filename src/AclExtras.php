@@ -313,7 +313,7 @@ class AclExtras
         $excludes = $this->_getCallbacks($className, $pluginPath);
         $baseMethods = get_class_methods(new Controller);
         $namespace = $this->_getNamespace($className, $pluginPath);
-        $reflectionClass = new \ReflectionClass( $namespace );
+        $reflectionClass = new \ReflectionClass($namespace);
         $actions = null;
         if ($reflectionClass->IsInstantiable()) {
             $methods = $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC);
