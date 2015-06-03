@@ -181,7 +181,7 @@ class AclExtras
             $tmp = explode(DS, $controller);
             $controllerName = str_replace('Controller.php', '', array_pop($tmp));
             $controllersNames[] = $controllerName;
-            $path = $this->rootNode . '/' . $pluginPath . $controllerName;
+            $path = $this->rootNode . DS . $pluginPath . $controllerName;
             $controllerNode = $this->_checkNode($path, $controllerName, $root->id);
             $this->_checkMethods($controller, $controllerName, $controllerNode, $pluginPath);
         }
@@ -373,6 +373,7 @@ class AclExtras
      */
     protected function _getNamespace($className, $pluginPath = false)
     {
+		$className = str_replace (DS, '/', $className);
         $namespace = preg_replace('/(.*)Controller\//', '', $className);
         $namespace = preg_replace('/\//', '\\', $namespace);
         $namespace = preg_replace('/\.php/', '', $namespace);
