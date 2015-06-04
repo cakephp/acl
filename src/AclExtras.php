@@ -373,7 +373,7 @@ class AclExtras
      */
     protected function _getNamespace($className, $pluginPath = false)
     {
-        $className = str_replace (DS, '/', $className);
+        $className = str_replace(DS, '/', $className);
         $namespace = preg_replace('/(.*)Controller\//', '', $className);
         $namespace = preg_replace('/\//', '\\', $namespace);
         $namespace = preg_replace('/\.php/', '', $namespace);
