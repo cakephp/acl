@@ -43,4 +43,19 @@ class AclShellTest extends TestCase
         $node = $this->Acos->node('ROOT/Controller3');
         $this->assertEmpty($node);
     }
+
+    public function testSetParentNode()
+    {
+        $this->Shell->args = ['create', 'aco', 'ROOT', 'Parent'];
+        $this->Shell->runCommand($this->Shell->args);
+
+        $this->Shell->args = ['create', 'aco', 'ROOT', 'Child'];
+        $this->Shell->runCommand($this->Shell->args);
+
+        $this->Shell->args = ['setparent', 'aco', 'Child', 'Parent'];
+        $this->Shell->runCommand($this->Shell->args);
+
+        $node = $this->Acos->node('Parent/Child')->first();
+        $this->assertNotEmpty($node);
+    }
 }
