@@ -184,10 +184,8 @@ class AclShell extends Shell
         $parent = $this->parseIdentifier($this->args[2]);
 
         $data = [
-            $class => [
-                'id' => $this->_getNodeId($class, $target),
-                'parent_id' => $this->_getNodeId($class, $parent)
-            ]
+            'id' => $this->_getNodeId($class, $target),
+            'parent_id' => $this->_getNodeId($class, $parent)
         ];
         $entity = $this->Acl->{$class}->newEntity($data);
         if (!$this->Acl->{$class}->save($entity)) {
