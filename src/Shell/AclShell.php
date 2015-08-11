@@ -70,7 +70,11 @@ class AclShell extends Shell
         }
 
         $class = Configure::read('Acl.classname');
-        $className = App::classname('Acl.' . $class, 'Adapter');
+        if (strpos($class, '\\') === false && strpos($class, '.') === false) {
+            $className = App::classname('Acl.' . $class, 'Adapter');
+        } else {
+            $className = App::classname($class, 'Adapter');
+        }
         if ($class !== 'DbAcl' &&
             !is_subclass_of($className, 'Acl\Adapter\DbAcl')
         ) {
