@@ -205,7 +205,6 @@ class AclExtras
     protected function _processPrefixes($root)
     {
         foreach ($this->prefixes as $prefix) {
-            $controllers = [];
             if (strpos($prefix['template'], ':action') === false) {
                 $controllers = $this->getControllerList(null, $prefix['prefix']);
                 $path = str_replace('/:controller', '', $prefix['template']);
@@ -242,7 +241,6 @@ class AclExtras
     protected function _processPlugins($root, array $plugins = [])
     {
         foreach ($plugins as $plugin) {
-            $controllers = [];
             $controllers = $this->getControllerList($plugin);
             $pluginAlias = $this->_pluginAlias($plugin);
             $path = $this->rootNode . '/' . $pluginAlias;
@@ -504,19 +502,26 @@ class AclExtras
     protected function _buildPrefixes()
     {
         $routes = Router::routes();
-        $routesList = [];
         foreach ($routes as $key => $route) {
             if (isset($route->defaults['prefix'])) {
+                $prefix = Inflector::camelize($route->defaults['prefix']);
+                $template = str_replace([
+                        '/*',
+                        strtolower($route->defaults['prefix'])
+                    ], [
+                        '',
+                        $prefix
+                    ],
+                    $route->template);
                 if (!isset($route->defaults['plugin'])) {
                     $this->prefixes[] = [
-                        'prefix' => Inflector::camelize($route->defaults['prefix']),
-                        'template' => str_replace('/*', '', $route->template)
+                        'prefix' => $prefix,
+                        'template' => $template
                     ];
                 } else {
-                    $template = str_replace('/*', '', $route->template);
-                    $template = str_replace('/' . strtolower($route->defaults['plugin']) . '/', '/' . $route->defaults['plugin'] . '/', $template);
+                    $template = str_replace(Inflector::underscore($route->defaults['plugin']), $route->defaults['plugin'], $template);
                     $this->pluginPrefixes[$route->defaults['plugin']][] = [
-                        'prefix' => Inflector::camelize($route->defaults['prefix']),
+                        'prefix' => $prefix,
                         'template' => $template
                     ];
                 }

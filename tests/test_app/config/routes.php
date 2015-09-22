@@ -1,5 +1,5 @@
 <?php
 
-\Cake\Routing\Router::prefix('admin', function ($routes) {
-    $routes->fallbacks('InflectedRoute');
+\Cake\Routing\Router::prefix('Admin', function ($routes) {
+    $routes->fallbacks('DashedRoute');
 });

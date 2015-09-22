@@ -18,3 +18,23 @@ class PostsController extends Controller
     {
     }
 }
+
+class BigLongNamesController extends Controller
+{
+
+    public function index()
+    {
+    }
+
+    public function view()
+    {
+    }
+
+    public function add()
+    {
+    }
+
+    public function delete()
+    {
+    }
+}

@@ -44,6 +44,8 @@ class AclExtrasTestCase extends TestCase
 
     public $fixtures = ['app.acos', 'app.aros', 'app.aros_acos'];
 
+    public $output = [];
+
     /**
      * setUp
      *
@@ -59,6 +61,14 @@ class AclExtrasTestCase extends TestCase
             'Acl\AclExtras',
             ['in', 'out', 'hr', 'createFile', 'error', 'err', 'clear', 'getControllerList']
         );
+
+        $this->Task
+            ->expects($this->any())
+            ->method('out')
+            ->with($this->callback(function ($text) {
+                $this->output[] = $text;
+                return true;
+            }));
     }
 
     /**
@@ -70,6 +80,7 @@ class AclExtrasTestCase extends TestCase
     {
         parent::tearDown();
         unset($this->Task);
+        debug($this->output);
     }
 
     /**
@@ -126,7 +137,7 @@ class AclExtrasTestCase extends TestCase
                 if ($prefix === null) {
                     return ['CommentsController.php', 'PostsController.php', 'BigLongNamesController.php'];
                 } else {
-                    return ['PostsController.php'];
+                    return ['PostsController.php', 'BigLongNamesController.php'];
                 }
             }));
 
@@ -165,10 +176,34 @@ class AclExtrasTestCase extends TestCase
         $result = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
         $this->assertEquals(count($result), 3);
 
+        $result = $Aco->node('controllers/Admin/BigLongNames')->toArray();
+        $this->assertEquals($result[0]['alias'], 'BigLongNames');
+        $result = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
+        $this->assertEquals(count($result), 4);
+
         $result = $Aco->node('controllers/BigLongNames')->toArray();
         $this->assertEquals($result[0]['alias'], 'BigLongNames');
         $result = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
         $this->assertEquals(count($result), 4);
+    }
+
+    protected function _createNode($parent, $expected)
+    {
+        $Aco = $this->Task->Acl->Aco;
+        $Aco->cacheQueries = false;
+
+        $result = $Aco->node($parent)->toArray();
+        $new = [
+            'parent_id' => $result[0]['id'],
+            'alias' => 'someMethod'
+        ];
+        $new = $Aco->newEntity($new);
+        $Aco->save($new);
+
+        $children = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
+        $this->assertEquals(count($children), $expected);
+
+        return $result;
     }
 
     /**
@@ -185,21 +220,18 @@ class AclExtrasTestCase extends TestCase
         $Aco = $this->Task->Acl->Aco;
         $Aco->cacheQueries = false;
 
-        $result = $Aco->node('controllers/Comments')->toArray();
-        $new = [
-            'parent_id' => $result[0]['id'],
-            'alias' => 'some_method'
-        ];
-        $new = $Aco->newEntity($new);
-        $Aco->save($new);
-        $children = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
-        $this->assertEquals(count($children), 4);
+        $basic = $this->_createNode('controllers/Comments', 4);
+        $adminPosts = $this->_createNode('controllers/Admin/Posts', 4);
 
         $this->Task->acoSync();
-        $children = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
+        $children = $Aco->find('children', ['for' => $basic[0]['id']])->toArray();
+        $this->assertEquals(count($children), 3);
+        $children = $Aco->find('children', ['for' => $adminPosts[0]['id']])->toArray();
         $this->assertEquals(count($children), 3);
 
-        $method = $Aco->node('controllers/Commments/some_method');
+        $method = $Aco->node('controllers/Comments/someMethod');
+        $this->assertFalse($method);
+        $method = $Aco->node('controllers/Admin/Posts/otherMethod');
         $this->assertFalse($method);
     }
 
@@ -294,7 +326,7 @@ class AclExtrasTestCase extends TestCase
         $this->assertNotFalse($result);
         $this->assertEquals($result->toArray()[0]['alias'], 'Plugin');
 
-        $result = $Aco->node('controllers/Admin/TestPlugin/Plugin');
+        $result = $Aco->node('controllers/TestPlugin/Admin/Plugin');
         $this->assertNotFalse($result);
         $this->assertEquals($result->toArray()[0]['alias'], 'Plugin');
 
