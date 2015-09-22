@@ -33,7 +33,7 @@ Plugin::load('Acl', ['bootstrap' => true]);
 To create ACL related tables, run the following `Migrations` command:
 
 ```
-bin/cake Migrations.migrations migrate -p Acl
+bin/cake migrations migrate -p Acl
 ```
 
 ## Running tests
