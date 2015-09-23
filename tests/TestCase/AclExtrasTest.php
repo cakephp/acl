@@ -61,14 +61,6 @@ class AclExtrasTestCase extends TestCase
             'Acl\AclExtras',
             ['in', 'out', 'hr', 'createFile', 'error', 'err', 'clear', 'getControllerList']
         );
-
-        $this->Task
-            ->expects($this->any())
-            ->method('out')
-            ->with($this->callback(function ($text) {
-                $this->output[] = $text;
-                return true;
-            }));
     }
 
     /**
@@ -80,7 +72,6 @@ class AclExtrasTestCase extends TestCase
     {
         parent::tearDown();
         unset($this->Task);
-        debug($this->output);
     }
 
     /**

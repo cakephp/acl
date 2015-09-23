@@ -209,7 +209,7 @@ class ActionsAuthorizeTest extends TestCase
         ]);
 
         $result = $this->auth->action($request);
-        $this->assertEquals('controllers/DebugKit/admin/Posts/index', $result);
+        $this->assertEquals('controllers/DebugKit/Admin/Posts/index', $result);
     }
 
     public function testActionWithPrefix()
@@ -223,6 +223,6 @@ class ActionsAuthorizeTest extends TestCase
         ]);
 
         $result = $this->auth->action($request);
-        $this->assertEquals('controllers/admin/Posts/index', $result);
+        $this->assertEquals('controllers/Admin/Posts/index', $result);
     }
 }
