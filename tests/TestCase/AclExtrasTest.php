@@ -44,8 +44,6 @@ class AclExtrasTestCase extends TestCase
 
     public $fixtures = ['app.acos', 'app.aros', 'app.aros_acos'];
 
-    public $output = [];
-
     /**
      * setUp
      *
@@ -301,7 +299,7 @@ class AclExtrasTestCase extends TestCase
                         return ['PluginTwoController.php'];
                     default:
                         if ($prefix !== null) {
-                            return [];
+                            return ['PostsController.php', 'BigLongNamesController.php'];
                         }
                         return ['CommentsController.php', 'PostsController.php', 'BigLongNamesController.php'];
                 }

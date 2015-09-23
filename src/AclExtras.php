@@ -259,20 +259,20 @@ class AclExtras
                 foreach (array_keys($this->pluginPrefixes[$plugin]) as $prefix) {
                     $path = [
                         $this->rootNode,
-                        $prefix
-                    ];
-                    $path = implode('/', Hash::filter($path));
-                    $prefixNode = $this->_checkNode($path, $prefix, $root->id);
-                    $this->foundACOs[$root->id][] = $prefix;
-
-                    $path = [
-                        $this->rootNode,
-                        $prefix,
                         $pluginAlias
                     ];
                     $path = implode('/', Hash::filter($path));
-                    $pathNode = $this->_checkNode($path, $pluginAlias, $prefixNode->id);
-                    $this->foundACOs[$prefixNode->id][] = $pluginAlias;
+                    $pluginNode = $this->_checkNode($path, $pluginAlias, $root->id);
+                    $this->foundACOs[$root->id][] = $pluginAlias;
+
+                    $path = [
+                        $this->rootNode,
+                        $pluginAlias,
+                        $prefix,
+                    ];
+                    $path = implode('/', Hash::filter($path));
+                    $pathNode = $this->_checkNode($path, $prefix, $pluginNode->id);
+                    $this->foundACOs[$pluginNode->id][] = $prefix;
 
                     $controllers = $this->getControllerList($plugin, $prefix);
                     if (isset($this->foundACOs[$pathNode->id])) {
@@ -297,7 +297,6 @@ class AclExtras
     protected function _updateControllers($root, $controllers, $plugin = null, $prefix = null)
     {
         $pluginPath = $this->_pluginAlias($plugin);
-        $prefixPath = $prefix;
 
         // look at each controller
         $controllersNames = [];
@@ -310,13 +309,13 @@ class AclExtras
             $controllersNames[] = $controllerName;
             $path = [
                 $this->rootNode,
-                $prefixPath,
                 $pluginPath,
+                $prefix,
                 $controllerName
             ];
             $path = implode('/', Hash::filter($path));
             $controllerNode = $this->_checkNode($path, $controllerName, $root->id);
-            $this->_checkMethods($controller, $controllerName, $controllerNode, $pluginPath, $prefixPath);
+            $this->_checkMethods($controller, $controllerName, $controllerNode, $pluginPath, $prefix);
         }
 
         return $controllersNames;
@@ -440,8 +439,8 @@ class AclExtras
             }
             $path = [
                 $this->rootNode,
-                $prefixPath,
                 $pluginPath,
+                $prefixPath,
                 $controllerName,
                 $action
             ];
