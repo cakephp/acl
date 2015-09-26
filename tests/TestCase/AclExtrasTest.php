@@ -30,6 +30,10 @@ use Cake\TestSuite\TestCase;
 
 //import test controller class names.
 include ((dirname(__FILE__))) . DS . 'test_controllers.php';
+include ((dirname(__FILE__))) . DS . 'test_admin_controllers.php';
+include ((dirname(__FILE__))) . DS . 'test_plugin_controllers.php';
+include ((dirname(__FILE__))) . DS . 'test_nested_plugin_controllers.php';
+include ((dirname(__FILE__))) . DS . 'test_plugin_admin_controllers.php';
 
 /**
  * AclExtras Shell Test case
@@ -118,7 +122,13 @@ class AclExtrasTestCase extends TestCase
         $this->Task->expects($this->any())
             ->method('getControllerList')
             ->with(null)
-            ->will($this->returnValue(['CommentsController.php', 'PostsController.php', 'BigLongNamesController.php']));
+            ->will($this->returnCallback(function ($plugin, $prefix) {
+                if ($prefix === null) {
+                    return ['CommentsController.php', 'PostsController.php', 'BigLongNamesController.php'];
+                } else {
+                    return ['PostsController.php', 'BigLongNamesController.php'];
+                }
+            }));
 
         $this->Task->startup();
     }
@@ -150,10 +160,39 @@ class AclExtrasTestCase extends TestCase
         $result = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
         $this->assertEquals(count($result), 3);
 
+        $result = $Aco->node('controllers/Admin/Posts')->toArray();
+        $this->assertEquals($result[0]['alias'], 'Posts');
+        $result = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
+        $this->assertEquals(count($result), 3);
+
+        $result = $Aco->node('controllers/Admin/BigLongNames')->toArray();
+        $this->assertEquals($result[0]['alias'], 'BigLongNames');
+        $result = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
+        $this->assertEquals(count($result), 4);
+
         $result = $Aco->node('controllers/BigLongNames')->toArray();
         $this->assertEquals($result[0]['alias'], 'BigLongNames');
         $result = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
         $this->assertEquals(count($result), 4);
+    }
+
+    protected function _createNode($parent, $expected)
+    {
+        $Aco = $this->Task->Acl->Aco;
+        $Aco->cacheQueries = false;
+
+        $result = $Aco->node($parent)->toArray();
+        $new = [
+            'parent_id' => $result[0]['id'],
+            'alias' => 'someMethod'
+        ];
+        $new = $Aco->newEntity($new);
+        $Aco->save($new);
+
+        $children = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
+        $this->assertEquals(count($children), $expected);
+
+        return $result;
     }
 
     /**
@@ -170,21 +209,18 @@ class AclExtrasTestCase extends TestCase
         $Aco = $this->Task->Acl->Aco;
         $Aco->cacheQueries = false;
 
-        $result = $Aco->node('controllers/Comments')->toArray();
-        $new = [
-            'parent_id' => $result[0]['id'],
-            'alias' => 'some_method'
-        ];
-        $new = $Aco->newEntity($new);
-        $Aco->save($new);
-        $children = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
-        $this->assertEquals(count($children), 4);
+        $basic = $this->_createNode('controllers/Comments', 4);
+        $adminPosts = $this->_createNode('controllers/Admin/Posts', 4);
 
         $this->Task->acoSync();
-        $children = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
+        $children = $Aco->find('children', ['for' => $basic[0]['id']])->toArray();
+        $this->assertEquals(count($children), 3);
+        $children = $Aco->find('children', ['for' => $adminPosts[0]['id']])->toArray();
         $this->assertEquals(count($children), 3);
 
-        $method = $Aco->node('controllers/Commments/some_method');
+        $method = $Aco->node('controllers/Comments/someMethod');
+        $this->assertFalse($method);
+        $method = $Aco->node('controllers/Admin/Posts/otherMethod');
         $this->assertFalse($method);
     }
 
@@ -237,26 +273,34 @@ class AclExtrasTestCase extends TestCase
         $this->assertEquals($newResult[0]['alias'], $result[0]['alias']);
     }
 
+    /**
+     * Ensures that nested plugins are correctly created
+     *
+     * @return void
+     */
     public function testUpdateWithPlugins()
     {
-        Plugin::load('TestPlugin');
+        Plugin::unload();
+        Plugin::load('TestPlugin', ['routes' => true]);
         Plugin::load('Nested/TestPluginTwo');
+        Plugin::routes();
         $this->_clean();
 
-        $this->Task->expects($this->exactly(3))
+        $this->Task->expects($this->atLeast(3))
             ->method('getControllerList')
-            ->with($this->logicalOr(
-                $this->equalTo(null),
-                $this->equalTo('TestPlugin'),
-                $this->equalTo('Nested/TestPluginTwo')
-            ))
-            ->will($this->returnCallback(function ($param) {
-                switch ($param) {
+            ->will($this->returnCallback(function ($plugin, $prefix) {
+                switch ($plugin) {
                     case 'TestPlugin':
                         return ['PluginController.php'];
                     case 'Nested/TestPluginTwo':
+                        if ($prefix !== null) {
+                            return [];
+                        }
                         return ['PluginTwoController.php'];
                     default:
+                        if ($prefix !== null) {
+                            return ['PostsController.php', 'BigLongNamesController.php'];
+                        }
                         return ['CommentsController.php', 'PostsController.php', 'BigLongNamesController.php'];
                 }
             }));
@@ -271,6 +315,10 @@ class AclExtrasTestCase extends TestCase
         $this->assertNotFalse($result);
         $this->assertEquals($result->toArray()[0]['alias'], 'Plugin');
 
+        $result = $Aco->node('controllers/TestPlugin/Admin/Plugin');
+        $this->assertNotFalse($result);
+        $this->assertEquals($result->toArray()[0]['alias'], 'Plugin');
+
         $result = $Aco->node('controllers/Nested\TestPluginTwo/PluginTwo');
         $this->assertNotFalse($result);
         $result = $result->toArray();
@@ -280,5 +328,65 @@ class AclExtrasTestCase extends TestCase
         $this->assertEquals($result[0]['alias'], 'index');
         $this->assertEquals($result[1]['alias'], 'add');
         $this->assertEquals($result[2]['alias'], 'edit');
+    }
+
+    /**
+     * Tests that aco sync works correctly with nested plugins
+     *
+     * @return void
+     */
+    public function testSyncWithNestedPlugin()
+    {
+        Plugin::unload();
+        Plugin::load('Nested/TestPluginTwo');
+        $this->_clean();
+
+        $this->Task->expects($this->atLeast(2))
+            ->method('getControllerList')
+            ->will($this->returnCallback(function ($plugin, $prefix) {
+                if ($prefix !== null) {
+                    return [];
+                }
+
+                switch ($plugin) {
+                    case 'Nested/TestPluginTwo':
+                        return ['PluginTwoController.php'];
+                    default:
+                        return ['CommentsController.php', 'PostsController.php', 'BigLongNamesController.php'];
+                }
+            }));
+
+        $this->Task->startup();
+        $this->Task->acoUpdate();
+
+        $Aco = $this->Task->Acl->Aco;
+        $originalNode = $Aco->node('controllers/Nested\TestPluginTwo/PluginTwo')->first();
+
+        $cleanTask = $this->getMock(
+            'Acl\AclExtras',
+            ['in', 'out', 'hr', 'createFile', 'error', 'err', 'clear', 'getControllerList']
+        );
+
+        $cleanTask->expects($this->atLeast(2))
+            ->method('getControllerList')
+            ->will($this->returnCallback(function ($plugin, $prefix) {
+                if ($prefix !== null) {
+                    return [];
+                }
+
+                switch ($plugin) {
+                    case 'Nested/TestPluginTwo':
+                        return ['PluginTwoController.php'];
+                    default:
+                        return ['CommentsController.php', 'PostsController.php', 'BigLongNamesController.php'];
+                }
+            }));
+
+        $cleanTask->startup();
+        $cleanTask->acoSync();
+
+        $updatedNode = $Aco->node('controllers/Nested\TestPluginTwo/PluginTwo')->first();
+
+        $this->assertSame($originalNode->id, $updatedNode->id);
     }
 }

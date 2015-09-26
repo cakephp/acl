@@ -13,8 +13,6 @@
 namespace Acl;
 
 use Acl\Controller\Component\AclComponent;
-use Cake\Console\ConsoleIo;
-use Cake\Console\Shell;
 use Cake\Controller\ComponentRegistry;
 use Cake\Controller\Controller;
 use Cake\Core\App;
@@ -22,6 +20,8 @@ use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Filesystem\Folder;
 use Cake\Network\Request;
+use Cake\Routing\Router;
+use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 
 /**
@@ -67,6 +67,27 @@ class AclExtras
     protected $_clean = false;
 
     /**
+     * Contains app route prefixes
+     *
+     * @var array
+     */
+    protected $prefixes = [];
+
+    /**
+     * Contains plugins route prefixes
+     *
+     * @var array
+     */
+    protected $pluginPrefixes = [];
+
+    /**
+     * List of ACOs found during synchronization
+     *
+     * @var array
+     */
+    protected $foundACOs = [];
+
+    /**
      * Start up And load Acl Component / Aco model
      *
      * @return void
@@ -75,11 +96,13 @@ class AclExtras
     {
         if (!$controller) {
             $controller = new Controller(new Request());
+            include CONFIG . 'routes.php';
         }
         $registry = new ComponentRegistry();
         $this->Acl = new AclComponent($registry, Configure::read('Acl'));
         $this->Aco = $this->Acl->Aco;
         $this->controller = $controller;
+        $this->_buildPrefixes();
     }
 
     /**
@@ -138,9 +161,10 @@ class AclExtras
     {
         $root = $this->_checkNode($this->rootNode, $this->rootNode, null);
         if (empty($params['plugin'])) {
-            $controllers = $this->getControllerList();
-            $this->_updateControllers($root, $controllers);
-            $plugins = $this->_getPluginList();
+            $plugins = Plugin::loaded();
+            $this->_processControllers($root);
+            $this->_processPrefixes($root);
+            $this->_processPlugins($root, $plugins);
         } else {
             $plugin = $params['plugin'];
             if (!Plugin::loaded($plugin)) {
@@ -148,15 +172,117 @@ class AclExtras
                 return false;
             }
             $plugins = [$params['plugin']];
+            $this->_processPlugins($root, $plugins);
+            $this->foundACOs = array_slice($this->foundACOs, 1, null, true);
         }
-        foreach ($plugins as $plugin) {
-            $controllers = $this->getControllerList($plugin);
-            $path = $this->rootNode . '/' . $plugin;
-            $pluginRoot = $this->_checkNode($path, preg_replace('/\//', '\\', Inflector::camelize($plugin)), $root->id);
-            $this->_updateControllers($pluginRoot, $controllers, $plugin);
+
+        if ($this->_clean) {
+            foreach ($this->foundACOs as $parentId => $acosList) {
+                $this->_cleaner($parentId, $acosList);
+            }
         }
         $this->out(__d('cake_acl', '<success>Aco Update Complete</success>'));
         return true;
+    }
+
+    /**
+     * Updates the Aco Tree with all App controllers.
+     *
+     * @param \Acl\Model\Entity\Aco $root The root note of Aco Tree
+     * @return void
+     */
+    protected function _processControllers($root)
+    {
+        $controllers = $this->getControllerList();
+        $this->foundACOs[$root->id] = $this->_updateControllers($root, $controllers);
+    }
+
+    /**
+     * Updates the Aco Tree with all App route prefixes.
+     *
+     * @param \Acl\Model\Entity\Aco $root The root note of Aco Tree
+     * @return void
+     */
+    protected function _processPrefixes($root)
+    {
+        foreach (array_keys($this->prefixes) as $prefix) {
+            $controllers = $this->getControllerList(null, $prefix);
+            $path = $this->rootNode . '/' . $prefix;
+            $pathNode = $this->_checkNode($path, $prefix, $root->id);
+            $this->foundACOs[$root->id][] = $prefix;
+            if (isset($this->foundACOs[$pathNode->id])) {
+                $this->foundACOs[$pathNode->id] += $this->_updateControllers($pathNode, $controllers, null, $prefix);
+            } else {
+                $this->foundACOs[$pathNode->id] = $this->_updateControllers($pathNode, $controllers, null, $prefix);
+            }
+        }
+    }
+
+    /**
+     * Returns the aliased name for the plugin (Needed in order to correctly handle nested plugins)
+     *
+     * @param string $plugin The name of the plugin to alias
+     * @return string
+     */
+    protected function _pluginAlias($plugin)
+    {
+        return preg_replace('/\//', '\\', Inflector::camelize($plugin));
+    }
+
+    /**
+     * Updates the Aco Tree with all Plugins.
+     *
+     * @param \Acl\Model\Entity\Aco $root The root note of Aco Tree
+     * @param array $plugins list of App plugins
+     * @return void
+     */
+    protected function _processPlugins($root, array $plugins = [])
+    {
+        foreach ($plugins as $plugin) {
+            $controllers = $this->getControllerList($plugin);
+            $pluginAlias = $this->_pluginAlias($plugin);
+            $path = [
+                $this->rootNode,
+                $pluginAlias
+            ];
+            $path = implode('/', Hash::filter($path));
+            $pathNode = $this->_checkNode($path, $pluginAlias, $root->id);
+            $this->foundACOs[$root->id][] = $pluginAlias;
+
+            if (isset($this->foundACOs[$pathNode->id])) {
+                $this->foundACOs[$pathNode->id] += $this->_updateControllers($pathNode, $controllers, $plugin);
+            } else {
+                $this->foundACOs[$pathNode->id] = $this->_updateControllers($pathNode, $controllers, $plugin);
+            }
+
+            if (isset($this->pluginPrefixes[$plugin])) {
+                foreach (array_keys($this->pluginPrefixes[$plugin]) as $prefix) {
+                    $path = [
+                        $this->rootNode,
+                        $pluginAlias
+                    ];
+                    $path = implode('/', Hash::filter($path));
+                    $pluginNode = $this->_checkNode($path, $pluginAlias, $root->id);
+                    $this->foundACOs[$root->id][] = $pluginAlias;
+
+                    $path = [
+                        $this->rootNode,
+                        $pluginAlias,
+                        $prefix,
+                    ];
+                    $path = implode('/', Hash::filter($path));
+                    $pathNode = $this->_checkNode($path, $prefix, $pluginNode->id);
+                    $this->foundACOs[$pluginNode->id][] = $prefix;
+
+                    $controllers = $this->getControllerList($plugin, $prefix);
+                    if (isset($this->foundACOs[$pathNode->id])) {
+                        $this->foundACOs[$pathNode->id] += $this->_updateControllers($pathNode, $controllers, $pluginAlias, $prefix);
+                    } else {
+                        $this->foundACOs[$pathNode->id] = $this->_updateControllers($pathNode, $controllers, $pluginAlias, $prefix);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -165,50 +291,34 @@ class AclExtras
      * @param array $root Array or ACO information for root node.
      * @param array $controllers Array of Controllers
      * @param string $plugin Name of the plugin you are making controllers for.
-     * @return void
+     * @param string $prefix Name of the prefix you are making controllers for.
+     * @return array
      */
-    protected function _updateControllers($root, $controllers, $plugin = null)
+    protected function _updateControllers($root, $controllers, $plugin = null, $prefix = null)
     {
-        $dotPlugin = $pluginPath = $plugin;
-        if ($plugin) {
-            $dotPlugin .= '.';
-            $pluginPath .= '/';
-        }
-        $appIndex = array_search($plugin . 'AppController', $controllers);
+        $pluginPath = $this->_pluginAlias($plugin);
+
         // look at each controller
         $controllersNames = [];
         foreach ($controllers as $controller) {
-            $tmp = explode(DS, $controller);
+            $tmp = explode('/', $controller);
             $controllerName = str_replace('Controller.php', '', array_pop($tmp));
+            if ($controllerName == 'App') {
+                continue;
+            }
             $controllersNames[] = $controllerName;
-            $path = $this->rootNode . '/' . $pluginPath . $controllerName;
+            $path = [
+                $this->rootNode,
+                $pluginPath,
+                $prefix,
+                $controllerName
+            ];
+            $path = implode('/', Hash::filter($path));
             $controllerNode = $this->_checkNode($path, $controllerName, $root->id);
-            $this->_checkMethods($controller, $controllerName, $controllerNode, $pluginPath);
+            $this->_checkMethods($controller, $controllerName, $controllerNode, $pluginPath, $prefix);
         }
-        if ($this->_clean) {
-            if (!$plugin) {
-                $controllers = array_merge($controllersNames, $this->_getPluginList());
-            } else {
-                $controllers = $controllersNames;
-            }
-            $controllerFlip = array_flip($controllers);
-            $this->Aco->id = $root->id;
-            $controllerNodes = $this->Aco->find()->where(['parent_id' => $root->id]);
-            foreach ($controllerNodes as $ctrlNode) {
-                $alias = $ctrlNode->alias;
-                $name = $alias . 'Controller';
-                if (!isset($controllerFlip[$name]) && !isset($controllerFlip[$alias])) {
-                    $entity = $this->Aco->get($ctrlNode->id);
-                    if ($this->Aco->delete($entity)) {
-                        $this->out(__d(
-                            'cake_acl',
-                            'Deleted <warning>{0}</warning> and all children',
-                            $this->rootNode . '/' . $plugin . '/' . $ctrlNode->alias
-                        ));
-                    }
-                }
-            }
-        }
+
+        return $controllersNames;
     }
 
     /**
@@ -217,18 +327,19 @@ class AclExtras
      * Returns an array of path => import notation.
      *
      * @param string $plugin Name of plugin to get controllers for
+     * @param string $prefix Name of prefix to get controllers for
      * @return array
      */
-    public function getControllerList($plugin = null)
+    public function getControllerList($plugin = null, $prefix = null)
     {
         if (!$plugin) {
-            $path = App::path('Controller');
+            $path = App::path('Controller' . (empty($prefix) ? '' : DS . Inflector::camelize($prefix)));
             $dir = new Folder($path[0]);
-            $controllers = $dir->findRecursive('.*Controller\.php');
+            $controllers = $dir->find('.*Controller\.php');
         } else {
-            $path = App::path('Controller', $plugin);
+            $path = App::path('Controller' . (empty($prefix) ? '' : DS . Inflector::camelize($prefix)), $plugin);
             $dir = new Folder($path[0]);
-            $controllers = $dir->findRecursive('.*Controller\.php');
+            $controllers = $dir->find('.*Controller\.php');
         }
 
         return $controllers;
@@ -265,12 +376,13 @@ class AclExtras
      *
      * @param string $className The class to reflect on.
      * @param string $pluginPath The plugin path.
+     * @param string $prefixPath The prefix path.
      * @return array
      */
-    protected function _getCallbacks($className, $pluginPath = false)
+    protected function _getCallbacks($className, $pluginPath = null, $prefixPath = null)
     {
         $callbacks = [];
-        $namespace = $this->_getNamespace($className, $pluginPath);
+        $namespace = $this->_getNamespace($className, $pluginPath, $prefixPath);
         $reflection = new \ReflectionClass($namespace);
         if ($reflection->isAbstract()) {
             return $callbacks;
@@ -306,48 +418,38 @@ class AclExtras
      * @param string $controllerName The controller name
      * @param array $node The node to check.
      * @param string $pluginPath The plugin path to use.
-     * @return void
+     * @param string $prefixPath The prefix path to use.
+     * @return bool
      */
-    protected function _checkMethods($className, $controllerName, $node, $pluginPath = false)
+    protected function _checkMethods($className, $controllerName, $node, $pluginPath = null, $prefixPath = null)
     {
-        $excludes = $this->_getCallbacks($className, $pluginPath);
+        $excludes = $this->_getCallbacks($className, $pluginPath, $prefixPath);
         $baseMethods = get_class_methods(new Controller);
-        $namespace = $this->_getNamespace($className, $pluginPath);
-        $reflectionClass = new \ReflectionClass($namespace);
-        $actions = null;
-        if ($reflectionClass->IsInstantiable()) {
-            $methods = $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC);
-            foreach ($methods as $method) {
-                $actions[] = $method->getName();
-            }
-        }
-        $prefix = $this->_getPrefix($namespace, $pluginPath);
-        if ($actions == null) {
+        $namespace = $this->_getNamespace($className, $pluginPath, $prefixPath);
+        $methods = get_class_methods(new $namespace);
+        if ($methods == null) {
             $this->err(__d('cake_acl', 'Unable to get methods for {0}', $className));
             return false;
         }
-        $methods = array_diff($actions, $baseMethods);
-        $methods = array_diff($methods, $excludes);
-        foreach ($methods as $key => $action) {
+        $actions = array_diff($methods, $baseMethods);
+        $actions = array_diff($actions, $excludes);
+        foreach ($actions as $key => $action) {
             if (strpos($action, '_', 0) === 0) {
                 continue;
             }
-            $path = $this->rootNode . '/' . $pluginPath . $controllerName . '/' . $prefix . $action;
-            $this->_checkNode($path, $prefix . $action, $node->id);
-            $methods[$key] = $prefix . $action;
+            $path = [
+                $this->rootNode,
+                $pluginPath,
+                $prefixPath,
+                $controllerName,
+                $action
+            ];
+            $path = implode('/', Hash::filter($path));
+            $this->_checkNode($path, $action, $node->id);
+            $actions[$key] = $action;
         }
         if ($this->_clean) {
-            $actionNodes = $this->Aco->find('children', ['for' => $node->id]);
-            $methodFlip = array_flip($methods);
-            foreach ($actionNodes as $action) {
-                if (!isset($methodFlip[$action->alias])) {
-                    $entity = $this->Aco->get($action->id);
-                    if ($this->Aco->delete($entity)) {
-                        $path = $this->rootNode . '/' . $controllerName . '/' . $action->alias;
-                        $this->out(__d('cake_acl', 'Deleted Aco node: <warning>{0}</warning>', $path));
-                    }
-                }
-            }
+            $this->_cleaner($node->id, $actions);
         }
         return true;
     }
@@ -369,50 +471,73 @@ class AclExtras
      *
      * @param string $className The class you want a namespace for.
      * @param string $pluginPath The plugin path.
+     * @param string $prefixPath The prefix path.
      * @return string
      */
-    protected function _getNamespace($className, $pluginPath = false)
+    protected function _getNamespace($className, $pluginPath = null, $prefixPath = null)
     {
-        $className = str_replace(DS, '/', $className);
         $namespace = preg_replace('/(.*)Controller\//', '', $className);
         $namespace = preg_replace('/\//', '\\', $namespace);
         $namespace = preg_replace('/\.php/', '', $namespace);
+        $prefixPath = preg_replace('/\//', '\\', Inflector::camelize($prefixPath));
         if (!$pluginPath) {
-            $appNamespace = Configure::read('App.namespace');
-            $namespace = '\\' . $appNamespace . '\\Controller\\' . $namespace;
+            $rootNamespace = Configure::read('App.namespace');
         } else {
-            $pluginPath = preg_replace('/\//', '\\', $pluginPath);
-            $namespace = '\\' . $pluginPath . 'Controller\\' . $namespace;
+            $rootNamespace = preg_replace('/\//', '\\', $pluginPath);
         }
-        return $namespace;
-    }
+        $namespace = [
+            $rootNamespace,
+            'Controller',
+            $prefixPath,
+            $namespace
+        ];
 
-
-    /**
-     * Get the prefix for a namespace.
-     *
-     * @param string|null $namespace The namespace to get a prefix from.
-     * @return string|null
-     */
-    protected function _getPrefix($namespace = null)
-    {
-        if (empty($namespace)) {
-            return null;
-        }
-        $pathArray = explode('\\', $namespace);
-        if (count($pathArray) >= 5 && $pathArray[3] !== 'Controller') {
-            return Inflector::dasherize($pathArray[3]) . '_';
-        }
-        return null;
+        return implode('\\', Hash::filter($namespace));
     }
 
     /**
-     * Get the list of plugins in the application.
+     * Build prefixes for App and Plugins based on configured routes
      *
-     * @return array
+     * @return void
      */
-    protected function _getPluginList()
+    protected function _buildPrefixes()
     {
-        return Plugin::loaded();
+        $routes = Router::routes();
+        foreach ($routes as $key => $route) {
+            if (isset($route->defaults['prefix'])) {
+                $prefix = Inflector::camelize($route->defaults['prefix']);
+                if (!isset($route->defaults['plugin'])) {
+                    $this->prefixes[$prefix] = true;
+                } else {
+                    $this->pluginPrefixes[$route->defaults['plugin']][$prefix] = true;
+                }
+            }
+        }
+    }
+
+    /**
+     * Delete unused ACOs.
+     *
+     * @param int $parentId Id of the parent node.
+     * @param array $preservedItems list of items that will not be erased.
+     * @return void
+     */
+    protected function _cleaner($parentId, $preservedItems = [])
+    {
+        $nodes = $this->Aco->find()->where(['parent_id' => $parentId]);
+        $methodFlip = array_flip($preservedItems);
+        foreach ($nodes as $node) {
+            if (!isset($methodFlip[$node->alias])) {
+                $crumbs = $this->Aco->find('path', ['for' => $node->id, 'order' => 'lft']);
+                $path = null;
+                foreach ($crumbs as $crumb) {
+                    $path .= '/' . $crumb->alias;
+                }
+                $entity = $this->Aco->get($node->id);
+                if ($this->Aco->delete($entity)) {
+                    $this->out(__d('cake_acl', 'Deleted Aco node: <warning>{0}</warning> and all children', $path));
+                }
+            }
+        }
     }
 }
