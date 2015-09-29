@@ -134,6 +134,7 @@ class AclBehavior extends Behavior
             $data = [
                 'parent_id' => isset($parent->id) ? $parent->id : null,
                 'model' => $model->alias(),
+                'alias' => $entity->{$model->displayField()},
                 'foreign_key' => $entity->id,
             ];
 
