@@ -18,11 +18,6 @@
  */
 namespace Acl\Test\TestCase;
 
-use Acl\AclExtras;
-use Acl\Controller\Component\AclComponent;
-use Acl\Model\Table\AcosTable;
-use Cake\Console\Shell;
-use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Datasource\ConnectionManager;
