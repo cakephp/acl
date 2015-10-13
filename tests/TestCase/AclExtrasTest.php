@@ -24,11 +24,11 @@ use Cake\Datasource\ConnectionManager;
 use Cake\TestSuite\TestCase;
 
 //import test controller class names.
-include ((dirname(__FILE__))) . DS . 'test_controllers.php';
-include ((dirname(__FILE__))) . DS . 'test_admin_controllers.php';
-include ((dirname(__FILE__))) . DS . 'test_plugin_controllers.php';
-include ((dirname(__FILE__))) . DS . 'test_nested_plugin_controllers.php';
-include ((dirname(__FILE__))) . DS . 'test_plugin_admin_controllers.php';
+include dirname(__FILE__) . DS . 'test_controllers.php';
+include dirname(__FILE__) . DS . 'test_admin_controllers.php';
+include dirname(__FILE__) . DS . 'test_plugin_controllers.php';
+include dirname(__FILE__) . DS . 'test_nested_plugin_controllers.php';
+include dirname(__FILE__) . DS . 'test_plugin_admin_controllers.php';
 
 /**
  * AclExtras Shell Test case
