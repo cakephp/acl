@@ -18,22 +18,17 @@
  */
 namespace Acl\Test\TestCase;
 
-use Acl\AclExtras;
-use Acl\Controller\Component\AclComponent;
-use Acl\Model\Table\AcosTable;
-use Cake\Console\Shell;
-use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Datasource\ConnectionManager;
 use Cake\TestSuite\TestCase;
 
 //import test controller class names.
-include ((dirname(__FILE__))) . DS . 'test_controllers.php';
-include ((dirname(__FILE__))) . DS . 'test_admin_controllers.php';
-include ((dirname(__FILE__))) . DS . 'test_plugin_controllers.php';
-include ((dirname(__FILE__))) . DS . 'test_nested_plugin_controllers.php';
-include ((dirname(__FILE__))) . DS . 'test_plugin_admin_controllers.php';
+include dirname(__FILE__) . DS . 'test_controllers.php';
+include dirname(__FILE__) . DS . 'test_admin_controllers.php';
+include dirname(__FILE__) . DS . 'test_plugin_controllers.php';
+include dirname(__FILE__) . DS . 'test_nested_plugin_controllers.php';
+include dirname(__FILE__) . DS . 'test_plugin_admin_controllers.php';
 
 /**
  * AclExtras Shell Test case
