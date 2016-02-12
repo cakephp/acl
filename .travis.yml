@@ -27,7 +27,7 @@ matrix:
 
   include:
     - php: 7.0
-      env: MINIMUMS=1 RUN_TESTS=1
+      env: MINIMUMS=1 RUN_TESTS=1 DB=mysql db_dsn='mysql://travis@0.0.0.0/cakephp_test'
 
     - php: 7.0
       env: RUN_CS=1 RUN_TESTS=0
