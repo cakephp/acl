@@ -12,19 +12,16 @@ It is currently under development and should be considered experimental.
 
 ## Installing via composer
 
-You can install this plugin into your CakePHP application using
-[composer](http://getcomposer.org). For existing applications you can add the
-following to your `composer.json` file:
 
-```javascript
-"require": {
-	"cakephp/acl": "dev-master"
-}
+You can install this plugin into your CakePHP application using [composer](http://getcomposer.org).
+
+The recommended way to install composer packages is:
+
+```
+composer require cakephp/acl
 ```
 
-And run `php composer.phar update`
-
-In your `config\bootstrap.php`:
+Then in your `config\bootstrap.php`:
 ```php
 Plugin::load('Acl', ['bootstrap' => true]);
 ```

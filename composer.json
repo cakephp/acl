@@ -1,38 +1,41 @@
 {
-	"name": "cakephp/acl",
-	"description": "Acl Plugin for CakePHP 3.x framework",
-	"type": "cakephp-plugin",
-	"keywords": ["cakephp", "acl"],
-	"homepage": "http://cakephp.org",
-	"license": "MIT",
-	"authors": [
-		{
-			"name": "CakePHP Community",
-			"homepage": "https://github.com/cakephp/acl/graphs/contributors"
-		}
-	],
-	"support": {
-		"issues": "https://github.com/cakephp/acl/issues",
-		"forum": "http://stackoverflow.com/tags/cakephp",
-		"irc": "irc://irc.freenode.org/cakephp",
-		"source": "https://github.com/cakephp/acl"
-	},
-	"require": {
-		"cakephp/cakephp": "^3.0.1"
-	},
-	"require-dev": {
-		"cakephp/cakephp-codesniffer": "dev-master",
-		"phpunit/phpunit": "~5.0"
-	},
-	"autoload": {
-		"psr-4": {
-			"Acl\\": "src"
-		}
-	},
-	"autoload-dev": {
-		"psr-4": {
-			"Acl\\Test\\": "tests",
-			"Cake\\Test\\": "vendor/cakephp/cakephp/tests"
-		}
-	}
+    "name": "cakephp/acl",
+    "description": "Acl Plugin for CakePHP 3.x framework",
+    "type": "cakephp-plugin",
+    "keywords": [
+        "cakephp",
+        "acl"
+    ],
+    "homepage": "http://cakephp.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "CakePHP Community",
+            "homepage": "https://github.com/cakephp/acl/graphs/contributors"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/cakephp/acl/issues",
+        "forum": "http://stackoverflow.com/tags/cakephp",
+        "irc": "irc://irc.freenode.org/cakephp",
+        "source": "https://github.com/cakephp/acl"
+    },
+    "require": {
+        "cakephp/cakephp": "^3.0.1"
+    },
+    "require-dev": {
+        "cakephp/cakephp-codesniffer": "dev-master",
+        "phpunit/phpunit": "^5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Acl\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Acl\\Test\\": "tests",
+            "Cake\\Test\\": "vendor/cakephp/cakephp/tests"
+        }
+    }
 }
