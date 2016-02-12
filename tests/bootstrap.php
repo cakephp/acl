@@ -131,8 +131,8 @@ Log::config([
 if (class_exists('Carbon\Carbon')) {
     Carbon\Carbon::setTestNow(Carbon\Carbon::now());
 } else {
-    Cake\Chronos\Chronos::setTestNow(Chronos::now());
-    Cake\Chronos\MutableDateTime::setTestNow(MutableDateTime::now());
-    Cake\Chronos\Date::setTestNow(Date::now());
-    Cake\Chronos\MutableDate::setTestNow(MutableDate::now());
+    Cake\Chronos\Chronos::setTestNow(Cake\Chronos\Chronos::now());
+    Cake\Chronos\MutableDateTime::setTestNow(Cake\Chronos\MutableDateTime::now());
+    Cake\Chronos\Date::setTestNow(Cake\Chronos\Date::now());
+    Cake\Chronos\MutableDate::setTestNow(Cake\Chronos\MutableDate::now());
 }
