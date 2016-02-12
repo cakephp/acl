@@ -53,6 +53,10 @@ class AclNodesTable extends Table
 
         if (empty($ref)) {
             return null;
+        } elseif (is_int($ref) || ctype_digit($ref)) {
+            $ref = [
+                'id' => $ref
+            ];
         } elseif (is_string($ref)) {
             $path = explode('/', $ref);
             $start = $path[0];

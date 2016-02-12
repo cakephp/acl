@@ -240,6 +240,26 @@ class AclNodeTest extends TestCase
         $expected = [8, 7, 6, 1];
         $this->assertEquals($expected, $result);
 
+        $result = $Aco->node(8);
+        $result = $result->extract('id')->toArray();
+        $expected = [8, 7, 6, 1];
+        $this->assertEquals($expected, $result);
+
+        $result = $Aco->node(7);
+        $result = $result->extract('id')->toArray();
+        $expected = [7, 6, 1];
+        $this->assertEquals($expected, $result);
+
+        $result = $Aco->node(4);
+        $result = $result->extract('id')->toArray();
+        $expected = [4, 3, 2, 1];
+        $this->assertEquals($expected, $result);
+
+        $result = $Aco->node(3);
+        $result = $result->extract('id')->toArray();
+        $expected = [3, 2, 1];
+        $this->assertEquals($expected, $result);
+
         $this->assertFalse($Aco->node('Controller2/action3'));
 
         $this->assertFalse($Aco->node('Controller2/action3/record5'));
