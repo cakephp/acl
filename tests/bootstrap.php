@@ -128,4 +128,11 @@ Log::config([
     ]
 ]);
 
-Carbon\Carbon::setTestNow(Carbon\Carbon::now());
+if (class_exists('Carbon\Carbon')) {
+    Carbon\Carbon::setTestNow(Carbon\Carbon::now());
+} else {
+    Cake\Chronos\Chronos::setTestNow(Cake\Chronos\Chronos::now());
+    Cake\Chronos\MutableDateTime::setTestNow(Cake\Chronos\MutableDateTime::now());
+    Cake\Chronos\Date::setTestNow(Cake\Chronos\Date::now());
+    Cake\Chronos\MutableDate::setTestNow(Cake\Chronos\MutableDate::now());
+}
