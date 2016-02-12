@@ -25,7 +25,7 @@
     },
     "require-dev": {
         "cakephp/cakephp-codesniffer": "dev-master",
-        "phpunit/phpunit": "*"
+        "phpunit/phpunit": ">= 4.2"
     },
     "autoload": {
         "psr-4": {
