@@ -49,4 +49,9 @@
 		<env name="db_password" value=""/>
 		-->
 	</php>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">./src/</directory>
+        </whitelist>
+    </filter>
 </phpunit>

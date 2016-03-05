@@ -1,7 +1,8 @@
 # CakePHP Acl Plugin
 
-[![Build Status](https://api.travis-ci.org/cakephp/acl.png)](https://travis-ci.org/cakephp/acl)
-[![License](https://poser.pugx.org/cakephp/acl/license.svg)](https://packagist.org/packages/cakephp/acl)
+[![Build Status](https://img.shields.io/travis/cakephp/acl/master.svg?style=flat-square)](https://travis-ci.org/cakephp/acl)
+[![Coverage Status](https://img.shields.io/codecov/c/github/cakephp/acl.svg?style=flat-square)](https://codecov.io/github/cakephp/acl)
+[![License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.txt)
 
 A plugin for managing ACL in CakePHP applications.
 
@@ -11,19 +12,16 @@ It is currently under development and should be considered experimental.
 
 ## Installing via composer
 
-You can install this plugin into your CakePHP application using
-[composer](http://getcomposer.org). For existing applications you can add the
-following to your `composer.json` file:
 
-```javascript
-"require": {
-	"cakephp/acl": "dev-master"
-}
+You can install this plugin into your CakePHP application using [composer](http://getcomposer.org).
+
+The recommended way to install composer packages is:
+
+```
+composer require cakephp/acl
 ```
 
-And run `php composer.phar update`
-
-In your `config\bootstrap.php`:
+Then in your `config\bootstrap.php`:
 ```php
 Plugin::load('Acl', ['bootstrap' => true]);
 ```

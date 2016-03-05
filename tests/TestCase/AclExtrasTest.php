@@ -286,18 +286,23 @@ class AclExtrasTestCase extends TestCase
             ->will($this->returnCallback(function ($plugin, $prefix) {
                 switch ($plugin) {
                     case 'TestPlugin':
-                        return ['PluginController.php'];
+                        $return = ['PluginController.php'];
+                        break;
                     case 'Nested/TestPluginTwo':
                         if ($prefix !== null) {
-                            return [];
+                            $return = [];
+                            break;
                         }
-                        return ['PluginTwoController.php'];
+                        $return = ['PluginTwoController.php'];
+                        break;
                     default:
                         if ($prefix !== null) {
-                            return ['PostsController.php', 'BigLongNamesController.php'];
+                            $return = ['PostsController.php', 'BigLongNamesController.php'];
+                            break;
                         }
-                        return ['CommentsController.php', 'PostsController.php', 'BigLongNamesController.php'];
+                        $return = ['CommentsController.php', 'PostsController.php', 'BigLongNamesController.php'];
                 }
+                return $return;
             }));
 
         $this->Task->startup();
@@ -345,10 +350,12 @@ class AclExtrasTestCase extends TestCase
 
                 switch ($plugin) {
                     case 'Nested/TestPluginTwo':
-                        return ['PluginTwoController.php'];
+                        $return = ['PluginTwoController.php'];
+                        break;
                     default:
-                        return ['CommentsController.php', 'PostsController.php', 'BigLongNamesController.php'];
+                        $return = ['CommentsController.php', 'PostsController.php', 'BigLongNamesController.php'];
                 }
+                return $return;
             }));
 
         $this->Task->startup();
@@ -371,10 +378,12 @@ class AclExtrasTestCase extends TestCase
 
                 switch ($plugin) {
                     case 'Nested/TestPluginTwo':
-                        return ['PluginTwoController.php'];
+                        $return = ['PluginTwoController.php'];
+                        break;
                     default:
-                        return ['CommentsController.php', 'PostsController.php', 'BigLongNamesController.php'];
+                        $return = ['CommentsController.php', 'PostsController.php', 'BigLongNamesController.php'];
                 }
+                return $return;
             }));
 
         $cleanTask->startup();
