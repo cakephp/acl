@@ -177,7 +177,11 @@ class PermissionsTable extends AclNodesTable
             $save = array_combine($permKeys, array_pad([], count($permKeys), $value));
         } else {
             if (!is_array($actions)) {
-                $actions = ['_' . $actions];
+                if ($actions{0} !== '_') {
+                    $actions = ['_' . $actions];
+                } else {
+                    $actions = [$actions];
+                }
             }
             foreach ($actions as $action) {
                 if ($action{0} !== '_') {
