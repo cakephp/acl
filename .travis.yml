@@ -26,11 +26,6 @@ matrix:
     - php: 7.0
       env: PHPCS=1 DEFAULT=0
 
-cache:
-  directories:
-    - vendor
-    - $HOME/.composer/cache
-
 before_install:
   - phpenv config-rm xdebug.ini
 
