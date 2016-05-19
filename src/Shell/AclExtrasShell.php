@@ -91,7 +91,6 @@ class AclExtrasShell extends Shell
     public function acoUpdate()
     {
         $this->AclExtras->acoUpdate($this->params);
-        return true;
     }
 
     /**

@@ -572,7 +572,7 @@ class AclShell extends Shell
      *
      * @param string $class Class type you want (Aro/Aco)
      * @param string|array $identifier A mixed identifier for finding the node.
-     * @return int Integer of NodeId. Will trigger an error if nothing is found.
+     * @return int|null Integer of NodeId. Will trigger an error if nothing is found.
      */
     protected function _getNodeId($class, $identifier)
     {
@@ -582,7 +582,7 @@ class AclShell extends Shell
                 $identifier = var_export($identifier, true);
             }
             $this->error(__d('cake_acl', 'Could not find node using reference "{0}"', [$identifier]));
-            return;
+            return null;
         }
         return $node->first()->id;
     }
