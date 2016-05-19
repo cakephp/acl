@@ -19,6 +19,7 @@ use Cake\Controller\ComponentRegistry;
 use Cake\Controller\Controller;
 use Cake\Core\App;
 use Cake\Core\Configure;
+use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
 
 /**
@@ -85,30 +86,31 @@ class AclShell extends Shell
             $out .= __d('cake_acl', 'Current ACL Classname: {0}', [$class]) . "\n";
             $out .= "--------------------------------------------------\n";
             $this->err($out);
-            return $this->_stop();
+            $this->_stop();
         }
 
         if ($this->command) {
             if (Configure::check('Datasource') === null) {
                 $this->out(__d('cake_acl', 'Your database configuration was not found. Take a moment to create one.'));
                 $this->args = null;
-                return $this->DbConfig->execute();
+                $this->DbConfig->execute();
+                return;
             }
 
             try {
-                \Cake\ORM\TableRegistry::get('Aros')->schema();
-                \Cake\ORM\TableRegistry::remove('Aros');
+                TableRegistry::get('Aros')->schema();
+                TableRegistry::remove('Aros');
             } catch (\Cake\Database\Exception $e) {
                 $this->out(__d('cake_acl', 'Acl database tables not found. To create them, run:'));
                 $this->out();
                 $this->out('  bin/cake Migrations.migrations migrate -p Acl');
                 $this->out();
-                return $this->_stop();
+                $this->_stop();
+                return;
             }
 
             $registry = new ComponentRegistry();
             $this->Acl = new AclComponent($registry);
-            $controller = new Controller();
         }
     }
 
@@ -570,7 +572,7 @@ class AclShell extends Shell
      *
      * @param string $class Class type you want (Aro/Aco)
      * @param string|array $identifier A mixed identifier for finding the node.
-     * @return int Integer of NodeId. Will trigger an error if nothing is found.
+     * @return int|null Integer of NodeId. Will trigger an error if nothing is found.
      */
     protected function _getNodeId($class, $identifier)
     {
@@ -580,7 +582,7 @@ class AclShell extends Shell
                 $identifier = var_export($identifier, true);
             }
             $this->error(__d('cake_acl', 'Could not find node using reference "{0}"', [$identifier]));
-            return;
+            return null;
         }
         return $node->first()->id;
     }
