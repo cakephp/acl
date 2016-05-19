@@ -68,7 +68,7 @@ class AclExtrasShell extends Shell
                 $this->out();
                 $this->out('  bin/cake Migrations.migrations migrate -p Acl');
                 $this->out();
-                return $this->_stop();
+                $this->_stop();
             }
         }
     }

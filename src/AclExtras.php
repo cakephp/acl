@@ -90,6 +90,7 @@ class AclExtras
     /**
      * Start up And load Acl Component / Aco model
      *
+     * @param \Cake\Controller\Controller $controller Controller instance
      * @return void
      */
     public function startup($controller = null)
@@ -118,7 +119,7 @@ class AclExtras
         if (!empty($this->controller->Flash)) {
             $this->controller->Flash->success($msg);
         } else {
-            return $this->Shell->out($msg);
+            $this->Shell->out($msg);
         }
     }
 
@@ -135,7 +136,7 @@ class AclExtras
         if (!empty($this->controller->Flash)) {
             $this->controller->Flash->error($msg);
         } else {
-            return $this->Shell->err($msg);
+            $this->Shell->err($msg);
         }
     }
 
@@ -155,7 +156,7 @@ class AclExtras
      * Updates the Aco Tree with new controller actions.
      *
      * @param array $params An array of parameters
-     * @return void
+     * @return bool
      */
     public function acoUpdate($params = [])
     {
