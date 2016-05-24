@@ -13,6 +13,7 @@
  */
 namespace Acl\Model\Table;
 
+use Cake\Core\App;
 use Cake\ORM\Table;
 
 /**
