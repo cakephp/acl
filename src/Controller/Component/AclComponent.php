@@ -99,8 +99,10 @@ class AclComponent extends Component
             }
             $this->_Instance = $adapter;
             $this->_Instance->initialize($this);
+
             return;
         }
+
         return $this->_Instance;
     }
 

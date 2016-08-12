@@ -153,6 +153,7 @@ class PhpAco
         $aco = preg_replace('#/+#', '/', $aco);
         // make case insensitive
         $aco = ltrim(strtolower($aco), '/');
+
         return array_filter(array_map('trim', explode('/', $aco)));
     }
 

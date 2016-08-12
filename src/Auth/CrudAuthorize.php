@@ -65,10 +65,12 @@ class CrudAuthorize extends BaseAuthorize
                 ),
                 E_USER_WARNING
             );
+
             return false;
         }
         $user = [$this->_config['userModel'] => $user];
         $Acl = $this->_registry->load('Acl');
+
         return $Acl->check(
             $user,
             $this->action($request, ':controller'),

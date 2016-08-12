@@ -131,6 +131,7 @@ class AclExtrasShell extends Shell
                     ]
                 ]
             ]);
+
             return $parser;
     }
 

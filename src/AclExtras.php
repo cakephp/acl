@@ -170,6 +170,7 @@ class AclExtras
             $plugin = $params['plugin'];
             if (!Plugin::loaded($plugin)) {
                 $this->err(__d('cake_acl', "<error>Plugin {0} not found or not activated.</error>", [$plugin]));
+
                 return false;
             }
             $plugins = [$params['plugin']];
@@ -183,6 +184,7 @@ class AclExtras
             }
         }
         $this->out(__d('cake_acl', '<success>Aco Update Complete</success>'));
+
         return true;
     }
 
@@ -369,6 +371,7 @@ class AclExtras
         } else {
             $node = $node->first();
         }
+
         return $node;
     }
 
@@ -409,6 +412,7 @@ class AclExtras
                 $callbacks[] = $callable['callable'];
             }
         }
+
         return $callbacks;
     }
 
@@ -430,6 +434,7 @@ class AclExtras
         $methods = get_class_methods(new $namespace);
         if ($methods == null) {
             $this->err(__d('cake_acl', 'Unable to get methods for {0}', $className));
+
             return false;
         }
         $actions = array_diff($methods, $baseMethods);
@@ -452,6 +457,7 @@ class AclExtras
         if ($this->_clean) {
             $this->_cleaner($node->id, $actions);
         }
+
         return true;
     }
 

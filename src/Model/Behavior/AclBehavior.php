@@ -103,12 +103,14 @@ class AclBehavior extends Behavior
             $type = $this->_typeMaps[$this->config('type')];
             if (is_array($type)) {
                 trigger_error(__d('cake_dev', 'AclBehavior is setup with more then one type, please specify type parameter for node()'), E_USER_WARNING);
+
                 return null;
             }
         }
         if (empty($ref)) {
             throw new Exception\Exception(__d('cake_dev', 'ref parameter must be a string or an Entity'));
         }
+
         return $this->_table->{$type}->node($ref);
     }
 
