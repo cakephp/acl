@@ -45,6 +45,6 @@ class ArosTable extends AclNodesTable
             'foreignKey' => 'parent_id'
         ]);
 
-        $this->entityClass('Acl.Aro', 'Model/Entity');
+        $this->entityClass(App::className('Acl.Aro', 'Model/Entity'));
     }
 }
