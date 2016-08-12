@@ -17,12 +17,13 @@ class AclShellTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
-        $this->Shell = $this->getMock(
-            'Acl\Shell\AclShell',
-            ['in', 'out', 'hr', 'err', '_stop'],
-            [$this->io]
-        );
+        $this->io = $this->getMockBuilder('Cake\Console\ConsoleIo')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->Shell = $this->getMockBuilder('Acl\Shell\AclShell')
+            ->setMethods(['in', 'out', 'hr', 'err', '_stop'])
+            ->setConstructorArgs([$this->io])
+            ->getMock();
         Configure::write('Acl.classname', 'DbAcl');
         Configure::write('Acl.database', 'test');
         $this->Acos = TableRegistry::get('Acl\Model\Table\AcosTable');

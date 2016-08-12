@@ -125,7 +125,9 @@ class CacheDbAclTest extends TestCase
      */
     public function testCaching()
     {
-        $this->CachedDb->Permission = $this->getMock('Acl\\Model\\Table\\PermissionsTable');
+        $this->CachedDb->Permission = $this
+            ->getMockBuilder('Acl\Model\Table\PermissionsTable')
+            ->getMock();
 
         $this->CachedDb->Permission
             ->expects($this->once())
@@ -144,7 +146,9 @@ class CacheDbAclTest extends TestCase
      */
     public function testCacheFalse()
     {
-        $this->CachedDb->Permission = $this->getMock('Acl\\Model\\Table\\PermissionsTable');
+        $this->CachedDb->Permission = $this
+            ->getMockBuilder('Acl\Model\Table\PermissionsTable')
+            ->getMock();
 
         $this->CachedDb->Permission
             ->expects($this->once())
@@ -163,7 +167,9 @@ class CacheDbAclTest extends TestCase
      */
     public function testCacheCleared()
     {
-        $this->CachedDb->Permission = $this->getMock('Acl\\Model\\Table\\PermissionsTable');
+        $this->CachedDb->Permission = $this
+            ->getMockBuilder('Acl\Model\Table\PermissionsTable')
+            ->getMock();
 
         $this->CachedDb->Permission
             ->expects($this->exactly(2))
