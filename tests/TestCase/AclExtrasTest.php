@@ -303,6 +303,7 @@ class AclExtrasTestCase extends TestCase
                         }
                         $return = ['CommentsController.php', 'PostsController.php', 'BigLongNamesController.php'];
                 }
+
                 return $return;
             }));
 
@@ -356,6 +357,7 @@ class AclExtrasTestCase extends TestCase
                     default:
                         $return = ['CommentsController.php', 'PostsController.php', 'BigLongNamesController.php'];
                 }
+
                 return $return;
             }));
 
@@ -383,6 +385,7 @@ class AclExtrasTestCase extends TestCase
                     default:
                         $return = ['CommentsController.php', 'PostsController.php', 'BigLongNamesController.php'];
                 }
+
                 return $return;
             }));
 
