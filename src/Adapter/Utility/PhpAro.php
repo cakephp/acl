@@ -157,6 +157,7 @@ class PhpAro
                 return $this->aliases[$mapped];
             }
         }
+
         return static::DEFAULT_ROLE;
     }
 

@@ -94,6 +94,7 @@ class AclShell extends Shell
                 $this->out(__d('cake_acl', 'Your database configuration was not found. Take a moment to create one.'));
                 $this->args = null;
                 $this->DbConfig->execute();
+
                 return;
             }
 
@@ -106,6 +107,7 @@ class AclShell extends Shell
                 $this->out('  bin/cake Migrations.migrations migrate -p Acl');
                 $this->out();
                 $this->_stop();
+
                 return;
             }
 
@@ -524,6 +526,7 @@ class AclShell extends Shell
                 "To add a node at the root level, enter 'root' or '/' as the <parent> parameter."
             ]
         );
+
         return $parser;
     }
 
@@ -545,6 +548,7 @@ class AclShell extends Shell
         if (empty($possibility)) {
             $this->error(__d('cake_acl', '{0} not found', [$this->args[1]]), __d('cake_acl', 'No tree returned.'));
         }
+
         return $possibility;
     }
 
@@ -563,6 +567,7 @@ class AclShell extends Shell
                 'foreign_key' => $matches[2],
             ];
         }
+
         return $identifier;
     }
 
@@ -582,8 +587,10 @@ class AclShell extends Shell
                 $identifier = var_export($identifier, true);
             }
             $this->error(__d('cake_acl', 'Could not find node using reference "{0}"', [$identifier]));
+
             return null;
         }
+
         return $node->first()->id;
     }
 
@@ -609,6 +616,7 @@ class AclShell extends Shell
         if (isset($this->args[2]) && !in_array($this->args[2], ['', 'all'])) {
             $action = $this->args[2];
         }
+
         return compact('aro', 'aco', 'action', 'aroName', 'acoName');
     }
 
@@ -629,6 +637,7 @@ class AclShell extends Shell
         $vars['data_name'] = $type;
         $vars['table_name'] = $type . 's';
         $vars['class'] = $class;
+
         return $vars;
     }
 }

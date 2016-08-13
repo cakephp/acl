@@ -75,6 +75,7 @@ class PermissionsTable extends AclNodesTable
                 ),
                 E_USER_WARNING
             );
+
             return false;
         }
 
@@ -89,11 +90,13 @@ class PermissionsTable extends AclNodesTable
                 ),
                 E_USER_WARNING
             );
+
             return false;
         }
 
         if ($action !== '*' && !in_array('_' . $action, $permKeys)) {
             trigger_error(__d('cake_dev', "ACO permissions key {0} does not exist in {1}", $action, 'DbAcl::check()'), E_USER_NOTICE);
+
             return false;
         }
 
@@ -145,6 +148,7 @@ class PermissionsTable extends AclNodesTable
                 }
             }
         }
+
         return false;
     }
 
@@ -167,6 +171,7 @@ class PermissionsTable extends AclNodesTable
 
         if (!$perms) {
             trigger_error(__d('cake_dev', '{0} - Invalid node', ['DbAcl::allow()']), E_USER_WARNING);
+
             return false;
         }
         if (isset($perms[0])) {
@@ -203,6 +208,7 @@ class PermissionsTable extends AclNodesTable
         }
         $entityClass = $this->entityClass();
         $entity = new $entityClass($save);
+
         return ($this->save($entity) !== false);
     }
 
@@ -240,6 +246,7 @@ class PermissionsTable extends AclNodesTable
                 ])->hydrate(false)->toArray()
             ],
         ];
+
         return $result;
     }
 
@@ -257,6 +264,7 @@ class PermissionsTable extends AclNodesTable
                 $newKeys[] = $key;
             }
         }
+
         return $newKeys;
     }
 }

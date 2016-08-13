@@ -32,9 +32,14 @@ class ActionsAuthorizeTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->controller = $this->getMock('Cake\Controller\Controller', [], [], '', false);
-        $this->Acl = $this->getMock('Acl\Controller\Component\AclComponent', [], [], '', false);
-        $this->Collection = $this->getMock('Cake\Controller\ComponentRegistry');
+        $this->controller = $this->getMockBuilder('Cake\Controller\Controller')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->Acl = $this->getMockBuilder('Acl\Controller\Component\AclComponent')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->Collection = $this->getMockBuilder('Cake\Controller\ComponentRegistry')
+            ->getMock();
 
         $this->auth = new ActionsAuthorize($this->Collection);
         $this->auth->config('actionPath', '/controllers');

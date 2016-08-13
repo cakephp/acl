@@ -79,6 +79,7 @@ class AclPerson extends Entity
         if (!$motherId) {
             return null;
         }
+
         return ['AclPeople' => ['id' => $motherId]];
     }
 }

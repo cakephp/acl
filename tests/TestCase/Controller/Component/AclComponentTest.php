@@ -34,7 +34,9 @@ class AclComponentTest extends TestCase
     {
         parent::setUp();
         if (!class_exists('MockAclImplementation', false)) {
-            $this->getMock('Acl\AclInterface', [], [], 'MockAclImplementation');
+            $this->getMockBuilder('Acl\AclInterface')
+                ->setMockClassName('MockAclImplementation')
+                ->getMock();
         }
         Configure::write('Acl.classname', '\MockAclImplementation');
         $Collection = new ComponentRegistry();
@@ -73,7 +75,7 @@ class AclComponentTest extends TestCase
      */
     public function testAdapter()
     {
-        $Adapter = $this->getMock('Acl\AclInterface');
+        $Adapter = $this->getMockBuilder('Acl\AclInterface')->getMock();
         $Adapter->expects($this->once())->method('initialize')->with($this->Acl);
 
         $this->assertNull($this->Acl->adapter($Adapter));

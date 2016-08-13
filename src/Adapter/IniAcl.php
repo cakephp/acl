@@ -165,6 +165,7 @@ class IniAcl implements AclInterface
                 }
             }
         }
+
         return false;
     }
 
@@ -178,6 +179,7 @@ class IniAcl implements AclInterface
     public function readConfigFile($filename)
     {
         $iniFile = new IniConfig(dirname($filename) . DS);
+
         return $iniFile->read(basename($filename));
     }
 
@@ -193,6 +195,7 @@ class IniAcl implements AclInterface
             $array[$key] = trim($value);
         }
         array_unshift($array, "");
+
         return $array;
     }
 }

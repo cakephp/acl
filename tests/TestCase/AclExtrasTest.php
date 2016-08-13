@@ -50,10 +50,9 @@ class AclExtrasTestCase extends TestCase
         Configure::write('Acl.classname', 'DbAcl');
         Configure::write('Acl.database', 'test');
 
-        $this->Task = $this->getMock(
-            'Acl\AclExtras',
-            ['in', 'out', 'hr', 'createFile', 'error', 'err', 'clear', 'getControllerList']
-        );
+        $this->Task = $this->getMockBuilder('Acl\AclExtras')
+            ->setMethods(['in', 'out', 'hr', 'createFile', 'error', 'err', 'clear', 'getControllerList'])
+            ->getMock();
     }
 
     /**
@@ -76,7 +75,9 @@ class AclExtrasTestCase extends TestCase
     {
         $this->Task->startup();
         $this->Task->args = ['Aco'];
-        $this->Task->Acl->Aco = $this->getMock('Aco', ['recover']);
+        $this->Task->Acl->Aco = $this->getMockBuilder('Aco')
+            ->setMethods(['recover'])
+            ->getMock();
         $this->Task->Acl->Aco->expects($this->once())
             ->method('recover')
             ->will($this->returnValue(true));
@@ -302,6 +303,7 @@ class AclExtrasTestCase extends TestCase
                         }
                         $return = ['CommentsController.php', 'PostsController.php', 'BigLongNamesController.php'];
                 }
+
                 return $return;
             }));
 
@@ -355,6 +357,7 @@ class AclExtrasTestCase extends TestCase
                     default:
                         $return = ['CommentsController.php', 'PostsController.php', 'BigLongNamesController.php'];
                 }
+
                 return $return;
             }));
 
@@ -364,10 +367,9 @@ class AclExtrasTestCase extends TestCase
         $Aco = $this->Task->Acl->Aco;
         $originalNode = $Aco->node('controllers/Nested\TestPluginTwo/PluginTwo')->first();
 
-        $cleanTask = $this->getMock(
-            'Acl\AclExtras',
-            ['in', 'out', 'hr', 'createFile', 'error', 'err', 'clear', 'getControllerList']
-        );
+        $cleanTask = $this->getMockBuilder('Acl\AclExtras')
+            ->setMethods(['in', 'out', 'hr', 'createFile', 'error', 'err', 'clear', 'getControllerList'])
+            ->getMock();
 
         $cleanTask->expects($this->atLeast(2))
             ->method('getControllerList')
@@ -383,6 +385,7 @@ class AclExtrasTestCase extends TestCase
                     default:
                         $return = ['CommentsController.php', 'PostsController.php', 'BigLongNamesController.php'];
                 }
+
                 return $return;
             }));
 
