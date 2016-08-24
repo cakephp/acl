@@ -97,7 +97,6 @@ class AclExtras
     {
         if (!$controller) {
             $controller = new Controller(new Request());
-            include CONFIG . 'routes.php';
         }
         $registry = new ComponentRegistry();
         $this->Acl = new AclComponent($registry, Configure::read('Acl'));
