@@ -142,8 +142,11 @@ class AclBehavior extends Behavior
             if (!$entity->isNew()) {
                 $node = $this->node($entity, $type)->first();
                 $data['id'] = isset($node->id) ? $node->id : null;
+                $newData = $model->{$type}->patchEntity($node, $data);
+            } else {
+                $newData = $model->{$type}->newEntity($data);
             }
-            $newData = $model->{$type}->newEntity($data);
+
             $saved = $model->{$type}->target()->save($newData);
         }
     }
