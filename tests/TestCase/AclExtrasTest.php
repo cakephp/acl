@@ -120,7 +120,13 @@ class AclExtrasTestCase extends TestCase
             ->with(null)
             ->will($this->returnCallback(function ($plugin, $prefix) {
                 if ($prefix === null) {
-                    return ['CommentsController.php', 'PostsController.php', 'BigLongNamesController.php'];
+                    return [
+                        'CommentsController.php',
+                        'PostsController.php',
+                        'BigLongNamesController.php',
+                        'AbstractController.php',
+                        'ConcreteController.php',
+                    ];
                 } else {
                     return ['PostsController.php', 'BigLongNamesController.php'];
                 }

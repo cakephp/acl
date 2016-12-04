@@ -58,3 +58,43 @@ class BigLongNamesController extends Controller
     {
     }
 }
+
+abstract class AbstractController extends Controller
+{
+
+    public function index()
+    {
+    }
+
+    public function view()
+    {
+    }
+
+    public function add()
+    {
+    }
+
+    public function delete()
+    {
+    }
+}
+
+class ConcreteController extends AbstractController
+{
+
+    public function index()
+    {
+    }
+
+    public function view()
+    {
+    }
+
+    public function add()
+    {
+    }
+
+    public function delete()
+    {
+    }
+}
