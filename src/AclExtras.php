@@ -305,7 +305,13 @@ class AclExtras
         foreach ($controllers as $controller) {
             $tmp = explode('/', $controller);
             $controllerName = str_replace('Controller.php', '', array_pop($tmp));
+            // Always skip the App controller
             if ($controllerName == 'App') {
+                continue;
+            }
+            // Skip anything that is not a concrete controller
+            $namespace = $this->_getNamespace($controller, $pluginPath, $prefix);
+            if (!(new \ReflectionClass($namespace))->isInstantiable()) {
                 continue;
             }
             $controllersNames[] = $controllerName;
