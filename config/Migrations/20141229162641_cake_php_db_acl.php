@@ -2,7 +2,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class PhinxDbAcl extends AbstractMigration
+class CakePhpDbAcl extends AbstractMigration
 {
 
     /**
