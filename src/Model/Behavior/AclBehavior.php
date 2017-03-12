@@ -139,6 +139,10 @@ class AclBehavior extends Behavior
                 'foreign_key' => $entity->id,
             ];
 
+            if (method_exists($entity, 'nodeAlias')) {
+                $data['alias'] = $entity->nodeAlias;
+            }
+
             if (!$entity->isNew()) {
                 $node = $this->node($entity, $type)->first();
                 $data['id'] = isset($node->id) ? $node->id : null;
