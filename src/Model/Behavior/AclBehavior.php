@@ -140,7 +140,7 @@ class AclBehavior extends Behavior
             ];
 
             if (method_exists($entity, 'nodeAlias')) {
-                $data['alias'] = $entity->nodeAlias;
+                $data['alias'] = $entity->nodeAlias();
             }
 
             if (!$entity->isNew()) {
