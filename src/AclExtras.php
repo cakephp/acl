@@ -365,13 +365,17 @@ class AclExtras
     {
         $node = $this->Aco->node($path);
         if (!$node) {
-            $data = [
-                'parent_id' => $parentId,
-                'model' => null,
-                'alias' => $alias,
-            ];
-            $entity = $this->Aco->newEntity($data);
-            $node = $this->Aco->save($entity);
+            $aliases = explode('/', $alias);
+            foreach ($aliases as $newAlias) {
+                $parentId = !empty($node) ? $node->id : $parentId;
+                $data = [
+                    'parent_id' => $parentId,
+                    'model' => null,
+                    'alias' => $newAlias,
+                ];
+                $entity = $this->Aco->newEntity($data);
+                $node = $this->Aco->save($entity);
+            }
             $this->out(__d('cake_acl', 'Created Aco node: <success>{0}</success>', $path));
         } else {
             $node = $node->first();
@@ -517,7 +521,11 @@ class AclExtras
         $routes = Router::routes();
         foreach ($routes as $key => $route) {
             if (isset($route->defaults['prefix'])) {
-                $prefix = Inflector::camelize($route->defaults['prefix']);
+                $prefixes = explode('/', $route->defaults['prefix']);
+                $prefix = implode('/', array_map(
+                    'Cake\\Utility\\Inflector::camelize',
+                    $prefixes
+                ));
                 if (!isset($route->defaults['plugin'])) {
                     $this->prefixes[$prefix] = true;
                 } else {
@@ -537,7 +545,13 @@ class AclExtras
     protected function _cleaner($parentId, $preservedItems = [])
     {
         $nodes = $this->Aco->find()->where(['parent_id' => $parentId]);
-        $methodFlip = array_flip($preservedItems);
+        $methodFlip = [];
+        foreach ($preservedItems as $preservedItem) {
+            $aliases = explode('/', $preservedItem);
+            foreach ($aliases as $alias) {
+                $methodFlip[$alias] = true;
+            }
+        }
         foreach ($nodes as $node) {
             if (!isset($methodFlip[$node->alias])) {
                 $crumbs = $this->Aco->find('path', ['for' => $node->id, 'order' => 'lft']);
