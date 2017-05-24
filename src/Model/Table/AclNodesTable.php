@@ -158,7 +158,7 @@ class AclNodesTable extends Table
             foreach ($ref as $key => $val) {
                 if (strpos($key, $type) !== 0 && strpos($key, '.') === false) {
                     unset($ref[$key]);
-                    $ref["{$type}0.{$key}"] = $val;
+                    $ref["{$type}0.{$key} IS"] = $val;
                 }
             }
             $queryData = [
