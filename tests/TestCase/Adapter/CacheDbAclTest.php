@@ -82,7 +82,7 @@ class CacheDbAclTest extends TestCase
 
         Cache::config('tests', [
             'engine' => 'File',
-            'path' => TMP,
+            'path' => TMP . 'test_acl',
             'prefix' => 'test_'
         ]);
     }
