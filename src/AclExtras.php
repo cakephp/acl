@@ -207,7 +207,7 @@ class AclExtras
      */
     protected function _processPrefixes($root)
     {
-        foreach (array_keys($this->prefixes) as $prefix) {
+        foreach (array_keys($this->getPrefixes()) as $prefix) {
             $controllers = $this->getControllerList(null, $prefix);
             $path = $this->rootNode . '/' . $prefix;
             $pathNode = $this->_checkNode($path, $prefix, $root->id);
@@ -565,5 +565,25 @@ class AclExtras
                 }
             }
         }
+    }
+
+    /**
+     * Get discovered app route prefixes
+     *
+     * @return array
+     */
+    public function getPrefixes()
+    {
+        return $this->prefixes;
+    }
+
+    /**
+     * Get discovered plugin route prefixes
+     *
+     * @return array
+     */
+    public function getPluginPrefixes()
+    {
+        return $this->pluginPrefixes;
     }
 }
