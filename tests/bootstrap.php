@@ -19,7 +19,7 @@ use Cake\Log\Log;
 require_once 'vendor/autoload.php';
 
 define('ROOT', dirname(__DIR__));
-define('APP_DIR', 'TestApp');
+define('APP_DIR', 'test_app');
 define('WEBROOT_DIR', 'webroot');
 
 define('TMP', sys_get_temp_dir() . DS);
@@ -36,7 +36,7 @@ define('TEST_APP', ROOT . DS . 'tests' . DS . 'test_app' . DS);
 define('LOG_ERROR', LOG_ERR);
 
 // Point app constants to the test app.
-define('APP', TEST_APP . 'TestApp' . DS);
+define('APP', TEST_APP . DS);
 define('WWW_ROOT', TEST_APP . WEBROOT_DIR . DS);
 define('TESTS', TEST_APP . 'tests' . DS);
 define('CONFIG', TEST_APP . 'config' . DS);
@@ -55,7 +55,7 @@ $loader = new Cake\Core\ClassLoader;
 $loader->register();
 
 $loader->addNamespace('Cake\Test\Fixture', ROOT . '/vendor/cakephp/cakephp/tests/Fixture');
-$loader->addNamespace('TestApp', APP);
+$loader->addNamespace('TestApp', APP . 'src');
 $loader->addNamespace('PluginJs', TEST_APP . 'Plugin/PluginJs/src');
 
 require_once CORE_PATH . 'config' . DS . 'bootstrap.php';

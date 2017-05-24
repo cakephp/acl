@@ -135,6 +135,35 @@ class AclExtrasTestCase extends TestCase
         $this->Task->startup();
     }
 
+    protected function _setupWithNestedPrefixRoutes()
+    {
+        $this->Task = $this->getMockBuilder('Acl\AclExtras')
+            ->setMethods(['in', 'out', 'hr', 'createFile', 'error', 'err', 'clear', 'getControllerList', 'getPrefixes'])
+            ->getMock();
+
+        $this->Task->expects($this->any())
+            ->method('getControllerList')
+            ->with(null)
+            ->will($this->returnCallback(function ($plugin, $prefix) {
+                if ($prefix) {
+                    return ['DummyController.php'];
+                } else {
+                    return [
+                    ];
+                }
+            }));
+
+        $this->Task->expects($this->any())
+            ->method('getPrefixes')
+            ->will($this->returnCallback(function () {
+                return [
+                    'Admin/V10/Authors/Editors' => true,
+                ];
+            }));
+
+        $this->Task->startup();
+    }
+
     /**
      * Test acoUpdate method.
      *
@@ -176,6 +205,29 @@ class AclExtrasTestCase extends TestCase
         $this->assertEquals($result[0]['alias'], 'BigLongNames');
         $result = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
         $this->assertEquals(count($result), 4);
+    }
+
+    /**
+     * Test nested prefix support
+     *
+     * @return void
+     */
+    public function testAcoUpdateWithNestedPrefixRoutes()
+    {
+        $this->_clean();
+        Configure::write('App.namespace', 'TestApp');
+        $this->_setupWithNestedPrefixRoutes();
+        $this->Task->acoUpdate();
+
+        $Aco = $this->Task->Acl->Aco;
+
+        $result = $Aco->node('controllers/Admin/V10/Authors/Editors/Dummy/doSomething')->toArray();
+        $this->assertEquals($result[0]['alias'], 'doSomething');
+
+        $result = $Aco->node('controllers/Admin/V10/Authors/Editors/Dummy/doSomethingElse')->toArray();
+        $this->assertEquals($result[0]['alias'], 'doSomethingElse');
+
+        Configure::write('App.namespace', 'Acl');
     }
 
     protected function _createNode($parent, $expected)
