@@ -23,11 +23,37 @@ Plugin::load('Acl', ['bootstrap' => true]);
 
 ## Creating tables
 
-To create ACL related tables, run the following `Migrations` command:
+To create the ACL requires tables, run the following `Migrations` command:
 
 ```
 bin/cake migrations migrate -p Acl
 ```
+
+## Attaching the behavior
+
+Add the `Acl` behavior to your table so it will automatically create an `aco` whenever a new record is saved:
+
+```php
+public function initialize(array $config)
+{
+    parent::initialize($config);
+
+    $this->addBehavior('Acl.Acl', ['controlled']);
+}
+```
+
+## Updating the entity
+
+Before you can start using the behavior, you MUST add the `parentNode()` method to the corresponding `Entity` file or the `AclBehavior` will not be able to determine the parent->child relationships. Also make make sure the method returns either null or a parent Model reference.
+
+```php
+public function parentNode() {
+    return null;
+}
+```
+
+> If things went well you should now see an entry appearing in the
+> `acos` database table whenever you save a new record.
 
 ## Running tests
 
