@@ -190,7 +190,7 @@ class AclExtras
     /**
      * Updates the Aco Tree with all App controllers.
      *
-     * @param \Acl\Model\Entity\Aco $root The root note of Aco Tree
+     * @param \Acl\Model\Entity\Aco $root The root node of Aco Tree
      * @return void
      */
     protected function _processControllers($root)
@@ -202,7 +202,7 @@ class AclExtras
     /**
      * Updates the Aco Tree with all App route prefixes.
      *
-     * @param \Acl\Model\Entity\Aco $root The root note of Aco Tree
+     * @param \Acl\Model\Entity\Aco $root The root node of Aco Tree
      * @return void
      */
     protected function _processPrefixes($root)
@@ -234,7 +234,7 @@ class AclExtras
     /**
      * Updates the Aco Tree with all Plugins.
      *
-     * @param \Acl\Model\Entity\Aco $root The root note of Aco Tree
+     * @param \Acl\Model\Entity\Aco $root The root node of Aco Tree
      * @param array $plugins list of App plugins
      * @return void
      */
