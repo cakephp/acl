@@ -97,7 +97,7 @@ class AclNodesTable extends Table
                 $queryData['conditions'] = [
                     'or' => [
                         ["{$type}.lft" . ' <= ' => new IdentifierExpression("{$type}0.lft"), "{$type}.rght" . ' >= ' => new IdentifierExpression("{$type}0.rght")],
-                        ["{$type}.lft" . ' <= ' => new IdentifierExpression("{$type}{$i}.lft") , "{$type}.rght" . ' >= ' => new IdentifierExpression("{$type}{$i}.rght")]
+                        ["{$type}.lft" . ' <= ' => new IdentifierExpression("{$type}{$i}.lft"), "{$type}.rght" . ' >= ' => new IdentifierExpression("{$type}{$i}.rght")]
                     ]
                 ];
             }
@@ -177,7 +177,7 @@ class AclNodesTable extends Table
                         ]
                     ]
                 ],
-                'order' => ["{$type}.lft"  => 'DESC'],
+                'order' => ["{$type}.lft" => 'DESC'],
             ];
             $query = $this->find('all', $queryData);
 
