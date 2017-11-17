@@ -15,8 +15,10 @@ namespace Acl\Model\Table;
 
 use Cake\Core\Configure;
 use Cake\Core\Exception;
+use Cake\Database\Expression\IdentifierExpression;
 use Cake\Datasource\ConnectionManager;
 use Cake\ORM\Entity;
+use Cake\ORM\Query;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 
@@ -40,16 +42,16 @@ class AclNodesTable extends Table
     /**
      * Retrieves the Aro/Aco node for this model
      *
-     * @param string|array|Model $ref Array with 'model' and 'foreign_key', model object, or string value
-     * @return array Node found in database
+     * @param string|array|Table $ref Array with 'model' and 'foreign_key', model object, or string value
+     * @return array|Query|false Node found in database
      * @throws \Cake\Core\Exception\Exception when binding to a model that doesn't exist.
      */
     public function node($ref = null)
     {
-        $db = $this->connection();
-        $type = $this->alias();
-        $table = $this->table();
+        $type = $this->getAlias();
+        $table = $this->getTable();
         $result = null;
+        $query = false;
 
         if (empty($ref)) {
             return null;
@@ -64,8 +66,8 @@ class AclNodesTable extends Table
 
             $queryData = [
                 'conditions' => [
-                    "{$type}.lft" . ' <= ' . "{$type}0.lft",
-                    "{$type}.rght" . ' >= ' . "{$type}0.rght",
+                    "{$type}.lft" . ' <= ' => new IdentifierExpression("{$type}0.lft"),
+                    "{$type}.rght" . ' >= ' => new IdentifierExpression("{$type}0.rght"),
                 ],
                 'fields' => ['id', 'parent_id', 'model', 'foreign_key', 'alias'],
                 'join' => [[
@@ -74,7 +76,7 @@ class AclNodesTable extends Table
                         'type' => 'INNER',
                         'conditions' => ["{$type}0.alias" => $start]
                 ]],
-                'order' => "{$type}.lft" . ' DESC'
+                'order' => ["{$type}.lft" => 'DESC']
             ];
 
             foreach ($path as $i => $alias) {
@@ -85,17 +87,17 @@ class AclNodesTable extends Table
                     'alias' => "{$type}{$i}",
                     'type' => 'INNER',
                     'conditions' => [
-                        "{$type}{$i}.lft" . ' > ' . "{$type}{$j}.lft",
-                        "{$type}{$i}.rght" . ' < ' . "{$type}{$j}.rght",
+                        "{$type}{$i}.lft" . ' > ' => new IdentifierExpression("{$type}{$j}.lft"),
+                        "{$type}{$i}.rght" . ' < ' => new IdentifierExpression("{$type}{$j}.rght"),
                         "{$type}{$i}.alias" => $alias,
-                        "{$type}{$j}.id" . ' = ' . "{$type}{$i}.parent_id"
+                        "{$type}{$j}.id" . ' = ' => new IdentifierExpression("{$type}{$i}.parent_id")
                     ]
                 ];
 
                 $queryData['conditions'] = [
                     'or' => [
-                        "{$type}.lft" . ' <= ' . "{$type}0.lft" . ' AND ' . "{$type}.rght" . ' >= ' . "{$type}0.rght",
-                        "{$type}.lft" . ' <= ' . "{$type}{$i}.lft" . ' AND ' . "{$type}.rght" . ' >= ' . "{$type}{$i}.rght"
+                        ["{$type}.lft" . ' <= ' => new IdentifierExpression("{$type}0.lft"), "{$type}.rght" . ' >= ' => new IdentifierExpression("{$type}0.rght")],
+                        ["{$type}.lft" . ' <= ' => new IdentifierExpression("{$type}{$i}.lft") , "{$type}.rght" . ' >= ' => new IdentifierExpression("{$type}{$i}.rght")]
                     ]
                 ];
             }
@@ -110,7 +112,7 @@ class AclNodesTable extends Table
                 return false;
             }
         } elseif (is_object($ref) && $ref instanceof Entity) {
-            list(, $alias) = pluginSplit($ref->source());
+            list(, $alias) = pluginSplit($ref->getSource());
             $ref = ['model' => $alias, 'foreign_key' => $ref->id];
         } elseif (is_array($ref) && !(isset($ref['model']) && isset($ref['foreign_key']))) {
             $name = key($ref);
@@ -124,7 +126,7 @@ class AclNodesTable extends Table
                     'connection' => ConnectionManager::get($connection)
                 ]);
             }
-            $entityClass = $bindTable->entityClass();
+            $entityClass = $bindTable->getEntityClass();
 
             if ($entityClass) {
                 $entity = new $entityClass();
@@ -141,7 +143,7 @@ class AclNodesTable extends Table
             if (empty($tmpRef)) {
                 $ref = [
                     'model' => $alias,
-                    'foreign_key' => $ref[$name][$this->primaryKey()]
+                    'foreign_key' => $ref[$name][$this->getPrimaryKey()]
                 ];
             } else {
                 if (is_string($tmpRef)) {
@@ -170,12 +172,12 @@ class AclNodesTable extends Table
                         'alias' => "{$type}0",
                         'type' => 'INNER',
                         'conditions' => [
-                            "{$type}.lft" . ' <= ' . "{$type}0.lft",
-                            "{$type}.rght" . ' >= ' . "{$type}0.rght",
+                            "{$type}.lft" . ' <= ' => new IdentifierExpression("{$type}0.lft"),
+                            "{$type}.rght" . ' >= ' => new IdentifierExpression("{$type}0.rght"),
                         ]
                     ]
                 ],
-                'order' => "{$type}.lft" . ' DESC',
+                'order' => ["{$type}.lft"  => 'DESC'],
             ];
             $query = $this->find('all', $queryData);
 
