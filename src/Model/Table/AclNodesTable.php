@@ -48,8 +48,8 @@ class AclNodesTable extends Table
      */
     public function node($ref = null)
     {
-        $type = $this->getAlias();
-        $table = $this->getTable();
+        $type = $this->alias();
+        $table = $this->table();
         $result = null;
         $query = false;
 
@@ -112,7 +112,7 @@ class AclNodesTable extends Table
                 return false;
             }
         } elseif (is_object($ref) && $ref instanceof Entity) {
-            list(, $alias) = pluginSplit($ref->getSource());
+            list(, $alias) = pluginSplit($ref->source());
             $ref = ['model' => $alias, 'foreign_key' => $ref->id];
         } elseif (is_array($ref) && !(isset($ref['model']) && isset($ref['foreign_key']))) {
             $name = key($ref);
@@ -126,7 +126,7 @@ class AclNodesTable extends Table
                     'connection' => ConnectionManager::get($connection)
                 ]);
             }
-            $entityClass = $bindTable->getEntityClass();
+            $entityClass = $bindTable->entityClass();
 
             if ($entityClass) {
                 $entity = new $entityClass();
@@ -143,7 +143,7 @@ class AclNodesTable extends Table
             if (empty($tmpRef)) {
                 $ref = [
                     'model' => $alias,
-                    'foreign_key' => $ref[$name][$this->getPrimaryKey()]
+                    'foreign_key' => $ref[$name][$this->primaryKey()]
                 ];
             } else {
                 if (is_string($tmpRef)) {
