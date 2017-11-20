@@ -108,7 +108,8 @@ ConnectionManager::config('test', [
     'database' => getenv('db_database'),
     'username' => getenv('db_login'),
     'password' => getenv('db_password'),
-    'timezone' => 'UTC'
+    'timezone' => 'UTC',
+    'quoteIdentifiers' => getenv('quoteIdentifiers'),
 ]);
 
 Configure::write('Session', [
