@@ -15,7 +15,7 @@ namespace Acl\Test\TestCase\Auth;
 
 use Acl\Auth\CrudAuthorize;
 use Cake\Core\Configure;
-use Cake\Network\Request;
+use Cake\Http\ServerRequest;
 use Cake\Routing\Router;
 use Cake\TestSuite\TestCase;
 
@@ -67,7 +67,7 @@ class CrudAuthorizeTest extends TestCase
      */
     public function testAuthorizeNoMappedAction()
     {
-        $request = new Request('/posts/foobar');
+        $request = new ServerRequest('/posts/foobar');
         $request->addParams([
             'controller' => 'posts',
             'action' => 'foobar'
@@ -84,7 +84,7 @@ class CrudAuthorizeTest extends TestCase
      */
     public function testAuthorizeCheckSuccess()
     {
-        $request = new Request('posts/index');
+        $request = new ServerRequest('posts/index');
         $request->addParams([
             'controller' => 'posts',
             'action' => 'index'
@@ -107,7 +107,7 @@ class CrudAuthorizeTest extends TestCase
      */
     public function testAuthorizeCheckFailure()
     {
-        $request = new Request('posts/index');
+        $request = new ServerRequest('posts/index');
         $request->addParams([
             'controller' => 'posts',
             'action' => 'index'
