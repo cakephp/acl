@@ -43,8 +43,8 @@ class AroTwoTest extends ArosTable
     public function initialize(array $config)
     {
         parent::initialize($config);
-        $this->alias('AroTwoTest');
-        $this->table('aro_twos');
+        $this->setAlias('AroTwoTest');
+        $this->setTable('aro_twos');
         $this->associations()->removeAll();
         $this->belongsToMany('AcoTwoTest', [
             'through' => __NAMESPACE__ . '\PermissionTwoTest',
@@ -69,8 +69,8 @@ class AcoTwoTest extends AcosTable
     public function initialize(array $config)
     {
         parent::initialize($config);
-        $this->alias('AcoTwoTest');
-        $this->table('aco_twos');
+        $this->setAlias('AcoTwoTest');
+        $this->setTable('aco_twos');
         $this->associations()->removeAll();
         $this->belongsToMany('AroTwoTest', [
             'through' => __NAMESPACE__ . '\PermissionTwoTest',
@@ -95,9 +95,9 @@ class PermissionTwoTest extends PermissionsTable
     public function initialize(array $config)
     {
         parent::initialize($config);
-        $this->alias('PermissionTwoTest');
-        $this->entityClass('Acl\Model\Entity\Permission');
-        $this->table('aros_aco_twos');
+        $this->setAlias('PermissionTwoTest');
+        $this->setEntityClass('Acl\Model\Entity\Permission');
+        $this->setTable('aros_aco_twos');
         $this->associations()->removeAll();
         $this->belongsTo('AroTwoTest', [
             'foreignKey' => 'aro_id',
