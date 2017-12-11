@@ -80,7 +80,7 @@ class CacheDbAclTest extends TestCase
 
         $this->CachedDb = new CachedDbAclTwoTest();
 
-        Cache::config('tests', [
+        Cache::setConfig('tests', [
             'engine' => 'File',
             'path' => TMP . 'test_acl',
             'prefix' => 'test_'
