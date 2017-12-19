@@ -62,7 +62,7 @@ class AclExtrasShell extends Shell
 
         if ($this->command) {
             try {
-                \Cake\ORM\TableRegistry::get('Aros')->schema();
+                \Cake\ORM\TableRegistry::get('Aros')->getSchema();
             } catch (\Cake\Database\Exception $e) {
                 $this->out(__d('cake_acl', 'Acl database tables not found. To create them, run:'));
                 $this->out();
@@ -106,7 +106,7 @@ class AclExtrasShell extends Shell
             'short' => 'p',
             'help' => __('Plugin to process'),
         ];
-        $parser->description(__("Better manage, and easily synchronize you application's ACO tree"))
+        $parser->setDescription(__("Better manage, and easily synchronize you application's ACO tree"))
             ->addSubcommand('aco_update', [
                 'parser' => [
                     'options' => compact('plugin'),

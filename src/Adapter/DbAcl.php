@@ -50,8 +50,8 @@ class DbAcl implements AclInterface
             $config = ['className' => App::className('Acl.PermissionsTable', 'Model/Table')];
         }
         $this->Permission = TableRegistry::get('Permissions', $config);
-        $this->Aro = $this->Permission->Aros->target();
-        $this->Aco = $this->Permission->Acos->target();
+        $this->Aro = $this->Permission->Aros->getTarget();
+        $this->Aco = $this->Permission->Acos->getTarget();
     }
 
     /**

@@ -15,7 +15,7 @@
 namespace Acl\Auth;
 
 use Cake\Controller\ComponentRegistry;
-use Cake\Network\Request;
+use Cake\Http\ServerRequest;
 use Cake\Routing\Router;
 
 /**
@@ -52,9 +52,9 @@ class CrudAuthorize extends BaseAuthorize
      * @param \Cake\Network\Request $request The request needing authorization.
      * @return bool
      */
-    public function authorize($user, Request $request)
+    public function authorize($user, ServerRequest $request)
     {
-        $mapped = $this->config('actionMap.' . $request->params['action']);
+        $mapped = $this->getConfig('actionMap.' . $request->getParam('action'));
 
         if (!$mapped) {
             trigger_error(

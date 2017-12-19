@@ -63,7 +63,7 @@ class IniAcl implements AclInterface
      */
     public function initialize(Component $component)
     {
-        $adapter = $component->config('adapter');
+        $adapter = $component->getConfig('adapter');
         if (is_array($adapter)) {
             $this->options = $adapter + $this->options;
         }

@@ -48,8 +48,8 @@ class AclNodesTable extends Table
      */
     public function node($ref = null)
     {
-        $type = $this->alias();
-        $table = $this->table();
+        $type = $this->getAlias();
+        $table = $this->getTable();
         $result = null;
         $query = false;
 
@@ -112,7 +112,7 @@ class AclNodesTable extends Table
                 return false;
             }
         } elseif (is_object($ref) && $ref instanceof Entity) {
-            list(, $alias) = pluginSplit($ref->source());
+            list(, $alias) = pluginSplit($ref->getSource());
             $ref = ['model' => $alias, 'foreign_key' => $ref->id];
         } elseif (is_array($ref) && !(isset($ref['model']) && isset($ref['foreign_key']))) {
             $name = key($ref);
@@ -126,14 +126,14 @@ class AclNodesTable extends Table
                     'connection' => ConnectionManager::get($connection)
                 ]);
             }
-            $entityClass = $bindTable->entityClass();
+            $entityClass = $bindTable->getEntityClass();
 
             if ($entityClass) {
                 $entity = new $entityClass();
             }
 
             if (empty($entity)) {
-                throw new Exception\Exception(__d('cake_dev', "Entity class {0} not found in AclNode::node() when trying to bind {1} object", [$type, $this->alias()]));
+                throw new Exception\Exception(__d('cake_dev', "Entity class {0} not found in AclNode::node() when trying to bind {1} object", [$type, $this->getAlias()]));
             }
 
             $tmpRef = null;
@@ -143,7 +143,7 @@ class AclNodesTable extends Table
             if (empty($tmpRef)) {
                 $ref = [
                     'model' => $alias,
-                    'foreign_key' => $ref[$name][$this->primaryKey()]
+                    'foreign_key' => $ref[$name][$this->getPrimaryKey()]
                 ];
             } else {
                 if (is_string($tmpRef)) {
