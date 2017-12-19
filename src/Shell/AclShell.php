@@ -99,7 +99,7 @@ class AclShell extends Shell
             }
 
             try {
-                TableRegistry::get('Aros')->schema();
+                TableRegistry::get('Aros')->getSchema();
                 TableRegistry::remove('Aros');
             } catch (\Cake\Database\Exception $e) {
                 $this->out(__d('cake_acl', 'Acl database tables not found. To create them, run:'));
@@ -390,7 +390,7 @@ class AclShell extends Shell
             'help' => __d('cake_acl', 'Type of node to create.')
         ];
 
-        $parser->description(
+        $parser->setDescription(
             __d('cake_acl', 'A console tool for managing the DbAcl')
         )->addSubcommand('create', [
             'help' => __d('cake_acl', 'Create a new ACL node'),
@@ -513,7 +513,7 @@ class AclShell extends Shell
                     'node' => ['help' => __d('cake_acl', 'The optional node to view the subtree of.')]
                 ]
             ]
-        ])->epilog(
+        ])->setEpilog(
             [
                 'Node and parent arguments can be in one of the following formats:',
                 '',

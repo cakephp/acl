@@ -63,7 +63,7 @@ class AclBehavior extends Behavior
         }
         parent::__construct($model, $config);
 
-        $types = $this->_typeMaps[$this->config()['type']];
+        $types = $this->_typeMaps[$this->getConfig()['type']];
 
         if (!is_array($types)) {
             $types = [$types];
@@ -83,8 +83,8 @@ class AclBehavior extends Behavior
             ]);
         }
 
-        if (!method_exists($model->entityClass(), 'parentNode')) {
-            trigger_error(__d('cake_dev', 'Callback {0} not defined in {1}', ['parentNode()', $model->entityClass()]), E_USER_WARNING);
+        if (!method_exists($model->getEntityClass(), 'parentNode')) {
+            trigger_error(__d('cake_dev', 'Callback {0} not defined in {1}', ['parentNode()', $model->getEntityClass()]), E_USER_WARNING);
         }
     }
 
@@ -100,7 +100,7 @@ class AclBehavior extends Behavior
     public function node($ref = null, $type = null)
     {
         if (empty($type)) {
-            $type = $this->_typeMaps[$this->config('type')];
+            $type = $this->_typeMaps[$this->getConfig('type')];
             if (is_array($type)) {
                 trigger_error(__d('cake_dev', 'AclBehavior is setup with more then one type, please specify type parameter for node()'), E_USER_WARNING);
 
@@ -123,8 +123,8 @@ class AclBehavior extends Behavior
      */
     public function afterSave(Event $event, Entity $entity)
     {
-        $model = $event->subject();
-        $types = $this->_typeMaps[$this->config('type')];
+        $model = $event->getSubject();
+        $types = $this->_typeMaps[$this->getConfig('type')];
         if (!is_array($types)) {
             $types = [$types];
         }
@@ -164,14 +164,14 @@ class AclBehavior extends Behavior
      */
     public function afterDelete(Event $event, Entity $entity)
     {
-        $types = $this->_typeMaps[$this->config('type')];
+        $types = $this->_typeMaps[$this->getConfig('type')];
         if (!is_array($types)) {
             $types = [$types];
         }
         foreach ($types as $type) {
             $node = $this->node($entity, $type)->toArray();
             if (!empty($node)) {
-                $event->subject()->{$type}->delete($node[0]);
+                $event->getSubject()->{$type}->delete($node[0]);
             }
         }
     }
