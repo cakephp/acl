@@ -242,7 +242,7 @@ class DbAclTest extends TestCase
     /**
      * testDbAclAllow method
      *
-     * @expectedException PHPUnit_Framework_Error_Warning
+     * @expectedException PHPUnit\Framework\Error\Warning
      * @return void
      */
     public function testAllow()
@@ -291,7 +291,7 @@ class DbAclTest extends TestCase
     /**
      * testAllowInvalidNode method
      *
-     * @expectedException PHPUnit_Framework_Error_Warning
+     * @expectedException PHPUnit\Framework\Error\Warning
      * @return void
      */
     public function testAllowInvalidNode()
@@ -323,7 +323,7 @@ class DbAclTest extends TestCase
     /**
      * testCheckInvalidNode method
      *
-     * @expectedException PHPUnit_Framework_Error_Warning
+     * @expectedException PHPUnit\Framework\Error\Warning
      * @return void
      */
     public function testCheckInvalidNode()
@@ -334,7 +334,7 @@ class DbAclTest extends TestCase
     /**
      * testCheckInvalidPermission method
      *
-     * @expectedException PHPUnit_Framework_Error_Notice
+     * @expectedException PHPUnit\Framework\Error\Notice
      * @return void
      */
     public function testCheckInvalidPermission()
@@ -345,7 +345,7 @@ class DbAclTest extends TestCase
     /**
      * testCheckMissingPermission method
      *
-     * @expectedException PHPUnit_Framework_Error_Warning
+     * @expectedException PHPUnit\Framework\Error\Warning
      * @return void
      */
     public function testCheckMissingPermission()
@@ -374,7 +374,7 @@ class DbAclTest extends TestCase
     /**
      * testDbAclDeny method
      *
-     * @expectedException PHPUnit_Framework_Error_Warning
+     * @expectedException PHPUnit\Framework\Error\Warning
      * @return void
      */
     public function testDeny()
@@ -450,7 +450,7 @@ class DbAclTest extends TestCase
     /**
      * testDbGrant method
      *
-     * @expectedException PHPUnit_Framework_Error_Warning
+     * @expectedException PHPUnit\Framework\Error\Warning
      * @return void
      */
     public function testGrant()
@@ -472,7 +472,7 @@ class DbAclTest extends TestCase
     /**
      * testDbRevoke method
      *
-     * @expectedException PHPUnit_Framework_Error_Warning
+     * @expectedException PHPUnit\Framework\Error\Warning
      * @return void
      */
     public function testRevoke()

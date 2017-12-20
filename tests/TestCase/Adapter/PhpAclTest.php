@@ -292,13 +292,11 @@ class PhpAclTest extends TestCase
      * test that an invalid configuration throws exception
      *
      * @return void
+     * @expectedException Cake\Core\Exception\Exception
+     * @expectedExceptionMessage "roles" section not found in ACL configuration
      */
     public function testInvalidConfigWithAroMissing()
     {
-        $this->setExpectedException(
-            'Cake\Core\Exception\Exception',
-            '"roles" section not found in ACL configuration'
-        );
         $config = ['aco' => ['allow' => ['foo' => '']]];
         $this->PhpAcl->build($config);
     }
@@ -307,14 +305,11 @@ class PhpAclTest extends TestCase
      * test that an invalid config with missing acos
      *
      * @return void
+     * @expectedException Cake\Core\Exception\Exception
+     * @expectedExceptionMessage Neither "allow" nor "deny" rules were provided in ACL configuration.
      */
     public function testInvalidConfigWithAcosMissing()
     {
-        $this->setExpectedException(
-            'Cake\Core\Exception\Exception',
-            'Neither "allow" nor "deny" rules were provided in ACL configuration.'
-        );
-
         $config = [
             'roles' => ['Role/foo' => null],
         ];
@@ -348,6 +343,8 @@ class PhpAclTest extends TestCase
      * test that declaring cyclic dependencies should give an error when building the tree
      *
      * @return void
+     * @expectedException PhpUnit\Framework\Error\Error
+     * @expectedExceptionMessage cycle detected
      */
     public function testAroDeclarationContainsCycles()
     {
@@ -366,7 +363,6 @@ class PhpAclTest extends TestCase
             ],
         ];
 
-        $this->setExpectedException('PHPUnit_Framework_Error', 'cycle detected' /* ... */);
         $this->PhpAcl->build($config);
     }
 

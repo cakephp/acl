@@ -62,7 +62,7 @@ class CrudAuthorizeTest extends TestCase
     /**
      * test authorize() without a mapped action, ensure an error is generated.
      *
-     * @expectedException PHPUnit_Framework_Error_Warning
+     * @expectedException PHPUnit\Framework\Error\Warning
      * @return void
      */
     public function testAuthorizeNoMappedAction()
