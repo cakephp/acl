@@ -19,7 +19,7 @@ use Cake\Controller\Component;
 use Cake\Core\Configure;
 use Cake\ORM\Entity;
 use Cake\ORM\TableRegistry;
-use Cake\Utility\Inflector;
+use Cake\Utility\Text;
 
 /**
  * CachedDbAcl extends DbAcl to add caching of permissions.
@@ -93,15 +93,15 @@ class CachedDbAcl extends DbAcl implements AclInterface
         if (empty($ref)) {
             return '';
         } elseif (is_string($ref)) {
-            return Inflector::slug($ref, '_');
+            return Text::slug($ref, '_');
         } elseif (is_object($ref) && $ref instanceof Entity) {
-            return $ref->source() . '_' . $ref->id;
+            return $ref->getSource() . '_' . $ref->id;
         } elseif (is_array($ref) && !(isset($ref['model']) && isset($ref['foreign_key']))) {
             $name = key($ref);
             list(, $alias) = pluginSplit($name);
 
             $bindTable = TableRegistry::get($name);
-            $entityClass = $bindTable->entityClass();
+            $entityClass = $bindTable->getEntityClass();
 
             if ($entityClass) {
                 $entity = new $entityClass();
@@ -125,7 +125,7 @@ class CachedDbAcl extends DbAcl implements AclInterface
             if (empty($tmpRef)) {
                 $ref = [
                     'model' => $alias,
-                    'foreign_key' => $ref[$name][$bindTable->primaryKey()]
+                    'foreign_key' => $ref[$name][$bindTable->getPrimaryKey()]
                 ];
             } else {
                 $ref = $tmpRef;

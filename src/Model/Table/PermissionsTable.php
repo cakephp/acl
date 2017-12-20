@@ -34,16 +34,16 @@ class PermissionsTable extends AclNodesTable
      */
     public function initialize(array $config)
     {
-        $this->alias('Permissions');
-        $this->table('aros_acos');
+        $this->setAlias('Permissions');
+        $this->setTable('aros_acos');
         $this->belongsTo('Aros', [
             'className' => App::className('Acl.ArosTable', 'Model/Table'),
         ]);
         $this->belongsTo('Acos', [
             'className' => App::className('Acl.AcosTable', 'Model/Table'),
         ]);
-        $this->Aro = $this->Aros->target();
-        $this->Aco = $this->Acos->target();
+        $this->Aro = $this->Aros->getTarget();
+        $this->Aco = $this->Acos->getTarget();
     }
 
     /**
@@ -60,7 +60,7 @@ class PermissionsTable extends AclNodesTable
             return false;
         }
 
-        $permKeys = $this->getAcoKeys($this->schema()->columns());
+        $permKeys = $this->getAcoKeys($this->getSchema()->columns());
         $aroPath = $this->Aro->node($aro);
         $acoPath = $this->Aco->node($aco);
 
@@ -106,21 +106,21 @@ class PermissionsTable extends AclNodesTable
         $count = $aroPath->count();
         $aroPaths = $aroPath->toArray();
         for ($i = 0; $i < $count; $i++) {
-            $permAlias = $this->alias();
+            $permAlias = $this->getAlias();
 
             $perms = $this->find('all', [
                 'conditions' => [
                     "{$permAlias}.aro_id" => $aroPaths[$i]->id,
                     "{$permAlias}.aco_id IN" => $acoIDs
                 ],
-                'order' => [$this->Aco->alias() . '.lft' => 'desc'],
-                'contain' => $this->Aco->alias(),
+                'order' => [$this->Aco->getAlias() . '.lft' => 'desc'],
+                'contain' => $this->Aco->getAlias(),
             ]);
 
             if ($perms->count() == 0) {
                 continue;
             }
-            $perms = $perms->hydrate(false)->toArray();
+            $perms = $perms->enableHydration(false)->toArray();
             foreach ($perms as $perm) {
                 if ($action === '*') {
                     foreach ($permKeys as $key) {
@@ -165,8 +165,8 @@ class PermissionsTable extends AclNodesTable
     public function allow($aro, $aco, $actions = '*', $value = 1)
     {
         $perms = $this->getAclLink($aro, $aco);
-        $permKeys = $this->getAcoKeys($this->schema()->columns());
-        $alias = $this->alias();
+        $permKeys = $this->getAcoKeys($this->getSchema()->columns());
+        $alias = $this->getAlias();
         $save = [];
 
         if (!$perms) {
@@ -206,7 +206,7 @@ class PermissionsTable extends AclNodesTable
             unset($save['id']);
             $this->id = null;
         }
-        $entityClass = $this->entityClass();
+        $entityClass = $this->getEntityClass();
         $entity = new $entityClass($save);
 
         return ($this->save($entity) !== false);
@@ -232,7 +232,7 @@ class PermissionsTable extends AclNodesTable
         $aco = $obj['Aco']->extract('id')->toArray();
         $aro = current($aro);
         $aco = current($aco);
-        $alias = $this->alias();
+        $alias = $this->getAlias();
 
         $result = [
             'aro' => $aro,
@@ -243,7 +243,7 @@ class PermissionsTable extends AclNodesTable
                         $alias . '.aro_id' => $aro,
                         $alias . '.aco_id' => $aco,
                     ]
-                ])->hydrate(false)->toArray()
+                ])->enableHydration(false)->toArray()
             ],
         ];
 

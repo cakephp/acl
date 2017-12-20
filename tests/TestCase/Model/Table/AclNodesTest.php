@@ -44,7 +44,7 @@ class DbAroTest extends ArosTable
     public function initialize(array $config)
     {
         parent::initialize($config);
-        $this->alias('DbAroTest');
+        $this->setAlias('DbAroTest');
         $this->associations()->removeAll();
         $this->belongsToMany('DbAcoTest', [
             'through' => __NAMESPACE__ . '\DbPermissionTest',
@@ -71,7 +71,7 @@ class DbAcoTest extends AcosTable
     public function initialize(array $config)
     {
         parent::initialize($config);
-        $this->alias('DbAcoTest');
+        $this->setAlias('DbAcoTest');
         $this->associations()->removeAll();
         $this->belongsToMany('DbAroTest', [
             'through' => __NAMESPACE__ . '\DbPermissionTest',
@@ -98,7 +98,7 @@ class DbPermissionTest extends PermissionsTable
     public function initialize(array $config)
     {
         parent::initialize($config);
-        $this->alias('DbPermissionTest');
+        $this->setAlias('DbPermissionTest');
         $this->associations()->removeAll();
         $this->belongsTo('DbAroTest', [
             'className' => __NAMESPACE__ . '\DbAroTest',
@@ -126,7 +126,7 @@ class DbAcoActionTest extends AcoActionsTable
      */
     public function initialize(array $config)
     {
-        $this->table('aco_actions');
+        $this->setTable('aco_actions');
         $this->belongsTo('DbAcoTest', [
             'foreignKey' => 'aco_id',
         ]);
@@ -288,7 +288,7 @@ class AclNodeTest extends TestCase
     public function testNodeArrayFind()
     {
         $Aro = TableRegistry::get('DbAroTest');
-        $Aro->entityClass(__NAMESPACE__ . '\DbAroUserTest');
+        $Aro->setEntityClass(__NAMESPACE__ . '\DbAroUserTest');
         Configure::write('DbAclbindMode', 'string');
         $result = $Aro->node(['DbAroTest' => ['id' => '1', 'foreign_key' => '1']])->extract('id')->toArray();
         $expected = [3, 2, 1];
@@ -309,7 +309,7 @@ class AclNodeTest extends TestCase
     {
         $Aro = TableRegistry::get('DbAroTest');
         $Model = new DbAroUserTest(['id' => 1]);
-        $Model->source('AuthUser');
+        $Model->setSource('AuthUser');
         $result = $Aro->node($Model)->extract('id')->toArray();
         $expected = [3, 2, 1];
         $this->assertEquals($expected, $result);
@@ -328,8 +328,8 @@ class AclNodeTest extends TestCase
     public function testNodeAliasParenting()
     {
         $Aco = TableRegistry::get('DbAcoTest');
-        $conn = $Aco->connection();
-        $statements = $Aco->schema()->truncateSql($conn);
+        $conn = $Aco->getConnection();
+        $statements = $Aco->getSchema()->truncateSql($conn);
         foreach ($statements as $sql) {
             $conn->execute($sql);
         }
@@ -342,7 +342,7 @@ class AclNodeTest extends TestCase
 
         $result = $Aco->find('all');
         $result->contain('DbAroTest');
-        $result->hydrate(false);
+        $result->enableHydration(false);
 
         $result = $result->toArray();
         $expected = [
@@ -362,7 +362,7 @@ class AclNodeTest extends TestCase
         Plugin::load('TestPlugin', ['autoload' => true]);
 
         $Aro = TableRegistry::get('DbAroTest');
-        $Aro->entityClass(App::className('TestPlugin.TestPluginAuthUser', 'Model/Entity'));
+        $Aro->setEntityClass(App::className('TestPlugin.TestPluginAuthUser', 'Model/Entity'));
 
         $aro = $Aro->newEntity(['model' => 'TestPluginAuthUser', 'foreign_key' => 1]);
         $aro = $Aro->save($aro);

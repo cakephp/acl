@@ -90,7 +90,7 @@ class PhpAcl implements AclInterface
      */
     public function initialize(Component $Component)
     {
-        $adapter = $Component->config('adapter');
+        $adapter = $Component->getConfig('adapter');
         if (is_array($adapter)) {
             $this->options = $adapter + $this->options;
         }

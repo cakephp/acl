@@ -32,8 +32,8 @@ class ArosTable extends AclNodesTable
     public function initialize(array $config)
     {
         parent::initialize($config);
-        $this->alias('Aros');
-        $this->table('aros');
+        $this->setAlias('Aros');
+        $this->setTable('aros');
         $this->addBehavior('Tree', ['type' => 'nested']);
 
         $this->belongsToMany('Acos', [
@@ -45,6 +45,6 @@ class ArosTable extends AclNodesTable
             'foreignKey' => 'parent_id'
         ]);
 
-        $this->entityClass(App::className('Acl.Aro', 'Model/Entity'));
+        $this->setEntityClass(App::className('Acl.Aro', 'Model/Entity'));
     }
 }

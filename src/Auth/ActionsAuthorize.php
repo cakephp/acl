@@ -14,7 +14,7 @@
  */
 namespace Acl\Auth;
 
-use Cake\Network\Request;
+use Cake\Http\ServerRequest;
 
 /**
  * An authorization adapter for AuthComponent. Provides the ability to authorize using the AclComponent,
@@ -33,7 +33,7 @@ class ActionsAuthorize extends BaseAuthorize
      * @param \Cake\Network\Request $request The request needing authorization.
      * @return bool
      */
-    public function authorize($user, Request $request)
+    public function authorize($user, ServerRequest $request)
     {
         $Acl = $this->_registry->load('Acl');
         $user = [$this->_config['userModel'] => $user];
