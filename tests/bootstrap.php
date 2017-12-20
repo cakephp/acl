@@ -137,3 +137,10 @@ if (class_exists('Carbon\Carbon')) {
     Cake\Chronos\Date::setTestNow(Cake\Chronos\Date::now());
     Cake\Chronos\MutableDate::setTestNow(Cake\Chronos\MutableDate::now());
 }
+
+if (class_exists('PHPUnit_Runner_Version')) {
+    class_alias('PHPUnit_Framework_TestResult', 'PHPUnit\Framework\TestResult');    class_alias('PHPUnit_Framework_Error', 'PHPUnit\Framework\Error\Error');
+    class_alias('PHPUnit_Framework_Error_Warning', 'PHPUnit\Framework\Error\Warning');
+    class_alias('PHPUnit_Framework_Error_Notice', 'PHPUnit\Framework\Error\Notice');
+    class_alias('PHPUnit_Framework_ExpectationFailedException', 'PHPUnit\Framework\ExpectationFailedException');
+}
