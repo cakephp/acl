@@ -36,7 +36,7 @@ class AclExtrasShell extends Shell
     /**
      * AclExtras instance
      *
-     * @var \Cake\Acl\AclExtras
+     * @var AclExtras
      */
     public $AclExtras;
 
