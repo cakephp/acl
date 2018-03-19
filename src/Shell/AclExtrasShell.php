@@ -17,6 +17,8 @@ namespace Acl\Shell;
 use Acl\AclExtras;
 use Cake\Console\ConsoleIo;
 use Cake\Console\Shell;
+use Cake\Database\Exception;
+use Cake\ORM\TableRegistry;
 
 /**
  * Shell for ACO extras
@@ -62,8 +64,8 @@ class AclExtrasShell extends Shell
 
         if ($this->command) {
             try {
-                \Cake\ORM\TableRegistry::get('Aros')->getSchema();
-            } catch (\Cake\Database\Exception $e) {
+                TableRegistry::get('Aros')->getSchema();
+            } catch (Exception $e) {
                 $this->out(__d('cake_acl', 'Acl database tables not found. To create them, run:'));
                 $this->out();
                 $this->out('  bin/cake Migrations.migrations migrate -p Acl');
