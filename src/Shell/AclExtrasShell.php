@@ -112,12 +112,12 @@ class AclExtrasShell extends Shell
             ->addSubcommand('aco_update', [
                 'parser' => [
                     'options' => compact('plugin'),
-                    ],
+                ],
                 'help' => __('Add new ACOs for new controllers and actions. Does not remove nodes from the ACO table.')
             ])->addSubcommand('aco_sync', [
                 'parser' => [
                     'options' => compact('plugin'),
-                    ],
+                ],
                 'help' => __('Perform a full sync on the ACO table.' .
                     'Will create new ACOs or missing controllers and actions.' .
                     'Will also remove orphaned entries that no longer have a matching controller/action')
@@ -134,7 +134,7 @@ class AclExtrasShell extends Shell
                 ]
             ]);
 
-            return $parser;
+        return $parser;
     }
 
     /**
