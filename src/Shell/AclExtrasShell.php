@@ -17,6 +17,8 @@ namespace Acl\Shell;
 use Acl\AclExtras;
 use Cake\Console\ConsoleIo;
 use Cake\Console\Shell;
+use Cake\Database\Exception;
+use Cake\ORM\TableRegistry;
 
 /**
  * Shell for ACO extras
@@ -34,7 +36,7 @@ class AclExtrasShell extends Shell
     /**
      * AclExtras instance
      *
-     * @var \Cake\Acl\AclExtras
+     * @var AclExtras
      */
     public $AclExtras;
 
@@ -62,8 +64,8 @@ class AclExtrasShell extends Shell
 
         if ($this->command) {
             try {
-                \Cake\ORM\TableRegistry::get('Aros')->getSchema();
-            } catch (\Cake\Database\Exception $e) {
+                TableRegistry::get('Aros')->getSchema();
+            } catch (Exception $e) {
                 $this->out(__d('cake_acl', 'Acl database tables not found. To create them, run:'));
                 $this->out();
                 $this->out('  bin/cake Migrations.migrations migrate -p Acl');
@@ -110,12 +112,12 @@ class AclExtrasShell extends Shell
             ->addSubcommand('aco_update', [
                 'parser' => [
                     'options' => compact('plugin'),
-                    ],
+                ],
                 'help' => __('Add new ACOs for new controllers and actions. Does not remove nodes from the ACO table.')
             ])->addSubcommand('aco_sync', [
                 'parser' => [
                     'options' => compact('plugin'),
-                    ],
+                ],
                 'help' => __('Perform a full sync on the ACO table.' .
                     'Will create new ACOs or missing controllers and actions.' .
                     'Will also remove orphaned entries that no longer have a matching controller/action')
@@ -132,7 +134,7 @@ class AclExtrasShell extends Shell
                 ]
             ]);
 
-            return $parser;
+        return $parser;
     }
 
     /**
