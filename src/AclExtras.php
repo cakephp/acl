@@ -19,7 +19,7 @@ use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Filesystem\Folder;
-use Cake\Network\Request;
+use Cake\Http\ServerRequest;
 use Cake\Routing\Router;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
@@ -96,7 +96,7 @@ class AclExtras
     public function startup($controller = null)
     {
         if (!$controller) {
-            $controller = new Controller(new Request());
+            $controller = new Controller(new ServerRequest());
         }
         $registry = new ComponentRegistry();
         $this->Acl = new AclComponent($registry, Configure::read('Acl'));

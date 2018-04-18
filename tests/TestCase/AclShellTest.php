@@ -26,7 +26,7 @@ class AclShellTest extends TestCase
             ->getMock();
         Configure::write('Acl.classname', 'DbAcl');
         Configure::write('Acl.database', 'test');
-        $this->Acos = TableRegistry::get('Acl\Model\Table\AcosTable');
+        $this->Acos = TableRegistry::getTableLocator()->get('Acl\Model\Table\AcosTable');
         $this->Shell->startup();
     }
 

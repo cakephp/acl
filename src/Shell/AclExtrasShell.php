@@ -64,7 +64,7 @@ class AclExtrasShell extends Shell
 
         if ($this->command) {
             try {
-                TableRegistry::get('Aros')->getSchema();
+                TableRegistry::getTableLocator()->get('Aros')->getSchema();
             } catch (Exception $e) {
                 $this->out(__d('cake_acl', 'Acl database tables not found. To create them, run:'));
                 $this->out();

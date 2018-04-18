@@ -100,7 +100,7 @@ class CachedDbAcl extends DbAcl implements AclInterface
             $name = key($ref);
             list(, $alias) = pluginSplit($name);
 
-            $bindTable = TableRegistry::get($name);
+            $bindTable = TableRegistry::getTableLocator()->get($name);
             $entityClass = $bindTable->getEntityClass();
 
             if ($entityClass) {

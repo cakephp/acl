@@ -68,7 +68,7 @@ class CrudAuthorizeTest extends TestCase
     public function testAuthorizeNoMappedAction()
     {
         $request = new ServerRequest('/posts/foobar');
-        $request->addParams([
+        $request = $request->withAttribute('params', [
             'controller' => 'posts',
             'action' => 'foobar'
         ]);
@@ -85,7 +85,7 @@ class CrudAuthorizeTest extends TestCase
     public function testAuthorizeCheckSuccess()
     {
         $request = new ServerRequest('posts/index');
-        $request->addParams([
+        $request = $request->withAttribute('params', [
             'controller' => 'posts',
             'action' => 'index'
         ]);
@@ -108,7 +108,7 @@ class CrudAuthorizeTest extends TestCase
     public function testAuthorizeCheckFailure()
     {
         $request = new ServerRequest('posts/index');
-        $request->addParams([
+        $request = $request->withAttribute('params', [
             'controller' => 'posts',
             'action' => 'index'
         ]);

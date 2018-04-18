@@ -123,10 +123,10 @@ class DbAclTwoTest extends DbAcl
      */
     public function __construct()
     {
-        $this->Permission = TableRegistry::get('Permissions');
-        $this->Aro = TableRegistry::get('AroTwoTest');
+        $this->Permission = TableRegistry::getTableLocator()->get('Permissions');
+        $this->Aro = TableRegistry::getTableLocator()->get('AroTwoTest');
         $this->Aro->Permission = $this->Permission;
-        $this->Aco = TableRegistry::get('AcoTwoTest');
+        $this->Aco = TableRegistry::getTableLocator()->get('AcoTwoTest');
         $this->Aco->Permission = $this->Permission;
 
         $this->Permission->Aro = $this->Aro;
@@ -159,14 +159,14 @@ class DbAclTest extends TestCase
         Configure::write('Acl.classname', __NAMESPACE__ . '\DbAclTwoTest');
         Configure::write('Acl.database', 'test');
 
-        TableRegistry::clear();
-        TableRegistry::get('Permissions', [
+        TableRegistry::getTableLocator()->clear();
+        TableRegistry::getTableLocator()->get('Permissions', [
             'className' => __NAMESPACE__ . '\PermissionTwoTest',
         ]);
-        TableRegistry::get('AroTwoTest', [
+        TableRegistry::getTableLocator()->get('AroTwoTest', [
             'className' => __NAMESPACE__ . '\AroTwoTest',
         ]);
-        TableRegistry::get('AcoTwoTest', [
+        TableRegistry::getTableLocator()->get('AcoTwoTest', [
             'className' => __NAMESPACE__ . '\AcoTwoTest',
         ]);
 
@@ -234,7 +234,7 @@ class DbAclTest extends TestCase
             'parent_id' => $parent->id,
         ]));
         $result = $this->Acl->Aro->findByAlias('Subordinate')->first();
-        $this->assertEquals('AroTwoTest', $result->source());
+        $this->assertEquals('AroTwoTest', $result->getSource());
         $this->assertEquals(16, $result->lft);
         $this->assertEquals(17, $result->rght);
     }
@@ -411,7 +411,7 @@ class DbAclTest extends TestCase
      */
     public function testAclNodeLookup()
     {
-        $result = $this->Acl->Aro->node('root/users/Samir')->hydrate(false)->toArray();
+        $result = $this->Acl->Aro->node('root/users/Samir')->enableHydration(false)->toArray();
         $expected = [
             ['id' => '7', 'parent_id' => '4', 'model' => 'User', 'foreign_key' => 3, 'alias' => 'Samir'],
             ['id' => '4', 'parent_id' => '1', 'model' => 'Group', 'foreign_key' => 3, 'alias' => 'users'],
@@ -419,7 +419,7 @@ class DbAclTest extends TestCase
         ];
         $this->assertEquals($expected, $result);
 
-        $result = $this->Acl->Aco->node('ROOT/tpsReports/view/current')->hydrate(false)->toArray();
+        $result = $this->Acl->Aco->node('ROOT/tpsReports/view/current')->enableHydration(false)->toArray();
         $expected = [
             ['id' => '4', 'parent_id' => '3', 'model' => null, 'foreign_key' => null, 'alias' => 'current'],
             ['id' => '3', 'parent_id' => '2', 'model' => null, 'foreign_key' => null, 'alias' => 'view'],

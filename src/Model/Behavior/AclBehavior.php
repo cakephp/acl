@@ -75,11 +75,11 @@ class AclBehavior extends Behavior
                 $className = App::className('Acl.' . $alias . 'Table', 'Model/Table');
             }
             $config = [];
-            if (!TableRegistry::exists($alias)) {
+            if (!TableRegistry::getTableLocator()->exists($alias)) {
                 $config = ['className' => $className];
             }
             $model->hasMany($type, [
-                'targetTable' => TableRegistry::get($alias, $config),
+                'targetTable' => TableRegistry::getTableLocator()->get($alias, $config),
             ]);
         }
 
@@ -93,7 +93,7 @@ class AclBehavior extends Behavior
      *
      * @param string|array|Model $ref Array with 'model' and 'foreign_key', model object, or string value
      * @param string $type Only needed when Acl is set up as 'both', specify 'Aro' or 'Aco' to get the correct node
-     * @return Cake\ORM\Query
+     * @return \Cake\ORM\Query
      * @link http://book.cakephp.org/2.0/en/core-libraries/behaviors/acl.html#node
      * @throws \Cake\Core\Exception\Exception
      */
@@ -135,7 +135,7 @@ class AclBehavior extends Behavior
             }
             $data = [
                 'parent_id' => isset($parent->id) ? $parent->id : null,
-                'model' => $model->alias(),
+                'model' => $model->getAlias(),
                 'foreign_key' => $entity->id,
             ];
 
@@ -151,7 +151,7 @@ class AclBehavior extends Behavior
                 $newData = $model->{$type}->newEntity($data);
             }
 
-            $saved = $model->{$type}->target()->save($newData);
+            $saved = $model->{$type}->getTarget()->save($newData);
         }
     }
 

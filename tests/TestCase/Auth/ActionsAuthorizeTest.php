@@ -72,7 +72,7 @@ class ActionsAuthorizeTest extends TestCase
             ]
         ];
         $request = new ServerRequest('/posts/index');
-        $request->addParams([
+        $request = $request->withAttribute('params', [
             'plugin' => null,
             'controller' => 'posts',
             'action' => 'index'
@@ -102,7 +102,7 @@ class ActionsAuthorizeTest extends TestCase
             ]
         ];
         $request = new ServerRequest('/posts/index');
-        $request->addParams([
+        $request = $request->withAttribute('params', [
             'plugin' => null,
             'controller' => 'posts',
             'action' => 'index'
@@ -126,7 +126,7 @@ class ActionsAuthorizeTest extends TestCase
     public function testAuthorizeSettings()
     {
         $request = new ServerRequest('/posts/index');
-        $request->addParams([
+        $request = $request->withAttribute('params', [
             'plugin' => null,
             'controller' => 'posts',
             'action' => 'index'
@@ -134,7 +134,7 @@ class ActionsAuthorizeTest extends TestCase
 
         $this->_mockAcl();
 
-        $this->auth->config('userModel', 'TestPlugin.AuthUser');
+        $this->auth->setConfig('userModel', 'TestPlugin.AuthUser');
         $user = [
             'id' => 1,
             'username' => 'mariano'
@@ -157,7 +157,7 @@ class ActionsAuthorizeTest extends TestCase
     public function testActionMethod()
     {
         $request = new ServerRequest('/posts/index');
-        $request->addParams([
+        $request = $request->withAttribute('params', [
             'plugin' => null,
             'controller' => 'posts',
             'action' => 'index'
@@ -174,9 +174,9 @@ class ActionsAuthorizeTest extends TestCase
      */
     public function testActionNoDoubleSlash()
     {
-        $this->auth->config('actionPath', '/controllers/');
+        $this->auth->setConfig('actionPath', '/controllers/');
         $request = new ServerRequest('/posts/index', false);
-        $request->addParams([
+        $request = $request->withAttribute('params', [
             'plugin' => null,
             'controller' => 'posts',
             'action' => 'index'
@@ -193,7 +193,7 @@ class ActionsAuthorizeTest extends TestCase
     public function testActionWithPlugin()
     {
         $request = new ServerRequest('/debug_kit/posts/index');
-        $request->addParams([
+        $request = $request->withAttribute('params', [
             'plugin' => 'debug_kit',
             'controller' => 'posts',
             'action' => 'index'
@@ -206,7 +206,7 @@ class ActionsAuthorizeTest extends TestCase
     public function testActionWithPluginAndPrefix()
     {
         $request = new ServerRequest('/debug_kit/admin/posts/index');
-        $request->addParams([
+        $request = $request->withAttribute('params', [
             'plugin' => 'debug_kit',
             'prefix' => 'admin',
             'controller' => 'posts',
@@ -220,7 +220,7 @@ class ActionsAuthorizeTest extends TestCase
     public function testActionWithPrefix()
     {
         $request = new ServerRequest('/admin/posts/index');
-        $request->addParams([
+        $request = $request->withAttribute('params', [
             'plugin' => null,
             'prefix' => 'admin',
             'controller' => 'posts',
