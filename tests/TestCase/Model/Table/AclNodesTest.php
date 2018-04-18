@@ -192,11 +192,11 @@ class AclNodeTest extends TestCase
         Configure::write('Acl.classname', 'TestDbAcl');
         Configure::write('Acl.database', 'test');
 
-        TableRegistry::clear();
-        TableRegistry::get('DbAcoTest', [
+        TableRegistry::getTableLocator()->clear();
+        TableRegistry::getTableLocator()->get('DbAcoTest', [
             'className' => 'Acl\Test\TestCase\Model\Table\DbAcoTest',
         ]);
-        TableRegistry::get('DbAroTest', [
+        TableRegistry::getTableLocator()->get('DbAroTest', [
             'className' => 'Acl\Test\TestCase\Model\Table\DbAroTest',
         ]);
     }
@@ -208,7 +208,7 @@ class AclNodeTest extends TestCase
      */
     public function testNode()
     {
-        $Aco = TableRegistry::get('DbAcoTest');
+        $Aco = TableRegistry::getTableLocator()->get('DbAcoTest');
 
         $result = $Aco->node('Controller1');
         $result = $result->extract('id')->toArray();
@@ -275,7 +275,7 @@ class AclNodeTest extends TestCase
      */
     public function testNodeWithDuplicatePathSegments()
     {
-        $Aco = TableRegistry::get('DbAcoTest');
+        $Aco = TableRegistry::getTableLocator()->get('DbAcoTest');
         $nodes = $Aco->node('ROOT/Users');
         $this->assertEquals(1, $nodes->toArray()[0]->parent_id, 'Parent id does not point at ROOT. %s');
     }
@@ -287,7 +287,7 @@ class AclNodeTest extends TestCase
      */
     public function testNodeArrayFind()
     {
-        $Aro = TableRegistry::get('DbAroTest');
+        $Aro = TableRegistry::getTableLocator()->get('DbAroTest');
         $Aro->setEntityClass(__NAMESPACE__ . '\DbAroUserTest');
         Configure::write('DbAclbindMode', 'string');
         $result = $Aro->node(['DbAroTest' => ['id' => '1', 'foreign_key' => '1']])->extract('id')->toArray();
@@ -307,7 +307,7 @@ class AclNodeTest extends TestCase
      */
     public function testNodeObjectFind()
     {
-        $Aro = TableRegistry::get('DbAroTest');
+        $Aro = TableRegistry::getTableLocator()->get('DbAroTest');
         $Model = new DbAroUserTest(['id' => 1]);
         $Model->setSource('AuthUser');
         $result = $Aro->node($Model)->extract('id')->toArray();
@@ -327,7 +327,7 @@ class AclNodeTest extends TestCase
      */
     public function testNodeAliasParenting()
     {
-        $Aco = TableRegistry::get('DbAcoTest');
+        $Aco = TableRegistry::getTableLocator()->get('DbAcoTest');
         $conn = $Aco->getConnection();
         $statements = $Aco->getSchema()->truncateSql($conn);
         foreach ($statements as $sql) {
@@ -361,7 +361,7 @@ class AclNodeTest extends TestCase
     {
         Plugin::load('TestPlugin', ['autoload' => true]);
 
-        $Aro = TableRegistry::get('DbAroTest');
+        $Aro = TableRegistry::getTableLocator()->get('DbAroTest');
         $Aro->setEntityClass(App::className('TestPlugin.TestPluginAuthUser', 'Model/Entity'));
 
         $aro = $Aro->newEntity(['model' => 'TestPluginAuthUser', 'foreign_key' => 1]);

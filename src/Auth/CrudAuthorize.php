@@ -16,7 +16,6 @@ namespace Acl\Auth;
 
 use Cake\Controller\ComponentRegistry;
 use Cake\Http\ServerRequest;
-use Cake\Routing\Router;
 
 /**
  * An authorization adapter for AuthComponent. Provides the ability to authorize using CRUD mappings.
@@ -60,8 +59,8 @@ class CrudAuthorize extends BaseAuthorize
             trigger_error(
                 sprintf(
                     'CrudAuthorize::authorize() - Attempted access of un-mapped action "%1$s" in controller "%2$s"',
-                    $request->action,
-                    $request->controller
+                    $request->getParam('action'),
+                    $request->getParam('controller')
                 ),
                 E_USER_WARNING
             );

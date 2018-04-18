@@ -99,8 +99,8 @@ class AclShell extends Shell
             }
 
             try {
-                TableRegistry::get('Aros')->getSchema();
-                TableRegistry::remove('Aros');
+                TableRegistry::getTableLocator()->get('Aros')->getSchema();
+                TableRegistry::getTableLocator()->remove('Aros');
             } catch (\Cake\Database\Exception $e) {
                 $this->out(__d('cake_acl', 'Acl database tables not found. To create them, run:'));
                 $this->out();

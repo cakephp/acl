@@ -118,11 +118,11 @@ class AclNodesTable extends Table
             $name = key($ref);
             list(, $alias) = pluginSplit($name);
 
-            if (TableRegistry::exists($name)) {
-                $bindTable = TableRegistry::get($name);
+            if (TableRegistry::getTableLocator()->exists($name)) {
+                $bindTable = TableRegistry::getTableLocator()->get($name);
             } else {
                 $connection = Configure::read('Acl.database');
-                $bindTable = TableRegistry::get($name, [
+                $bindTable = TableRegistry::getTableLocator()->get($name, [
                     'connection' => ConnectionManager::get($connection)
                 ]);
             }

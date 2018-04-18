@@ -72,7 +72,7 @@ class AclPerson extends Entity
         if (isset($this->mother_id)) {
             $motherId = $this->mother_id;
         } else {
-            $People = TableRegistry::get('AclPeople');
+            $People = TableRegistry::getTableLocator()->get('AclPeople');
             $person = $People->find('all', ['fields' => ['mother_id']])->where(['id' => $this->id])->first();
             $motherId = $person->mother_id;
         }
@@ -192,21 +192,21 @@ class AclBehaviorTest extends TestCase
         parent::setUp();
         Configure::write('Acl.database', 'test');
 
-        TableRegistry::clear();
-        $this->Aco = TableRegistry::get('Acos', [
+        TableRegistry::getTableLocator()->clear();
+        $this->Aco = TableRegistry::getTableLocator()->get('Acos', [
             'className' => App::className('Acl.AcosTable', 'Model/Table'),
         ]);
-        $this->Aro = TableRegistry::get('Aros', [
+        $this->Aro = TableRegistry::getTableLocator()->get('Aros', [
             'className' => App::className('Acl.ArosTable', 'Model/Table'),
         ]);
 
-        TableRegistry::get('AclUsers', [
+        TableRegistry::getTableLocator()->get('AclUsers', [
             'className' => __NAMESPACE__ . '\AclUsers',
         ]);
-        TableRegistry::get('AclPeople', [
+        TableRegistry::getTableLocator()->get('AclPeople', [
             'className' => __NAMESPACE__ . '\AclPeople',
         ]);
-        TableRegistry::get('AclPosts', [
+        TableRegistry::getTableLocator()->get('AclPosts', [
             'className' => __NAMESPACE__ . '\AclPosts',
         ]);
     }
@@ -229,12 +229,12 @@ class AclBehaviorTest extends TestCase
      */
     public function testSetup()
     {
-        $User = TableRegistry::get('AclUsers');
-        $this->assertEquals('requester', $User->behaviors()->Acl->config('type'));
+        $User = TableRegistry::getTableLocator()->get('AclUsers');
+        $this->assertEquals('requester', $User->behaviors()->Acl->getConfig('type'));
         $this->assertTrue(is_object($User->Aro));
 
-        $Post = TableRegistry::get('AclPosts');
-        $this->assertEquals('controlled', $Post->behaviors()->Acl->config('type'));
+        $Post = TableRegistry::getTableLocator()->get('AclPosts');
+        $this->assertEquals('controlled', $Post->behaviors()->Acl->getConfig('type'));
         $this->assertTrue(is_object($Post->Aco));
     }
 
@@ -245,11 +245,11 @@ class AclBehaviorTest extends TestCase
      */
     public function testSetupMulti()
     {
-        TableRegistry::clear();
-        $User = TableRegistry::get('AclPeople', [
+        TableRegistry::getTableLocator()->clear();
+        $User = TableRegistry::getTableLocator()->get('AclPeople', [
             'className' => __NAMESPACE__ . '\AclPeople',
         ]);
-        $this->assertEquals('both', $User->behaviors()->Acl->config('type'));
+        $this->assertEquals('both', $User->behaviors()->Acl->getConfig('type'));
         $this->assertTrue(is_object($User->Aro));
         $this->assertTrue(is_object($User->Aco));
     }
@@ -261,7 +261,7 @@ class AclBehaviorTest extends TestCase
      */
     public function testAfterSave()
     {
-        $Post = TableRegistry::get('AclPosts');
+        $Post = TableRegistry::getTableLocator()->get('AclPosts');
         $data = new AclPost([
             'author_id' => 1,
             'title' => 'Acl Post',
@@ -277,7 +277,7 @@ class AclBehaviorTest extends TestCase
         $this->assertEquals($Post->getAlias(), $result->model);
         $this->assertEquals($saved->id, $result->foreign_key);
 
-        $Person = TableRegistry::get('AclPeople');
+        $Person = TableRegistry::getTableLocator()->get('AclPeople');
         $Person->deleteAll(['name' => 'person']);
         $aroData = new AclPerson([
             'model' => $Person->getAlias(),
@@ -342,7 +342,7 @@ class AclBehaviorTest extends TestCase
      */
     public function testAfterSaveUpdateParentIdNotNull()
     {
-        $Person = TableRegistry::get('AclPeople');
+        $Person = TableRegistry::getTableLocator()->get('AclPeople');
         $Person->deleteAll(['name' => 'person']);
         $this->Aro->save(new Aro([
             'model' => $Person->getAlias(),
@@ -385,7 +385,7 @@ class AclBehaviorTest extends TestCase
      */
     public function testAfterDelete()
     {
-        $Person = TableRegistry::get('AclPeople');
+        $Person = TableRegistry::getTableLocator()->get('AclPeople');
 
         $this->Aro->save(new Aro([
             'model' => $Person->getAlias(),
@@ -448,7 +448,7 @@ class AclBehaviorTest extends TestCase
      */
     public function testNode()
     {
-        $Person = TableRegistry::get('AclPeople');
+        $Person = TableRegistry::getTableLocator()->get('AclPeople');
         $this->Aro->save(new Aro([
             'model' => $Person->getAlias(),
             'foreign_key' => 2,

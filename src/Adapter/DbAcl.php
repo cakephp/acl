@@ -46,10 +46,10 @@ class DbAcl implements AclInterface
     public function __construct()
     {
         $config = [];
-        if (!TableRegistry::exists('Permissions')) {
+        if (!TableRegistry::getTableLocator()->exists('Permissions')) {
             $config = ['className' => App::className('Acl.PermissionsTable', 'Model/Table')];
         }
-        $this->Permission = TableRegistry::get('Permissions', $config);
+        $this->Permission = TableRegistry::getTableLocator()->get('Permissions', $config);
         $this->Aro = $this->Permission->Aros->getTarget();
         $this->Aco = $this->Permission->Acos->getTarget();
     }
