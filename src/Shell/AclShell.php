@@ -52,13 +52,6 @@ class AclShell extends Shell
     public $connection = 'default';
 
     /**
-     * Contains tasks to load and instantiate
-     *
-     * @var array
-     */
-    public $tasks = ['DbConfig'];
-
-    /**
      * Override startup of the Shell
      *
      * @return void
@@ -90,14 +83,6 @@ class AclShell extends Shell
         }
 
         if ($this->command) {
-            if (Configure::check('Datasource') === null) {
-                $this->out(__d('cake_acl', 'Your database configuration was not found. Take a moment to create one.'));
-                $this->args = null;
-                $this->DbConfig->execute();
-
-                return;
-            }
-
             try {
                 TableRegistry::getTableLocator()->get('Aros')->getSchema();
                 TableRegistry::getTableLocator()->remove('Aros');
