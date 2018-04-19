@@ -52,13 +52,6 @@ class AclShell extends Shell
     public $connection = 'default';
 
     /**
-     * Contains tasks to load and instantiate
-     *
-     * @var array
-     */
-    public $tasks = ['DbConfig'];
-
-    /**
      * Override startup of the Shell
      *
      * @return void
