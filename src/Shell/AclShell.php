@@ -306,7 +306,7 @@ class AclShell extends Shell
     {
         extract($this->_dataVars());
 
-        $alias = $this->Acl->{$class}->alias();
+        $alias = $this->Acl->{$class}->getAlias();
         if (isset($this->args[1])) {
             $identity = $this->parseIdentifier($this->args[1]);
 
@@ -327,9 +327,9 @@ class AclShell extends Shell
 
         if ($nodes->count() === 0) {
             if (isset($this->args[1])) {
-                $this->error(__d('cake_acl', '{0} not found', [$this->args[1]]), __d('cake_acl', 'No tree returned.'));
+                $this->abort(__d('cake_acl', '{0} not found', [$this->args[1]]));
             } elseif (isset($this->args[0])) {
-                $this->error(__d('cake_acl', '{0} not found', [$this->args[0]]), __d('cake_acl', 'No tree returned.'));
+                $this->abort(__d('cake_acl', '{0} not found', [$this->args[0]]));
             }
         }
         $this->out($class . ' tree:');
@@ -338,7 +338,7 @@ class AclShell extends Shell
         $stack = [];
         $last = null;
 
-        $rows = $nodes->hydrate(false)->toArray();
+        $rows = $nodes->enableHydration(false)->toArray();
         foreach ($rows as $n) {
             $stack[] = $n;
             if (!empty($last)) {
