@@ -440,7 +440,7 @@ class AclExtras
         $excludes = $this->_getCallbacks($className, $pluginPath, $prefixPath);
         $baseMethods = get_class_methods(new Controller);
         $namespace = $this->_getNamespace($className, $pluginPath, $prefixPath);
-        $methods = get_class_methods(new $namespace);
+        $methods = get_class_methods($namespace);
         if ($methods == null) {
             $this->err(__d('cake_acl', 'Unable to get methods for {0}', $className));
 
