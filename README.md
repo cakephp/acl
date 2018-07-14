@@ -16,7 +16,15 @@ The recommended way to install composer packages is:
 composer require cakephp/acl
 ```
 
-Then in your `config\bootstrap.php`:
+Then in your `src/Application.php`:
+```php
+public function bootstrap()
+{
+    parent::bootstrap();
+    $this->addPlugin('Acl');
+}
+```
+Prior to 3.6.0
 ```php
 Plugin::load('Acl', ['bootstrap' => true]);
 ```
