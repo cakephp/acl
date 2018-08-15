@@ -24,10 +24,6 @@ public function bootstrap()
     $this->addPlugin('Acl');
 }
 ```
-Prior to 3.6.0
-```php
-Plugin::load('Acl', ['bootstrap' => true]);
-```
 
 ## Creating tables
 
