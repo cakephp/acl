@@ -15,7 +15,7 @@ namespace Acl\Auth;
 
 use Cake\Auth\BaseAuthorize as ParentAuthorize;
 use Cake\Controller\ComponentRegistry;
-use Cake\Network\Request;
+use Cake\Http\ServerRequest;
 use Cake\Utility\Inflector;
 
 /**
@@ -54,11 +54,11 @@ abstract class BaseAuthorize extends ParentAuthorize
      * Get the action path for a given request. Primarily used by authorize objects
      * that need to get information about the plugin, controller, and action being invoked.
      *
-     * @param \Cake\Network\Request $request The request a path is needed for.
+     * @param \Cake\Http\ServerRequest $request The request a path is needed for.
      * @param string $path Path
      * @return string The action path for the given request.
      */
-    public function action(Request $request, $path = '/:plugin/:prefix/:controller/:action')
+    public function action(ServerRequest $request, $path = '/:plugin/:prefix/:controller/:action')
     {
         $plugin = empty($request->getParam('plugin')) ? null : preg_replace('/\//', '\\', Inflector::camelize($request->getParam('plugin'))) . '/';
         $prefix = empty($request->getParam('prefix')) ? null : Inflector::camelize($request->getParam('prefix')) . '/';
