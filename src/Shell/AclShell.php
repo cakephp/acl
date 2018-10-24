@@ -209,7 +209,7 @@ class AclShell extends Shell
         }
         $this->out(__d('cake_acl', 'Path:'));
         $this->hr();
-        $rows = $nodes->hydrate(false)->toArray();
+        $rows = $nodes->enableHydration(false)->toArray();
         for ($i = 0, $len = count($rows); $i < $len; $i++) {
             $this->_outputNode($class, $rows[$i], $i);
         }
