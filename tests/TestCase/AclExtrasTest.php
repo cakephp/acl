@@ -338,10 +338,12 @@ class AclExtrasTestCase extends TestCase
      */
     public function testUpdateWithPlugins()
     {
-        Plugin::unload();
-        Plugin::load('TestPlugin', ['routes' => true]);
-        Plugin::load('Nested/TestPluginTwo');
-        Plugin::routes();
+        $this->deprecated(function () {
+            Plugin::unload();
+            Plugin::load('TestPlugin', ['routes' => true]);
+            Plugin::load('Nested/TestPluginTwo');
+            Plugin::routes();
+        });
         $this->_clean();
 
         $this->Task->expects($this->atLeast(3))
@@ -401,8 +403,10 @@ class AclExtrasTestCase extends TestCase
      */
     public function testSyncWithNestedPlugin()
     {
-        Plugin::unload();
-        Plugin::load('Nested/TestPluginTwo');
+        $this->deprecated(function () {
+            Plugin::unload();
+            Plugin::load('Nested/TestPluginTwo');
+        });
         $this->_clean();
 
         $this->Task->expects($this->atLeast(2))
