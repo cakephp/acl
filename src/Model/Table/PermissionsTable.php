@@ -141,7 +141,7 @@ class PermissionsTable extends AclNodesTable
                         case -1:
                             return false;
                         case 0:
-                            continue;
+                            break;
                         case 1:
                             return true;
                     }
