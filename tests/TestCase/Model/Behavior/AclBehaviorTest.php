@@ -178,8 +178,12 @@ class AclBehaviorTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.people', 'core.users', 'core.posts',
-        'app.acos', 'app.aros', 'app.aros_acos',
+        'app.Acos',
+        'app.Aros',
+        'app.ArosAcos',
+        'app.People',
+        'core.Posts',
+        'core.Users',
     ];
 
     /**

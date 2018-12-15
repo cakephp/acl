@@ -37,7 +37,11 @@ include dirname(__FILE__) . DS . 'test_plugin_admin_controllers.php';
 class AclExtrasTestCase extends TestCase
 {
 
-    public $fixtures = ['app.acos', 'app.aros', 'app.aros_acos'];
+    public $fixtures = [
+        'app.Acos',
+        'app.Aros',
+        'app.ArosAcos',
+    ];
 
     /**
      * setUp

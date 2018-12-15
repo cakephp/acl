@@ -66,7 +66,9 @@ class CacheDbAclTest extends TestCase
      *
      * @var array
      */
-    public $fixtures = ['core.users'];
+    public $fixtures = [
+        'core.Users',
+    ];
 
     /**
      * setUp method
