@@ -11,7 +11,9 @@ use Cake\TestSuite\TestCase;
 class AclShellTest extends TestCase
 {
     public $fixtures = [
-        'app.acos', 'app.aros', 'app.aros_acos',
+        'app.Acos',
+        'app.Aros',
+        'app.ArosAcos',
     ];
 
     public function setUp()

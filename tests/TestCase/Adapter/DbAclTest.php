@@ -146,7 +146,11 @@ class DbAclTest extends TestCase
      *
      * @var array
      */
-    public $fixtures = ['app.aro_twos', 'app.aco_twos', 'app.aros_aco_twos'];
+    public $fixtures = [
+        'app.AcoTwos',
+        'app.AroTwos',
+        'app.ArosAcoTwos',
+    ];
 
     /**
      * setUp method

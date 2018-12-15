@@ -177,8 +177,11 @@ class AclNodeTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.aros', 'app.acos', 'app.aros_acos',
-        'app.aco_actions', 'core.auth_users',
+        'app.AcoActions',
+        'app.Acos',
+        'app.Aros',
+        'app.ArosAcos',
+        'core.AuthUsers',
     ];
 
     /**
@@ -359,7 +362,9 @@ class AclNodeTest extends TestCase
      */
     public function testNodeActionAuthorize()
     {
-        Plugin::load('TestPlugin', ['autoload' => true]);
+        $this->deprecated(function () {
+            Plugin::load('TestPlugin', ['autoload' => true]);
+        });
 
         $Aro = TableRegistry::getTableLocator()->get('DbAroTest');
         $Aro->setEntityClass(App::className('TestPlugin.TestPluginAuthUser', 'Model/Entity'));
@@ -374,6 +379,9 @@ class AclNodeTest extends TestCase
         $result = $node->extract('id')->toArray();
         $expected = $aro->id;
         $this->assertEquals($expected, $result[0]);
-        Plugin::unload('TestPlugin');
+
+        $this->deprecated(function () {
+            Plugin::unload('TestPlugin');
+        });
     }
 }
