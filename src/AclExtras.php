@@ -87,6 +87,9 @@ class AclExtras
      */
     protected $foundACOs = [];
 
+    /** @var \Cake\Controller\Controller */
+    protected $controller;
+
     /**
      * Start up And load Acl Component / Aco model
      *
@@ -585,5 +588,15 @@ class AclExtras
     public function getPluginPrefixes()
     {
         return $this->pluginPrefixes;
+    }
+
+    /**
+     * Get the attached controller.
+     *
+     * @return \Cake\Controller\Controller
+     */
+    public function getController()
+    {
+        return $this->controller;
     }
 }
