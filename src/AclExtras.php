@@ -13,6 +13,7 @@
 namespace Acl;
 
 use Acl\Controller\Component\AclComponent;
+use Cake\Console\Shell;
 use Cake\Controller\ComponentRegistry;
 use Cake\Controller\Controller;
 use Cake\Core\App;
@@ -86,6 +87,12 @@ class AclExtras
      * @var array
      */
     protected $foundACOs = [];
+
+    /** @var \Cake\Controller\Controller */
+    protected $controller;
+
+    /** @var \Cake\Console\Shell */
+    protected $Shell;
 
     /**
      * Start up And load Acl Component / Aco model
@@ -585,5 +592,36 @@ class AclExtras
     public function getPluginPrefixes()
     {
         return $this->pluginPrefixes;
+    }
+
+    /**
+     * Get the attached controller.
+     *
+     * @return \Cake\Controller\Controller
+     */
+    public function getController()
+    {
+        return $this->controller;
+    }
+
+    /**
+     * Get the attached shell.
+     *
+     * @return \Cake\Console\Shell
+     */
+    public function getShell()
+    {
+        return $this->Shell;
+    }
+
+    /**
+     * Attach a shell for output.
+     *
+     * @param \Cake\Console\Shell $shell Shell to attach
+     * @return void
+     */
+    public function setShell(Shell $shell)
+    {
+        $this->Shell = $shell;
     }
 }
