@@ -60,7 +60,7 @@ class AclExtrasShell extends Shell
     {
         parent::startup();
         $this->AclExtras->startup();
-        $this->AclExtras->Shell = $this;
+        $this->AclExtras->setShell($this);
 
         if ($this->command) {
             try {
