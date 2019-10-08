@@ -29,7 +29,7 @@ class ArosTable extends AclNodesTable
      * @param array $config Config
      * @return void
      */
-    public function initialize(array $config)
+    public function initialize(array $config) :void
     {
         parent::initialize($config);
         $this->setAlias('Aros');

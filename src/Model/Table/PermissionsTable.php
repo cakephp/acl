@@ -32,7 +32,7 @@ class PermissionsTable extends AclNodesTable
      * @param array $config Configuration
      * @return void
      */
-    public function initialize(array $config)
+    public function initialize(array $config) :void
     {
         $this->setAlias('Permissions');
         $this->setTable('aros_acos');
