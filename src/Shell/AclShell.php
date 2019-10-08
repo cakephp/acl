@@ -14,6 +14,7 @@
 namespace Acl\Shell;
 
 use Acl\Controller\Component\AclComponent;
+use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Controller\ComponentRegistry;
 use Cake\Controller\Controller;
@@ -56,7 +57,7 @@ class AclShell extends Shell
      *
      * @return void
      */
-    public function startup()
+    public function startup() :void
     {
         parent::startup();
         if (isset($this->params['connection'])) {
@@ -365,7 +366,7 @@ class AclShell extends Shell
      *
      * @return ConsoleOptionParser
      */
-    public function getOptionParser()
+    public function getOptionParser() :ConsoleOptionParser
     {
         $parser = parent::getOptionParser();
 
