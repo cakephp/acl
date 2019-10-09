@@ -29,7 +29,7 @@ class ActionsAuthorizeTest extends TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp() :void
     {
         parent::setUp();
         $this->controller = $this->getMockBuilder('Cake\Controller\Controller')

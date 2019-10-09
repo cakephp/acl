@@ -41,7 +41,7 @@ class DbAroTest extends ArosTable
      * @param array $config Configuration array
      * @return void
      */
-    public function initialize(array $config)
+    public function initialize(array $config) :void
     {
         parent::initialize($config);
         $this->setAlias('DbAroTest');
@@ -68,7 +68,7 @@ class DbAcoTest extends AcosTable
      * @param array $config Configuration array
      * @return void
      */
-    public function initialize(array $config)
+    public function initialize(array $config) :void
     {
         parent::initialize($config);
         $this->setAlias('DbAcoTest');
@@ -95,7 +95,7 @@ class DbPermissionTest extends PermissionsTable
      * @param array $config Configuration array
      * @return void
      */
-    public function initialize(array $config)
+    public function initialize(array $config) :void
     {
         parent::initialize($config);
         $this->setAlias('DbPermissionTest');
@@ -124,7 +124,7 @@ class DbAcoActionTest extends AcoActionsTable
      * @param array $config Configuration array
      * @return void
      */
-    public function initialize(array $config)
+    public function initialize(array $config) :void
     {
         $this->setTable('aco_actions');
         $this->belongsTo('DbAcoTest', [
@@ -189,7 +189,7 @@ class AclNodeTest extends TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp() :void
     {
         parent::setUp();
         Configure::write('Acl.classname', 'TestDbAcl');

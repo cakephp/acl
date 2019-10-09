@@ -51,7 +51,7 @@ class CrudAuthorize extends BaseAuthorize
      * @param \Cake\Network\Request $request The request needing authorization.
      * @return bool
      */
-    public function authorize($user, ServerRequest $request)
+    public function authorize($user, ServerRequest $request) :bool
     {
         $mapped = $this->getConfig('actionMap.' . $request->getParam('action'));
 
