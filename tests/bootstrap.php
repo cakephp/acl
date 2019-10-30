@@ -104,16 +104,8 @@ if (!getenv('db_dsn')) {
     putenv('db_dsn=sqlite:///:memory:');
 }
 
-ConnectionManager::setConfig('test', [
-    'className' => 'Cake\Database\Connection',
-    'driver' => getenv('db_class'),
-    'dsn' => getenv('db_dsn'),
-    'database' => getenv('db_database'),
-    'username' => getenv('db_login'),
-    'password' => getenv('db_password'),
-    'timezone' => 'UTC',
-    'quoteIdentifiers' => getenv('quoteIdentifiers'),
-]);
+ConnectionManager::setConfig('test', ['url' => getenv('db_dsn')]);
+ConnectionManager::setConfig('test_custom_i18n_datasource', ['url' => getenv('db_dsn')]);
 
 Configure::write('Session', [
     'defaults' => 'php'
