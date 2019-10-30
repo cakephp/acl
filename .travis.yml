@@ -3,6 +3,7 @@ language: php
 php:
   - 7.2
   - 7.3
+  - 7.4snapshot'
 
 dist: trusty
 
@@ -21,8 +22,12 @@ env:
 matrix:
   fast_finish: true
 
+  include:
+    - php: 7.2
+      env: MINIMUMS=1 DEFAULT=1 DB=mysql db_dsn='mysql://travis@0.0.0.0/cakephp_test'
+
 before_install:
-  - if [[ $TRAVIS_PHP_VERSION != 7.3 ]]; then phpenv config-rm xdebug.ini; fi
+  - if [[ $TRAVIS_PHP_VERSION != "7.4snapshot" ]]; then phpenv config-rm xdebug.ini; fi
 
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
 
