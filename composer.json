@@ -6,7 +6,7 @@
         "cakephp",
         "acl"
     ],
-    "homepage": "http://cakephp.org",
+    "homepage": "https://cakephp.org",
     "license": "MIT",
     "authors": [
         {
@@ -16,7 +16,7 @@
     ],
     "support": {
         "issues": "https://github.com/cakephp/acl/issues",
-        "forum": "http://stackoverflow.com/tags/cakephp",
+        "forum": "https://stackoverflow.com/tags/cakephp",
         "irc": "irc://irc.freenode.org/cakephp",
         "source": "https://github.com/cakephp/acl"
     },
@@ -30,13 +30,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Acl\\": "src"
+            "Acl\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Acl\\Test\\": "tests",
-            "Cake\\Test\\": "vendor/cakephp/cakephp/tests"
+            "Acl\\Test\\": "tests/",
+            "Cake\\Test\\": "vendor/cakephp/cakephp/tests/"
         }
     }
 }
