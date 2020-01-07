@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -11,6 +12,7 @@
  * @link          http://cakephp.org CakePHP Project
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace Cake\Acl\Test\TestCase\Model\Behavior;
 
 use Acl\Model\Behavior\AclBehavior;
@@ -51,7 +53,7 @@ class AclPeople extends Table
         ]);
         $this->hasMany('Child', [
             'className' => __NAMESPACE__ . '\AclPeople',
-            'foreignKey' => 'mother_id'
+            'foreignKey' => 'mother_id',
         ]);
     }
 }
@@ -270,11 +272,11 @@ class AclBehaviorTest extends TestCase
             'author_id' => 1,
             'title' => 'Acl Post',
             'body' => 'post body',
-            'published' => 1
+            'published' => 1,
         ]);
         $saved = $Post->save($data);
         $query = $this->Aco->find('all', [
-            'conditions' => ['model' => $Post->getAlias(), 'foreign_key' => $saved->id]
+            'conditions' => ['model' => $Post->getAlias(), 'foreign_key' => $saved->id],
         ]);
         $this->assertTrue(is_object($query));
         $result = $query->first();
@@ -286,14 +288,14 @@ class AclBehaviorTest extends TestCase
         $aroData = new AclPerson([
             'model' => $Person->getAlias(),
             'foreign_key' => 2,
-            'parent_id' => null
+            'parent_id' => null,
         ]);
         $this->Aro->save($aroData);
 
         $acoData = new AclPerson([
             'model' => $Person->getAlias(),
             'foreign_key' => 2,
-            'parent_id' => null
+            'parent_id' => null,
         ]);
         $this->Aco->save($acoData);
 
@@ -304,7 +306,7 @@ class AclBehaviorTest extends TestCase
         ]);
         $saved = $Person->save($data);
         $result = $this->Aro->find('all', [
-            'conditions' => ['model' => $Person->getAlias(), 'foreign_key' => $saved->id]
+            'conditions' => ['model' => $Person->getAlias(), 'foreign_key' => $saved->id],
         ])->first();
         $this->assertEquals(5, $result->parent_id);
 
@@ -317,19 +319,19 @@ class AclBehaviorTest extends TestCase
         $aroData = $this->Aro->save(new AclPerson([
             'model' => $Person->getAlias(),
             'foreign_key' => 1,
-            'parent_id' => null
+            'parent_id' => null,
         ]));
         $acoData = $this->Aco->save(new AclPerson([
             'model' => $Person->getAlias(),
             'foreign_key' => 1,
-            'parent_id' => null
+            'parent_id' => null,
         ]));
 
         $person = $Person->findById(8)->first();
         $person->mother_id = 1;
         $person = $Person->save($person);
         $result = $this->Aro->find('all', [
-            'conditions' => ['model' => $Person->getAlias(), 'foreign_key' => $person->id]
+            'conditions' => ['model' => $Person->getAlias(), 'foreign_key' => $person->id],
         ])->first();
         $this->assertEquals(7, $result->parent_id);
 
@@ -366,7 +368,7 @@ class AclBehaviorTest extends TestCase
             'father_id' => 3,
         ]));
         $result = $this->Aro->find('all', [
-            'conditions' => ['model' => $Person->getAlias(), 'foreign_key' => $person->id]
+            'conditions' => ['model' => $Person->getAlias(), 'foreign_key' => $person->id],
         ])->first();
         $this->assertEquals(5, $result->parent_id);
 
@@ -377,7 +379,7 @@ class AclBehaviorTest extends TestCase
             'source' => $Person->getAlias(),
         ]));
         $result = $this->Aro->find('all', [
-            'conditions' => ['model' => $Person->getAlias(), 'foreign_key' => $person->id]
+            'conditions' => ['model' => $Person->getAlias(), 'foreign_key' => $person->id],
         ])->first();
         $this->assertEquals(5, $result->parent_id);
     }
@@ -394,13 +396,13 @@ class AclBehaviorTest extends TestCase
         $this->Aro->save(new Aro([
             'model' => $Person->getAlias(),
             'foreign_key' => 2,
-            'parent_id' => null
+            'parent_id' => null,
         ]));
 
         $this->Aco->save(new Aco([
             'model' => $Person->getAlias(),
             'foreign_key' => 2,
-            'parent_id' => null
+            'parent_id' => null,
         ]));
 
         $Person->deleteAll(['name' => 'person']);
@@ -417,11 +419,11 @@ class AclBehaviorTest extends TestCase
 
         $Person->delete($person);
         $result = $this->Aro->find('all', [
-            'conditions' => ['model' => $Person->getAlias(), 'foreign_key' => $person->id]
+            'conditions' => ['model' => $Person->getAlias(), 'foreign_key' => $person->id],
         ]);
         $this->assertTrue($result->count() === 0);
         $result = $this->Aro->find('all', [
-            'conditions' => ['model' => $Person->getAlias(), 'foreign_key' => 2]
+            'conditions' => ['model' => $Person->getAlias(), 'foreign_key' => 2],
         ]);
         $this->assertTrue($result->count() > 0);
 
@@ -435,12 +437,12 @@ class AclBehaviorTest extends TestCase
 
         $Person->delete($person);
         $result = $this->Aro->find('all', [
-            'conditions' => ['model' => $Person->getAlias(), 'foreign_key' => $person->id]
+            'conditions' => ['model' => $Person->getAlias(), 'foreign_key' => $person->id],
         ]);
         $this->assertTrue($result->count() === 0);
 
         $result = $this->Aro->find('all', [
-            'conditions' => ['model' => $Person->getAlias(), 'foreign_key' => 2]
+            'conditions' => ['model' => $Person->getAlias(), 'foreign_key' => 2],
         ]);
         $this->assertTrue($result->count() === 0);
     }
@@ -456,7 +458,7 @@ class AclBehaviorTest extends TestCase
         $this->Aro->save(new Aro([
             'model' => $Person->getAlias(),
             'foreign_key' => 2,
-            'parent_id' => null
+            'parent_id' => null,
         ]));
 
         $person = new AclPerson(['id' => 2], ['source' => $Person->getAlias()]);

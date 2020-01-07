@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -11,6 +12,7 @@
  * @link          http://cakephp.org CakePHP(tm) Project
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace Acl\Test\TestCase\Auth;
 
 use Acl\Auth\ActionsAuthorize;
@@ -68,14 +70,14 @@ class ActionsAuthorizeTest extends TestCase
         $user = [
             'Users' => [
                 'id' => 1,
-                'user' => 'mariano'
-            ]
+                'user' => 'mariano',
+            ],
         ];
         $request = new ServerRequest('/posts/index');
         $request = $request->withAttribute('params', [
             'plugin' => null,
             'controller' => 'posts',
-            'action' => 'index'
+            'action' => 'index',
         ]);
 
         $this->_mockAcl();
@@ -98,14 +100,14 @@ class ActionsAuthorizeTest extends TestCase
         $user = [
             'Users' => [
                 'id' => 1,
-                'user' => 'mariano'
-            ]
+                'user' => 'mariano',
+            ],
         ];
         $request = new ServerRequest('/posts/index');
         $request = $request->withAttribute('params', [
             'plugin' => null,
             'controller' => 'posts',
-            'action' => 'index'
+            'action' => 'index',
         ]);
 
         $this->_mockAcl();
@@ -129,7 +131,7 @@ class ActionsAuthorizeTest extends TestCase
         $request = $request->withAttribute('params', [
             'plugin' => null,
             'controller' => 'posts',
-            'action' => 'index'
+            'action' => 'index',
         ]);
 
         $this->_mockAcl();
@@ -137,7 +139,7 @@ class ActionsAuthorizeTest extends TestCase
         $this->auth->setConfig('userModel', 'TestPlugin.AuthUser');
         $user = [
             'id' => 1,
-            'username' => 'mariano'
+            'username' => 'mariano',
         ];
 
         $expected = ['TestPlugin.AuthUser' => ['id' => 1, 'username' => 'mariano']];
@@ -160,7 +162,7 @@ class ActionsAuthorizeTest extends TestCase
         $request = $request->withAttribute('params', [
             'plugin' => null,
             'controller' => 'posts',
-            'action' => 'index'
+            'action' => 'index',
         ]);
 
         $result = $this->auth->action($request);
@@ -179,7 +181,7 @@ class ActionsAuthorizeTest extends TestCase
         $request = $request->withAttribute('params', [
             'plugin' => null,
             'controller' => 'posts',
-            'action' => 'index'
+            'action' => 'index',
         ]);
         $result = $this->auth->action($request);
         $this->assertEquals('controllers/Posts/index', $result);
@@ -196,7 +198,7 @@ class ActionsAuthorizeTest extends TestCase
         $request = $request->withAttribute('params', [
             'plugin' => 'debug_kit',
             'controller' => 'posts',
-            'action' => 'index'
+            'action' => 'index',
         ]);
 
         $result = $this->auth->action($request);
@@ -210,7 +212,7 @@ class ActionsAuthorizeTest extends TestCase
             'plugin' => 'debug_kit',
             'prefix' => 'admin',
             'controller' => 'posts',
-            'action' => 'index'
+            'action' => 'index',
         ]);
 
         $result = $this->auth->action($request);
@@ -224,7 +226,7 @@ class ActionsAuthorizeTest extends TestCase
             'plugin' => null,
             'prefix' => 'admin',
             'controller' => 'posts',
-            'action' => 'index'
+            'action' => 'index',
         ]);
 
         $result = $this->auth->action($request);

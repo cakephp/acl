@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -11,6 +12,7 @@
  * @link          http://cakephp.org CakePHP(tm) Project
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace Acl\Shell;
 
 use Acl\Controller\Component\AclComponent;
@@ -69,7 +71,8 @@ class AclShell extends Shell
         } else {
             $className = App::classname($class, 'Adapter');
         }
-        if ($class !== 'DbAcl' &&
+        if (
+            $class !== 'DbAcl' &&
             !is_subclass_of($className, 'Acl\Adapter\DbAcl')
         ) {
             $out = "--------------------------------------------------\n";
@@ -178,7 +181,7 @@ class AclShell extends Shell
 
         $data = [
             'id' => $this->_getNodeId($class, $target),
-            'parent_id' => $this->_getNodeId($class, $parent)
+            'parent_id' => $this->_getNodeId($class, $parent),
         ];
         $entity = $this->Acl->{$class}->newEntity($data);
         if (!$this->Acl->{$class}->save($entity)) {
@@ -311,15 +314,15 @@ class AclShell extends Shell
             $identity = $this->parseIdentifier($this->args[1]);
 
             $topNode = $this->Acl->{$class}->find('all', [
-                'conditions' => [$alias . '.id' => $this->_getNodeId($class, $identity)]
+                'conditions' => [$alias . '.id' => $this->_getNodeId($class, $identity)],
             ])->first();
 
             $nodes = $this->Acl->{$class}->find('all', [
                 'conditions' => [
                     $alias . '.lft >=' => $topNode->lft,
-                    $alias . '.lft <=' => $topNode->rght
+                    $alias . '.lft <=' => $topNode->rght,
                 ],
-                'order' => $alias . '.lft ASC'
+                'order' => $alias . '.lft ASC',
             ]);
         } else {
             $nodes = $this->Acl->{$class}->find('all', ['order' => $alias . '.lft ASC']);
@@ -372,7 +375,7 @@ class AclShell extends Shell
         $type = [
             'choices' => ['aro', 'aco'],
             'required' => true,
-            'help' => __d('cake_acl', 'Type of node to create.')
+            'help' => __d('cake_acl', 'Type of node to create.'),
         ];
 
         $parser->setDescription(
@@ -386,14 +389,14 @@ class AclShell extends Shell
                     'type' => $type,
                     'parent' => [
                         'help' => __d('cake_acl', 'The node selector for the parent.'),
-                        'required' => true
+                        'required' => true,
                     ],
                     'alias' => [
                         'help' => __d('cake_acl', 'The alias to use for the newly created node.'),
-                        'required' => true
-                    ]
-                ]
-            ]
+                        'required' => true,
+                    ],
+                ],
+            ],
         ])->addSubcommand('delete', [
             'help' => __d('cake_acl', 'Deletes the ACL object with the given <node> reference'),
             'parser' => [
@@ -403,9 +406,9 @@ class AclShell extends Shell
                     'node' => [
                         'help' => __d('cake_acl', 'The node identifier to delete.'),
                         'required' => true,
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ])->addSubcommand('setparent', [
             'help' => __d('cake_acl', 'Moves the ACL node under a new parent.'),
             'parser' => [
@@ -418,86 +421,86 @@ class AclShell extends Shell
                     ],
                     'parent' => [
                         'help' => __d('cake_acl', 'The new parent for <node>.'),
-                        'required' => true
-                    ]
-                ]
-            ]
+                        'required' => true,
+                    ],
+                ],
+            ],
         ])->addSubcommand('getpath', [
             'help' => __d('cake_acl', 'Print out the path to an ACL node.'),
             'parser' => [
                 'description' => [
                     __d('cake_acl', "Returns the path to the ACL object specified by <node>."),
-                    __d('cake_acl', "This command is useful in determining the inheritance of permissions for a certain object in the tree.")
+                    __d('cake_acl', "This command is useful in determining the inheritance of permissions for a certain object in the tree."),
                 ],
                 'arguments' => [
                     'type' => $type,
                     'node' => [
                         'help' => __d('cake_acl', 'The node to get the path of'),
                         'required' => true,
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ])->addSubcommand('check', [
             'help' => __d('cake_acl', 'Check the permissions between an ACO and ARO.'),
             'parser' => [
                 'description' => [
-                    __d('cake_acl', 'Use this command to check ACL permissions.')
+                    __d('cake_acl', 'Use this command to check ACL permissions.'),
                 ],
                 'arguments' => [
                     'aro' => ['help' => __d('cake_acl', 'ARO to check.'), 'required' => true],
                     'aco' => ['help' => __d('cake_acl', 'ACO to check.'), 'required' => true],
-                    'action' => ['help' => __d('cake_acl', 'Action to check'), 'default' => 'all']
-                ]
-            ]
+                    'action' => ['help' => __d('cake_acl', 'Action to check'), 'default' => 'all'],
+                ],
+            ],
         ])->addSubcommand('grant', [
             'help' => __d('cake_acl', 'Grant an ARO permissions to an ACO.'),
             'parser' => [
                 'description' => [
-                    __d('cake_acl', 'Use this command to grant ACL permissions. Once executed, the ARO specified (and its children, if any) will have ALLOW access to the specified ACO action (and the ACO\'s children, if any).')
+                    __d('cake_acl', 'Use this command to grant ACL permissions. Once executed, the ARO specified (and its children, if any) will have ALLOW access to the specified ACO action (and the ACO\'s children, if any).'),
                 ],
                 'arguments' => [
                     'aro' => ['help' => __d('cake_acl', 'ARO to grant permission to.'), 'required' => true],
                     'aco' => ['help' => __d('cake_acl', 'ACO to grant access to.'), 'required' => true],
-                    'action' => ['help' => __d('cake_acl', 'Action to grant'), 'default' => 'all']
-                ]
-            ]
+                    'action' => ['help' => __d('cake_acl', 'Action to grant'), 'default' => 'all'],
+                ],
+            ],
         ])->addSubcommand('deny', [
             'help' => __d('cake_acl', 'Deny an ARO permissions to an ACO.'),
             'parser' => [
                 'description' => [
-                    __d('cake_acl', 'Use this command to deny ACL permissions. Once executed, the ARO specified (and its children, if any) will have DENY access to the specified ACO action (and the ACO\'s children, if any).')
+                    __d('cake_acl', 'Use this command to deny ACL permissions. Once executed, the ARO specified (and its children, if any) will have DENY access to the specified ACO action (and the ACO\'s children, if any).'),
                 ],
                 'arguments' => [
                     'aro' => ['help' => __d('cake_acl', 'ARO to deny.'), 'required' => true],
                     'aco' => ['help' => __d('cake_acl', 'ACO to deny.'), 'required' => true],
-                    'action' => ['help' => __d('cake_acl', 'Action to deny'), 'default' => 'all']
-                ]
-            ]
+                    'action' => ['help' => __d('cake_acl', 'Action to deny'), 'default' => 'all'],
+                ],
+            ],
         ])->addSubcommand('inherit', [
             'help' => __d('cake_acl', 'Inherit an ARO\'s parent permissions.'),
             'parser' => [
                 'description' => [
-                    __d('cake_acl', "Use this command to force a child ARO object to inherit its permissions settings from its parent.")
+                    __d('cake_acl', "Use this command to force a child ARO object to inherit its permissions settings from its parent."),
                 ],
                 'arguments' => [
                     'aro' => ['help' => __d('cake_acl', 'ARO to have permissions inherit.'), 'required' => true],
                     'aco' => ['help' => __d('cake_acl', 'ACO to inherit permissions on.'), 'required' => true],
-                    'action' => ['help' => __d('cake_acl', 'Action to inherit'), 'default' => 'all']
-                ]
-            ]
+                    'action' => ['help' => __d('cake_acl', 'Action to inherit'), 'default' => 'all'],
+                ],
+            ],
         ])->addSubcommand('view', [
             'help' => __d('cake_acl', 'View a tree or a single node\'s subtree.'),
             'parser' => [
                 'description' => [
                     __d('cake_acl', "The view command will return the ARO or ACO tree."),
                     __d('cake_acl', "The optional node parameter allows you to return"),
-                    __d('cake_acl', "only a portion of the requested tree.")
+                    __d('cake_acl', "only a portion of the requested tree."),
                 ],
                 'arguments' => [
                     'type' => $type,
-                    'node' => ['help' => __d('cake_acl', 'The optional node to view the subtree of.')]
-                ]
-            ]
+                    'node' => ['help' => __d('cake_acl', 'The optional node to view the subtree of.')],
+                ],
+            ],
         ])->setEpilog(
             [
                 'Node and parent arguments can be in one of the following formats:',
@@ -508,7 +511,7 @@ class AclShell extends Shell
                 "   i.e. 'John'. When used with <parent>, this takes the form of an alias path,",
                 "   i.e. <group>/<subgroup>/<parent>.",
                 '',
-                "To add a node at the root level, enter 'root' or '/' as the <parent> parameter."
+                "To add a node at the root level, enter 'root' or '/' as the <parent> parameter.",
             ]
         );
 

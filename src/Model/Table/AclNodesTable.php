@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -11,6 +12,7 @@
  * @link          http://cakephp.org CakePHP(tm) Project
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace Acl\Model\Table;
 
 use Cake\Core\Configure;
@@ -57,7 +59,7 @@ class AclNodesTable extends Table
             return null;
         } elseif (is_int($ref) || ctype_digit($ref)) {
             $ref = [
-                'id' => $ref
+                'id' => $ref,
             ];
         } elseif (is_string($ref)) {
             $path = explode('/', $ref);
@@ -74,9 +76,9 @@ class AclNodesTable extends Table
                         'table' => $table,
                         'alias' => "{$type}0",
                         'type' => 'INNER',
-                        'conditions' => ["{$type}0.alias" => $start]
+                        'conditions' => ["{$type}0.alias" => $start],
                 ]],
-                'order' => ["{$type}.lft" => 'DESC']
+                'order' => ["{$type}.lft" => 'DESC'],
             ];
 
             foreach ($path as $i => $alias) {
@@ -90,22 +92,23 @@ class AclNodesTable extends Table
                         "{$type}{$i}.lft" . ' > ' => new IdentifierExpression("{$type}{$j}.lft"),
                         "{$type}{$i}.rght" . ' < ' => new IdentifierExpression("{$type}{$j}.rght"),
                         "{$type}{$i}.alias" => $alias,
-                        "{$type}{$j}.id" . ' = ' => new IdentifierExpression("{$type}{$i}.parent_id")
-                    ]
+                        "{$type}{$j}.id" . ' = ' => new IdentifierExpression("{$type}{$i}.parent_id"),
+                    ],
                 ];
 
                 $queryData['conditions'] = [
                     'or' => [
                         ["{$type}.lft" . ' <= ' => new IdentifierExpression("{$type}0.lft"), "{$type}.rght" . ' >= ' => new IdentifierExpression("{$type}0.rght")],
-                        ["{$type}.lft" . ' <= ' => new IdentifierExpression("{$type}{$i}.lft"), "{$type}.rght" . ' >= ' => new IdentifierExpression("{$type}{$i}.rght")]
-                    ]
+                        ["{$type}.lft" . ' <= ' => new IdentifierExpression("{$type}{$i}.lft"), "{$type}.rght" . ' >= ' => new IdentifierExpression("{$type}{$i}.rght")],
+                    ],
                 ];
             }
             $query = $this->find('all', $queryData);
             $result = $query->toArray();
             $path = array_values($path);
 
-            if (!isset($result[0]) ||
+            if (
+                !isset($result[0]) ||
                 (!empty($path) && $result[0]->alias != $path[count($path) - 1]) ||
                 (empty($path) && $result[0]->alias != $start)
             ) {
@@ -123,7 +126,7 @@ class AclNodesTable extends Table
             } else {
                 $connection = Configure::read('Acl.database');
                 $bindTable = TableRegistry::getTableLocator()->get($name, [
-                    'connection' => ConnectionManager::get($connection)
+                    'connection' => ConnectionManager::get($connection),
                 ]);
             }
             $entityClass = $bindTable->getEntityClass();
@@ -143,7 +146,7 @@ class AclNodesTable extends Table
             if (empty($tmpRef)) {
                 $ref = [
                     'model' => $alias,
-                    'foreign_key' => $ref[$name][$this->getPrimaryKey()]
+                    'foreign_key' => $ref[$name][$this->getPrimaryKey()],
                 ];
             } else {
                 if (is_string($tmpRef)) {
@@ -174,8 +177,8 @@ class AclNodesTable extends Table
                         'conditions' => [
                             "{$type}.lft" . ' <= ' => new IdentifierExpression("{$type}0.lft"),
                             "{$type}.rght" . ' >= ' => new IdentifierExpression("{$type}0.rght"),
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 'order' => ["{$type}.lft" => 'DESC'],
             ];

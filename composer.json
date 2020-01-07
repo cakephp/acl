@@ -21,7 +21,7 @@
         "source": "https://github.com/cakephp/acl"
     },
     "require": {
-        "cakephp/cakephp": "^3.6.0",
+        "cakephp/cakephp": "^3.8.2",
         "cakephp/plugin-installer": "*"
     },
     "require-dev": {

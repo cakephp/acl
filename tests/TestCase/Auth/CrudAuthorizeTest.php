@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -11,6 +12,7 @@
  * @link          http://cakephp.org CakePHP(tm) Project
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace Acl\Test\TestCase\Auth;
 
 use Acl\Auth\CrudAuthorize;
@@ -70,7 +72,7 @@ class CrudAuthorizeTest extends TestCase
         $request = new ServerRequest('/posts/foobar');
         $request = $request->withAttribute('params', [
             'controller' => 'posts',
-            'action' => 'foobar'
+            'action' => 'foobar',
         ]);
         $user = ['User' => ['username' => 'mark']];
 
@@ -87,7 +89,7 @@ class CrudAuthorizeTest extends TestCase
         $request = new ServerRequest('posts/index');
         $request = $request->withAttribute('params', [
             'controller' => 'posts',
-            'action' => 'index'
+            'action' => 'index',
         ]);
         $user = ['Users' => ['username' => 'mark']];
 
@@ -110,7 +112,7 @@ class CrudAuthorizeTest extends TestCase
         $request = new ServerRequest('posts/index');
         $request = $request->withAttribute('params', [
             'controller' => 'posts',
-            'action' => 'index'
+            'action' => 'index',
         ]);
         $user = ['Users' => ['username' => 'mark']];
 
@@ -137,7 +139,7 @@ class CrudAuthorizeTest extends TestCase
             'add' => 'create',
             'edit' => 'update',
             'view' => 'read',
-            'remove' => 'delete'
+            'remove' => 'delete',
         ];
         $this->assertEquals($expected, $result);
     }
@@ -153,7 +155,7 @@ class CrudAuthorizeTest extends TestCase
             'create' => ['generate'],
             'read' => ['listing', 'show'],
             'update' => ['update'],
-            'random' => 'custom'
+            'random' => 'custom',
         ];
         $result = $this->auth->mapActions($map);
         $this->assertNull($result);

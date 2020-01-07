@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -11,6 +12,7 @@
  * @link          http://cakephp.org CakePHP(tm) Project
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace Acl\Test\TestCase\Adapter;
 
 use Acl\Adapter\CachedDbAcl;
@@ -85,7 +87,7 @@ class CacheDbAclTest extends TestCase
         Cache::setConfig('tests', [
             'engine' => 'File',
             'path' => TMP . 'test_acl',
-            'prefix' => 'test_'
+            'prefix' => 'test_',
         ]);
     }
 
@@ -115,7 +117,7 @@ class CacheDbAclTest extends TestCase
         $this->assertSame('users_1_print', $this->CachedDb->getCacheKey(['model' => 'Users', 'foreign_key' => 1], 'print', '*'));
 
         $entity = new Entity([
-            'id' => '1'
+            'id' => '1',
         ], ['source' => 'Users']);
         $this->assertSame('users_1_print', $this->CachedDb->getCacheKey($entity, 'print', '*'));
     }

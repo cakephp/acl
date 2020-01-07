@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -11,6 +12,7 @@
  * @link          http://cakephp.org CakePHP(tm) Project
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace Acl\Auth;
 
 use Cake\Auth\BaseAuthorize as ParentAuthorize;
@@ -45,9 +47,9 @@ abstract class BaseAuthorize extends ParentAuthorize
             'edit' => 'update',
             'view' => 'read',
             'delete' => 'delete',
-            'remove' => 'delete'
+            'remove' => 'delete',
         ],
-        'userModel' => 'Users'
+        'userModel' => 'Users',
     ];
 
     /**
