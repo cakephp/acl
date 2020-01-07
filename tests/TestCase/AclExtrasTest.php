@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Acl Extras Shell.
  *
@@ -16,6 +17,7 @@
  * @author Mark Story <mark@mark-story.com>
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  */
+
 namespace Acl\Test\TestCase;
 
 use Cake\Core\Configure;
@@ -242,7 +244,7 @@ class AclExtrasTestCase extends TestCase
         $result = $Aco->node($parent)->toArray();
         $new = [
             'parent_id' => $result[0]['id'],
-            'alias' => 'someMethod'
+            'alias' => 'someMethod',
         ];
         $new = $Aco->newEntity($new);
         $Aco->save($new);

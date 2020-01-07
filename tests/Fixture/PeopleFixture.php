@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -11,6 +12,7 @@
  * @link          http://book.cakephp.org/2.0/en/development/testing.html CakePHP(tm) Tests
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace Acl\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
@@ -35,8 +37,8 @@ class PeopleFixture extends TestFixture
             'PRIMARY' => ['type' => 'primary', 'columns' => ['id']],
         ],
         '_indexes' => [
-            'mother_id' => ['type' => 'index', 'columns' => ['mother_id', 'father_id']]
-        ]
+            'mother_id' => ['type' => 'index', 'columns' => ['mother_id', 'father_id']],
+        ],
     ];
 
     /**
@@ -51,6 +53,6 @@ class PeopleFixture extends TestFixture
         ['name' => 'mother - grand mother', 'mother_id' => 0, 'father_id' => 0],
         ['name' => 'mother - grand father', 'mother_id' => 0, 'father_id' => 0],
         ['name' => 'father - grand mother', 'mother_id' => 0, 'father_id' => 0],
-        ['name' => 'father - grand father', 'mother_id' => 0, 'father_id' => 0]
+        ['name' => 'father - grand father', 'mother_id' => 0, 'father_id' => 0],
     ];
 }

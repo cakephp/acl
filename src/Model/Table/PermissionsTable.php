@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -11,6 +12,7 @@
  * @link          http://cakephp.org CakePHP(tm) Project
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace Acl\Model\Table;
 
 use Cake\Core\App;
@@ -111,7 +113,7 @@ class PermissionsTable extends AclNodesTable
             $perms = $this->find('all', [
                 'conditions' => [
                     "{$permAlias}.aro_id" => $aroPaths[$i]->id,
-                    "{$permAlias}.aco_id IN" => $acoIDs
+                    "{$permAlias}.aco_id IN" => $acoIDs,
                 ],
                 'order' => [$this->Aco->getAlias() . '.lft' => 'desc'],
                 'contain' => $this->Aco->getAlias(),
@@ -242,8 +244,8 @@ class PermissionsTable extends AclNodesTable
                     'conditions' => [
                         $alias . '.aro_id' => $aro,
                         $alias . '.aco_id' => $aco,
-                    ]
-                ])->enableHydration(false)->toArray()
+                    ],
+                ])->enableHydration(false)->toArray(),
             ],
         ];
 

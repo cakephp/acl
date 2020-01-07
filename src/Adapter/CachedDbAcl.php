@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -11,6 +12,7 @@
  * @link          http://cakephp.org CakePHP(tm) Project
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace Acl\Adapter;
 
 use Acl\AclInterface;
@@ -125,7 +127,7 @@ class CachedDbAcl extends DbAcl implements AclInterface
             if (empty($tmpRef)) {
                 $ref = [
                     'model' => $alias,
-                    'foreign_key' => $ref[$name][$bindTable->getPrimaryKey()]
+                    'foreign_key' => $ref[$name][$bindTable->getPrimaryKey()],
                 ];
             } else {
                 $ref = $tmpRef;

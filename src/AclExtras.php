@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Acl Extras.
  *
@@ -10,6 +11,7 @@
  * @author Mark Story <mark@mark-story.com>
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  */
+
 namespace Acl;
 
 use Acl\Controller\Component\AclComponent;
@@ -252,7 +254,7 @@ class AclExtras
             $pluginAlias = $this->_pluginAlias($plugin);
             $path = [
                 $this->rootNode,
-                $pluginAlias
+                $pluginAlias,
             ];
             $path = implode('/', Hash::filter($path));
             $pathNode = $this->_checkNode($path, $pluginAlias, $root->id);
@@ -268,7 +270,7 @@ class AclExtras
                 foreach (array_keys($this->pluginPrefixes[$plugin]) as $prefix) {
                     $path = [
                         $this->rootNode,
-                        $pluginAlias
+                        $pluginAlias,
                     ];
                     $path = implode('/', Hash::filter($path));
                     $pluginNode = $this->_checkNode($path, $pluginAlias, $root->id);
@@ -326,7 +328,7 @@ class AclExtras
                 $this->rootNode,
                 $pluginPath,
                 $prefix,
-                $controllerName
+                $controllerName,
             ];
             $path = implode('/', Hash::filter($path));
             $controllerNode = $this->_checkNode($path, $controllerName, $root->id);
@@ -445,7 +447,7 @@ class AclExtras
     protected function _checkMethods($className, $controllerName, $node, $pluginPath = null, $prefixPath = null)
     {
         $excludes = $this->_getCallbacks($className, $pluginPath, $prefixPath);
-        $baseMethods = get_class_methods(new Controller);
+        $baseMethods = get_class_methods(new Controller());
         $namespace = $this->_getNamespace($className, $pluginPath, $prefixPath);
         $methods = get_class_methods($namespace);
         if ($methods == null) {
@@ -464,7 +466,7 @@ class AclExtras
                 $pluginPath,
                 $prefixPath,
                 $controllerName,
-                $action
+                $action,
             ];
             $path = implode('/', Hash::filter($path));
             $this->_checkNode($path, $action, $node->id);
@@ -512,7 +514,7 @@ class AclExtras
             $rootNamespace,
             'Controller',
             $prefixPath,
-            $namespace
+            $namespace,
         ];
 
         return implode('\\', Hash::filter($namespace));

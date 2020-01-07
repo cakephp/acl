@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -11,6 +12,7 @@
  * @link          http://cakephp.org CakePHP(tm) Project
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace Acl\Model\Table;
 
 use Acl\Model\Table\AclNodesTable;
@@ -42,7 +44,7 @@ class ArosTable extends AclNodesTable
         ]);
         $this->hasMany('AroChildren', [
             'className' => App::className('Acl.ArosTable', 'Model/Table'),
-            'foreignKey' => 'parent_id'
+            'foreignKey' => 'parent_id',
         ]);
 
         $this->setEntityClass(App::className('Acl.Aro', 'Model/Entity'));

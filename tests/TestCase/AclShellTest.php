@@ -3,7 +3,6 @@
 namespace Acl\Test\TestCase;
 
 use Acl\Shell\AclShell;
-
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;

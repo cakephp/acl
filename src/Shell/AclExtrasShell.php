@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Acl Extras Shell.
  *
@@ -12,6 +13,7 @@
  * @author Mark Story <mark@mark-story.com>
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  */
+
 namespace Acl\Shell;
 
 use Acl\AclExtras;
@@ -113,14 +115,14 @@ class AclExtrasShell extends Shell
                 'parser' => [
                     'options' => compact('plugin'),
                 ],
-                'help' => __('Add new ACOs for new controllers and actions. Does not remove nodes from the ACO table.')
+                'help' => __('Add new ACOs for new controllers and actions. Does not remove nodes from the ACO table.'),
             ])->addSubcommand('aco_sync', [
                 'parser' => [
                     'options' => compact('plugin'),
                 ],
                 'help' => __('Perform a full sync on the ACO table.' .
                     'Will create new ACOs or missing controllers and actions.' .
-                    'Will also remove orphaned entries that no longer have a matching controller/action')
+                    'Will also remove orphaned entries that no longer have a matching controller/action'),
             ])->addSubcommand('recover', [
                 'help' => __('Recover a corrupted Tree'),
                 'parser' => [
@@ -128,10 +130,10 @@ class AclExtrasShell extends Shell
                         'type' => [
                             'required' => true,
                             'help' => __('The type of tree to recover'),
-                            'choices' => ['aco', 'aro']
-                        ]
-                    ]
-                ]
+                            'choices' => ['aco', 'aro'],
+                        ],
+                    ],
+                ],
             ]);
 
         return $parser;

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -11,6 +12,7 @@
  * @link          http://cakephp.org CakePHP(tm) Project
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace Acl\Test\TestCase\Adapter;
 
 use Acl\Adapter\DbAcl;
@@ -419,7 +421,7 @@ class DbAclTest extends TestCase
         $expected = [
             ['id' => '7', 'parent_id' => '4', 'model' => 'User', 'foreign_key' => 3, 'alias' => 'Samir'],
             ['id' => '4', 'parent_id' => '1', 'model' => 'Group', 'foreign_key' => 3, 'alias' => 'users'],
-            ['id' => '1', 'parent_id' => null, 'model' => null, 'foreign_key' => null, 'alias' => 'root']
+            ['id' => '1', 'parent_id' => null, 'model' => null, 'foreign_key' => null, 'alias' => 'root'],
         ];
         $this->assertEquals($expected, $result);
 

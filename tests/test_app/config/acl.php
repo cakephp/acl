@@ -64,9 +64,9 @@ return [
             // accountants and sales should not delete anything
             '/controllers/*/delete' => [
                 'Role/sales',
-                'Role/accounting'
+                'Role/accounting',
             ],
             '/controllers/db/drop' => 'User/db_manager_2',
         ],
-    ]
+    ],
 ];

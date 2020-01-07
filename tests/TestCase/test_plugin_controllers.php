@@ -1,4 +1,5 @@
 <?php
+
 namespace TestPlugin\Controller;
 
 use Cake\Controller\Controller;

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -51,7 +52,7 @@ define('CONFIG', TEST_APP . 'config' . DS);
 
 require CAKE . 'Core/ClassLoader.php';
 
-$loader = new Cake\Core\ClassLoader;
+$loader = new Cake\Core\ClassLoader();
 $loader->register();
 
 $loader->addNamespace('Cake\Test\Fixture', ROOT . '/vendor/cakephp/cakephp/tests/Fixture');
@@ -78,21 +79,21 @@ Configure::write('App', [
     'cssBaseUrl' => 'css/',
     'paths' => [
         'plugins' => [TEST_APP . 'Plugin' . DS],
-        'templates' => [APP . 'Template' . DS]
-    ]
+        'templates' => [APP . 'Template' . DS],
+    ],
 ]);
 
 Cache::setConfig([
     '_cake_core_' => [
         'engine' => 'File',
         'prefix' => 'cake_core_',
-        'serialize' => true
+        'serialize' => true,
     ],
     '_cake_model_' => [
         'engine' => 'File',
         'prefix' => 'cake_model_',
-        'serialize' => true
-    ]
+        'serialize' => true,
+    ],
 ]);
 
 // Ensure default test connection is defined
@@ -113,7 +114,7 @@ ConnectionManager::setConfig('test', [
 ]);
 
 Configure::write('Session', [
-    'defaults' => 'php'
+    'defaults' => 'php',
 ]);
 
 Log::setConfig([
@@ -126,7 +127,7 @@ Log::setConfig([
         'engine' => 'Cake\Log\Engine\FileLog',
         'levels' => ['warning', 'error', 'critical', 'alert', 'emergency'],
         'file' => 'error',
-    ]
+    ],
 ]);
 
 if (class_exists('Carbon\Carbon')) {
