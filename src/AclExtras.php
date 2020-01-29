@@ -348,7 +348,7 @@ class AclExtras
     public function getControllerList($plugin = null, $prefix = null)
     {
         if (!$plugin) {
-            $path = App::path('Controller' . (empty($prefix) ? '' : DS . Inflector::camelize($prefix)));
+            $path = App::classPath('Controller' . (empty($prefix) ? '' : DS . Inflector::camelize($prefix)));
             $dir = new Folder($path[0]);
             $controllers = $dir->find('.*Controller\.php');
         } else {
