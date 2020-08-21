@@ -90,19 +90,19 @@ class PhpAclTest extends TestCase
             'Role' => 'FooModel/role',
         ];
 
-        $this->assertEquals('Role/default', $this->Acl->Aro->resolve('Foo.bar'));
-        $this->assertEquals('User/hardy', $this->Acl->Aro->resolve('FooModel/hardy'));
-        $this->assertEquals('User/hardy', $this->Acl->Aro->resolve('hardy'));
-        $this->assertEquals('User/hardy', $this->Acl->Aro->resolve(['FooModel' => ['nickname' => 'hardy']]));
-        $this->assertEquals('Role/admin', $this->Acl->Aro->resolve(['FooModel' => ['role' => 'admin']]));
-        $this->assertEquals('Role/admin', $this->Acl->Aro->resolve('Role/admin'));
+        $this->assertSame('Role/default', $this->Acl->Aro->resolve('Foo.bar'));
+        $this->assertSame('User/hardy', $this->Acl->Aro->resolve('FooModel/hardy'));
+        $this->assertSame('User/hardy', $this->Acl->Aro->resolve('hardy'));
+        $this->assertSame('User/hardy', $this->Acl->Aro->resolve(['FooModel' => ['nickname' => 'hardy']]));
+        $this->assertSame('Role/admin', $this->Acl->Aro->resolve(['FooModel' => ['role' => 'admin']]));
+        $this->assertSame('Role/admin', $this->Acl->Aro->resolve('Role/admin'));
 
-        $this->assertEquals('Role/admin', $this->Acl->Aro->resolve('admin'));
-        $this->assertEquals('Role/admin', $this->Acl->Aro->resolve('FooModel/admin'));
-        $this->assertEquals('Role/accounting', $this->Acl->Aro->resolve('accounting'));
+        $this->assertSame('Role/admin', $this->Acl->Aro->resolve('admin'));
+        $this->assertSame('Role/admin', $this->Acl->Aro->resolve('FooModel/admin'));
+        $this->assertSame('Role/accounting', $this->Acl->Aro->resolve('accounting'));
 
-        $this->assertEquals(PhpAro::DEFAULT_ROLE, $this->Acl->Aro->resolve('bla'));
-        $this->assertEquals(PhpAro::DEFAULT_ROLE, $this->Acl->Aro->resolve(['FooModel' => ['role' => 'hardy']]));
+        $this->assertSame(PhpAro::DEFAULT_ROLE, $this->Acl->Aro->resolve('bla'));
+        $this->assertSame(PhpAro::DEFAULT_ROLE, $this->Acl->Aro->resolve(['FooModel' => ['role' => 'hardy']]));
     }
 
     /**
@@ -129,10 +129,10 @@ class PhpAclTest extends TestCase
             ],
         ];
         // group/1
-        $this->assertEquals('Role/admin', $this->Acl->Aro->resolve($user));
+        $this->assertSame('Role/admin', $this->Acl->Aro->resolve($user));
         // group/24
-        $this->assertEquals('Role/accounting', $this->Acl->Aro->resolve('Role/24'));
-        $this->assertEquals('Role/accounting', $this->Acl->Aro->resolve('24'));
+        $this->assertSame('Role/accounting', $this->Acl->Aro->resolve('Role/24'));
+        $this->assertSame('Role/accounting', $this->Acl->Aro->resolve('24'));
 
         // check department
         $user = [
