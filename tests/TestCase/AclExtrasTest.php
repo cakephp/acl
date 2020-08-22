@@ -36,7 +36,7 @@ include dirname(__FILE__) . DS . 'test_plugin_admin_controllers.php';
  * AclExtras Shell Test case
  *
  */
-class AclExtrasTestCase extends TestCase
+class AclExtrasTest extends TestCase
 {
 
     public $fixtures = [
@@ -187,7 +187,7 @@ class AclExtrasTestCase extends TestCase
         $this->assertEquals($result[0]['alias'], 'Comments');
 
         $result = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
-        $this->assertEquals(count($result), 3);
+        $this->assertCount(3, $result);
         $this->assertEquals($result[0]['alias'], 'add');
         $this->assertEquals($result[1]['alias'], 'index');
         $this->assertEquals($result[2]['alias'], 'delete');
@@ -195,22 +195,22 @@ class AclExtrasTestCase extends TestCase
         $result = $Aco->node('controllers/Posts')->toArray();
         $this->assertEquals($result[0]['alias'], 'Posts');
         $result = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
-        $this->assertEquals(count($result), 3);
+        $this->assertCount(3, $result);
 
         $result = $Aco->node('controllers/Admin/Posts')->toArray();
         $this->assertEquals($result[0]['alias'], 'Posts');
         $result = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
-        $this->assertEquals(count($result), 3);
+        $this->assertCount(3, $result);
 
         $result = $Aco->node('controllers/Admin/BigLongNames')->toArray();
         $this->assertEquals($result[0]['alias'], 'BigLongNames');
         $result = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
-        $this->assertEquals(count($result), 4);
+        $this->assertCount(4, $result);
 
         $result = $Aco->node('controllers/BigLongNames')->toArray();
         $this->assertEquals($result[0]['alias'], 'BigLongNames');
         $result = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
-        $this->assertEquals(count($result), 4);
+        $this->assertCount(4, $result);
     }
 
     /**
@@ -250,7 +250,7 @@ class AclExtrasTestCase extends TestCase
         $Aco->save($new);
 
         $children = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
-        $this->assertEquals(count($children), $expected);
+        $this->assertCount($expected, $children);
 
         return $result;
     }
@@ -274,9 +274,9 @@ class AclExtrasTestCase extends TestCase
 
         $this->Task->acoSync();
         $children = $Aco->find('children', ['for' => $basic[0]['id']])->toArray();
-        $this->assertEquals(count($children), 3);
+        $this->assertCount(3, $children);
         $children = $Aco->find('children', ['for' => $adminPosts[0]['id']])->toArray();
-        $this->assertEquals(count($children), 3);
+        $this->assertCount(3, $children);
 
         $method = $Aco->node('controllers/Comments/someMethod');
         $this->assertFalse($method);
@@ -300,14 +300,14 @@ class AclExtrasTestCase extends TestCase
 
         $result = $Aco->node('controllers/Comments')->toArray();
         $children = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
-        $this->assertEquals(count($children), 3);
+        $this->assertCount(3, $children);
 
         $Aco->delete($children[0]);
         $Aco->delete($children[1]);
         $this->Task->acoUpdate();
 
         $children = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
-        $this->assertEquals(count($children), 3);
+        $this->assertCount(3, $children);
     }
 
     /**
@@ -392,7 +392,7 @@ class AclExtrasTestCase extends TestCase
         $result = $result->toArray();
         $this->assertEquals($result[0]['alias'], 'PluginTwo');
         $result = $Aco->find('children', ['for' => $result[0]['id']])->toArray();
-        $this->assertEquals(count($result), 3);
+        $this->assertCount(3, $result);
         $this->assertEquals($result[0]['alias'], 'index');
         $this->assertEquals($result[1]['alias'], 'add');
         $this->assertEquals($result[2]['alias'], 'edit');

@@ -240,9 +240,9 @@ class DbAclTest extends TestCase
             'parent_id' => $parent->id,
         ]));
         $result = $this->Acl->Aro->findByAlias('Subordinate')->first();
-        $this->assertEquals('AroTwoTest', $result->getSource());
-        $this->assertEquals(16, $result->lft);
-        $this->assertEquals(17, $result->rght);
+        $this->assertSame('AroTwoTest', $result->getSource());
+        $this->assertSame(16, $result->lft);
+        $this->assertSame(17, $result->rght);
     }
 
     /**
@@ -405,7 +405,7 @@ class DbAclTest extends TestCase
             'contain' => 'AroTwoTest',
         ])->toArray();
         $expected = '-1';
-        $this->assertEquals($expected, $result[0]->_delete);
+        $this->assertSame($expected, $result[0]->_delete);
 
         $this->assertFalse($this->Acl->deny('Lumbergh', 'ROOT/tpsReports/DoesNotExist', 'create'));
     }

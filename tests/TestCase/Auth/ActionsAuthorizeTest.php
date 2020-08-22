@@ -166,7 +166,7 @@ class ActionsAuthorizeTest extends TestCase
         ]);
 
         $result = $this->auth->action($request);
-        $this->assertEquals('controllers/Posts/index', $result);
+        $this->assertSame('controllers/Posts/index', $result);
     }
 
     /**
@@ -184,7 +184,7 @@ class ActionsAuthorizeTest extends TestCase
             'action' => 'index',
         ]);
         $result = $this->auth->action($request);
-        $this->assertEquals('controllers/Posts/index', $result);
+        $this->assertSame('controllers/Posts/index', $result);
     }
 
     /**
@@ -202,7 +202,7 @@ class ActionsAuthorizeTest extends TestCase
         ]);
 
         $result = $this->auth->action($request);
-        $this->assertEquals('controllers/DebugKit/Posts/index', $result);
+        $this->assertSame('controllers/DebugKit/Posts/index', $result);
     }
 
     public function testActionWithPluginAndPrefix()
@@ -216,7 +216,7 @@ class ActionsAuthorizeTest extends TestCase
         ]);
 
         $result = $this->auth->action($request);
-        $this->assertEquals('controllers/DebugKit/Admin/Posts/index', $result);
+        $this->assertSame('controllers/DebugKit/Admin/Posts/index', $result);
     }
 
     public function testActionWithPrefix()
@@ -230,6 +230,6 @@ class ActionsAuthorizeTest extends TestCase
         ]);
 
         $result = $this->auth->action($request);
-        $this->assertEquals('controllers/Admin/Posts/index', $result);
+        $this->assertSame('controllers/Admin/Posts/index', $result);
     }
 }

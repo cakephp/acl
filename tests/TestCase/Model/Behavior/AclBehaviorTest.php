@@ -236,11 +236,11 @@ class AclBehaviorTest extends TestCase
     public function testSetup()
     {
         $User = TableRegistry::getTableLocator()->get('AclUsers');
-        $this->assertEquals('requester', $User->behaviors()->Acl->getConfig('type'));
+        $this->assertSame('requester', $User->behaviors()->Acl->getConfig('type'));
         $this->assertTrue(is_object($User->Aro));
 
         $Post = TableRegistry::getTableLocator()->get('AclPosts');
-        $this->assertEquals('controlled', $Post->behaviors()->Acl->getConfig('type'));
+        $this->assertSame('controlled', $Post->behaviors()->Acl->getConfig('type'));
         $this->assertTrue(is_object($Post->Aco));
     }
 
@@ -255,7 +255,7 @@ class AclBehaviorTest extends TestCase
         $User = TableRegistry::getTableLocator()->get('AclPeople', [
             'className' => __NAMESPACE__ . '\AclPeople',
         ]);
-        $this->assertEquals('both', $User->behaviors()->Acl->getConfig('type'));
+        $this->assertSame('both', $User->behaviors()->Acl->getConfig('type'));
         $this->assertTrue(is_object($User->Aro));
         $this->assertTrue(is_object($User->Aco));
     }
@@ -280,8 +280,8 @@ class AclBehaviorTest extends TestCase
         ]);
         $this->assertTrue(is_object($query));
         $result = $query->first();
-        $this->assertEquals($Post->getAlias(), $result->model);
-        $this->assertEquals($saved->id, $result->foreign_key);
+        $this->assertSame($Post->getAlias(), $result->model);
+        $this->assertSame($saved->id, $result->foreign_key);
 
         $Person = TableRegistry::getTableLocator()->get('AclPeople');
         $Person->deleteAll(['name' => 'person']);
@@ -308,13 +308,13 @@ class AclBehaviorTest extends TestCase
         $result = $this->Aro->find('all', [
             'conditions' => ['model' => $Person->getAlias(), 'foreign_key' => $saved->id],
         ])->first();
-        $this->assertEquals(5, $result->parent_id);
+        $this->assertSame(5, $result->parent_id);
 
         $node = $Person->node(['model' => $Person->getAlias(), 'foreign_key' => 8], 'Aro');
-        $this->assertEquals(2, $node->count());
+        $this->assertSame(2, $node->count());
         $node = $node->toArray();
-        $this->assertEquals(5, $node[0]->parent_id);
-        $this->assertEquals(null, $node[1]->parent_id);
+        $this->assertSame(5, $node[0]->parent_id);
+        $this->assertNull($node[1]->parent_id);
 
         $aroData = $this->Aro->save(new AclPerson([
             'model' => $Person->getAlias(),
@@ -333,12 +333,12 @@ class AclBehaviorTest extends TestCase
         $result = $this->Aro->find('all', [
             'conditions' => ['model' => $Person->getAlias(), 'foreign_key' => $person->id],
         ])->first();
-        $this->assertEquals(7, $result->parent_id);
+        $this->assertSame(7, $result->parent_id);
 
         $node = $Person->node(['model' => $Person->getAlias(), 'foreign_key' => 8], 'Aro')->toArray();
-        $this->assertEquals(2, count($node));
-        $this->assertEquals(7, $node[0]->parent_id);
-        $this->assertEquals(null, $node[1]->parent_id);
+        $this->assertCount(2, $node);
+        $this->assertSame(7, $node[0]->parent_id);
+        $this->assertNull($node[1]->parent_id);
     }
 
     /**
@@ -370,7 +370,7 @@ class AclBehaviorTest extends TestCase
         $result = $this->Aro->find('all', [
             'conditions' => ['model' => $Person->getAlias(), 'foreign_key' => $person->id],
         ])->first();
-        $this->assertEquals(5, $result->parent_id);
+        $this->assertSame(5, $result->parent_id);
 
         $person = $Person->save(new AclPerson([
             'id' => $person->id,
@@ -381,7 +381,7 @@ class AclBehaviorTest extends TestCase
         $result = $this->Aro->find('all', [
             'conditions' => ['model' => $Person->getAlias(), 'foreign_key' => $person->id],
         ])->first();
-        $this->assertEquals(5, $result->parent_id);
+        $this->assertSame(5, $result->parent_id);
     }
 
     /**
@@ -413,9 +413,9 @@ class AclBehaviorTest extends TestCase
         ]));
         $node = $Person->node($person, 'Aro')->toArray();
 
-        $this->assertEquals(2, count($node));
-        $this->assertEquals(5, $node[0]->parent_id);
-        $this->assertEquals(null, $node[1]->parent_id);
+        $this->assertCount(2, $node);
+        $this->assertSame(5, $node[0]->parent_id);
+        $this->assertNull($node[1]->parent_id);
 
         $Person->delete($person);
         $result = $this->Aro->find('all', [
@@ -463,6 +463,6 @@ class AclBehaviorTest extends TestCase
 
         $person = new AclPerson(['id' => 2], ['source' => $Person->getAlias()]);
         $result = $Person->node($person, 'Aro');
-        $this->assertEquals(1, $result->count());
+        $this->assertSame(1, $result->count());
     }
 }
