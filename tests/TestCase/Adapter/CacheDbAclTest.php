@@ -77,7 +77,7 @@ class CacheDbAclTest extends TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp() :void
     {
         parent::setUp();
         Configure::write('Acl.classname', __NAMESPACE__ . '\CachedDbAclTwoTest');
@@ -96,7 +96,7 @@ class CacheDbAclTest extends TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown() :void
     {
         parent::tearDown();
         unset($this->Acl);

@@ -222,9 +222,9 @@ class AclExtras
             $pathNode = $this->_checkNode($path, $prefix, $root->id);
             $this->foundACOs[$root->id][] = $prefix;
             if (isset($this->foundACOs[$pathNode->id])) {
-                $this->foundACOs[$pathNode->id] += $this->_updateControllers($pathNode, $controllers, null, $prefix);
+                $this->foundACOs[$pathNode->id] += $this->_updateControllers($pathNode, $controllers, '', $prefix);
             } else {
-                $this->foundACOs[$pathNode->id] = $this->_updateControllers($pathNode, $controllers, null, $prefix);
+                $this->foundACOs[$pathNode->id] = $this->_updateControllers($pathNode, $controllers, '', $prefix);
             }
         }
     }
@@ -235,7 +235,7 @@ class AclExtras
      * @param string $plugin The name of the plugin to alias
      * @return string
      */
-    protected function _pluginAlias($plugin)
+    protected function _pluginAlias(string $plugin) :string
     {
         return preg_replace('/\//', '\\', Inflector::camelize($plugin));
     }
@@ -305,7 +305,7 @@ class AclExtras
      * @param string $prefix Name of the prefix you are making controllers for.
      * @return array
      */
-    protected function _updateControllers($root, $controllers, $plugin = null, $prefix = null)
+    protected function _updateControllers($root, array $controllers, string $plugin = '', string $prefix = '')
     {
         $pluginPath = $this->_pluginAlias($plugin);
 
@@ -350,12 +350,12 @@ class AclExtras
     public function getControllerList($plugin = null, $prefix = null)
     {
         if (!$plugin) {
-            $path = App::path('Controller' . (empty($prefix) ? '' : DS . Inflector::camelize($prefix)));
+            $path = App::classPath('Controller' . (empty($prefix) ? '' : DS . Inflector::camelize($prefix)));
             $dir = new Folder($path[0]);
             $controllers = $dir->find('.*Controller\.php');
         } else {
-            $path = App::path('Controller' . (empty($prefix) ? '' : DS . Inflector::camelize($prefix)), $plugin);
-            $dir = new Folder($path[0]);
+            $path = Plugin::classPath($plugin) . 'Controller' . DS. (empty($prefix) ? '' : DS . Inflector::camelize($prefix));
+            $dir = new Folder($path);
             $controllers = $dir->find('.*Controller\.php');
         }
 

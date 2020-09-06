@@ -13,11 +13,16 @@
  */
 
 use Cake\Cache\Cache;
+use Cake\Chronos\Chronos;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use Cake\Log\Log;
 
 require_once 'vendor/autoload.php';
+
+if (!defined('DS')) {
+    define('DS', DIRECTORY_SEPARATOR);
+}
 
 define('ROOT', dirname(__DIR__));
 define('APP_DIR', 'test_app');
@@ -97,21 +102,11 @@ Cache::setConfig([
 ]);
 
 // Ensure default test connection is defined
-if (!getenv('db_class')) {
-    putenv('db_class=Cake\Database\Driver\Sqlite');
-    putenv('db_dsn=sqlite::memory:');
+if (!getenv('db_dsn')) {
+    putenv('db_dsn=sqlite:///:memory:');
 }
 
-ConnectionManager::setConfig('test', [
-    'className' => 'Cake\Database\Connection',
-    'driver' => getenv('db_class'),
-    'dsn' => getenv('db_dsn'),
-    'database' => getenv('db_database'),
-    'username' => getenv('db_login'),
-    'password' => getenv('db_password'),
-    'timezone' => 'UTC',
-    'quoteIdentifiers' => getenv('quoteIdentifiers'),
-]);
+ConnectionManager::setConfig('test', ['url' => getenv('db_dsn')]);
 
 Configure::write('Session', [
     'defaults' => 'php',
@@ -130,19 +125,4 @@ Log::setConfig([
     ],
 ]);
 
-if (class_exists('Carbon\Carbon')) {
-    Carbon\Carbon::setTestNow(Carbon\Carbon::now());
-} else {
-    Cake\Chronos\Chronos::setTestNow(Cake\Chronos\Chronos::now());
-    Cake\Chronos\MutableDateTime::setTestNow(Cake\Chronos\MutableDateTime::now());
-    Cake\Chronos\Date::setTestNow(Cake\Chronos\Date::now());
-    Cake\Chronos\MutableDate::setTestNow(Cake\Chronos\MutableDate::now());
-}
-
-if (class_exists('PHPUnit_Runner_Version')) {
-    class_alias('PHPUnit_Framework_TestResult', 'PHPUnit\Framework\TestResult');
-    class_alias('PHPUnit_Framework_Error', 'PHPUnit\Framework\Error\Error');
-    class_alias('PHPUnit_Framework_Error_Warning', 'PHPUnit\Framework\Error\Warning');
-    class_alias('PHPUnit_Framework_Error_Notice', 'PHPUnit\Framework\Error\Notice');
-    class_alias('PHPUnit_Framework_ExpectationFailedException', 'PHPUnit\Framework\ExpectationFailedException');
-}
+Chronos::setTestNow(Chronos::now());

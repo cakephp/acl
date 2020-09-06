@@ -36,7 +36,7 @@ class AclNodesTable extends Table
      *
      * @return void
      */
-    public static function defaultConnectionName()
+    public static function defaultConnectionName() :string
     {
         return Configure::read('Acl.database');
     }

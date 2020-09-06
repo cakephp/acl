@@ -33,7 +33,7 @@ class CrudAuthorizeTest extends TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp() :void
     {
         parent::setUp();
         Configure::write('Routing.prefixes', []);

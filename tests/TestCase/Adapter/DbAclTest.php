@@ -42,7 +42,7 @@ class AroTwoTest extends ArosTable
      * @param array $config Configuration array
      * @return void
      */
-    public function initialize(array $config)
+    public function initialize(array $config) :void
     {
         parent::initialize($config);
         $this->setAlias('AroTwoTest');
@@ -68,7 +68,7 @@ class AcoTwoTest extends AcosTable
      * @param array $config Configuration array
      * @return void
      */
-    public function initialize(array $config)
+    public function initialize(array $config) :void
     {
         parent::initialize($config);
         $this->setAlias('AcoTwoTest');
@@ -94,7 +94,7 @@ class PermissionTwoTest extends PermissionsTable
      * @param array $config Configuration array
      * @return void
      */
-    public function initialize(array $config)
+    public function initialize(array $config) :void
     {
         parent::initialize($config);
         $this->setAlias('PermissionTwoTest');
@@ -159,7 +159,7 @@ class DbAclTest extends TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp() :void
     {
         parent::setUp();
         Configure::write('Acl.classname', __NAMESPACE__ . '\DbAclTwoTest');
@@ -185,7 +185,7 @@ class DbAclTest extends TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown() :void
     {
         parent::tearDown();
         unset($this->Acl);

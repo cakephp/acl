@@ -1,6 +1,6 @@
 {
     "name": "cakephp/acl",
-    "description": "Acl Plugin for CakePHP 3.x framework",
+    "description": "Acl Plugin for CakePHP 4.x framework",
     "type": "cakephp-plugin",
     "keywords": [
         "cakephp",
@@ -21,12 +21,12 @@
         "source": "https://github.com/cakephp/acl"
     },
     "require": {
-        "cakephp/cakephp": "^3.8.2",
+        "cakephp/cakephp": "^4.0",
         "cakephp/plugin-installer": "*"
     },
     "require-dev": {
-        "cakephp/cakephp-codesniffer": "^3.0",
-        "phpunit/phpunit": "^5.7.14|^6.0"
+        "cakephp/cakephp-codesniffer": "dev-next",
+        "phpunit/phpunit": "^8.0"
     },
     "autoload": {
         "psr-4": {
@@ -38,5 +38,6 @@
             "Acl\\Test\\": "tests/",
             "Cake\\Test\\": "vendor/cakephp/cakephp/tests/"
         }
-    }
+    },
+    "minimum-stability": "dev"
 }
