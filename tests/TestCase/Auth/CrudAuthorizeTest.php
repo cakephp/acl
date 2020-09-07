@@ -64,11 +64,11 @@ class CrudAuthorizeTest extends TestCase
     /**
      * test authorize() without a mapped action, ensure an error is generated.
      *
-     * @expectedException PHPUnit\Framework\Error\Warning
      * @return void
      */
     public function testAuthorizeNoMappedAction()
     {
+        $this->expectException(\PHPUnit\Framework\Error\Warning::class);
         $request = new ServerRequest(['url' => '/posts/foobar']);
         $request = $request->withAttribute('params', [
             'controller' => 'posts',
