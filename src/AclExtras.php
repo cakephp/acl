@@ -26,6 +26,7 @@ use Cake\Http\ServerRequest;
 use Cake\Routing\Router;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
+use ReflectionException;
 
 /**
  * Provides features for additional ACL operations.

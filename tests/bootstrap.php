@@ -25,35 +25,18 @@ if (!defined('DS')) {
 }
 
 define('ROOT', dirname(__DIR__));
+define('CAKE_CORE_INCLUDE_PATH', ROOT . DS . 'vendor' . DS . 'cakephp' . DS . 'cakephp');
+define('CORE_PATH', ROOT . DS . 'vendor' . DS . 'cakephp' . DS . 'cakephp' . DS);
+define('CAKE', CORE_PATH . 'src' . DS);
+define('TESTS', ROOT . DS . 'tests');
+define('APP', ROOT . DS . 'tests' . DS . 'test_app' . DS);
 define('APP_DIR', 'test_app');
 define('WEBROOT_DIR', 'webroot');
-
+define('WWW_ROOT', APP . 'webroot' . DS);
 define('TMP', sys_get_temp_dir() . DS);
-define('LOGS', TMP . 'logs' . DS);
-define('CACHE', TMP . 'cache' . DS);
-define('SESSIONS', TMP . 'sessions' . DS);
-
-define('CAKE_CORE_INCLUDE_PATH', ROOT . '/vendor/cakephp/cakephp');
-define('CORE_PATH', CAKE_CORE_INCLUDE_PATH . DS);
-define('CAKE', CORE_PATH . 'src' . DS);
-define('CORE_TESTS', CORE_PATH . 'tests' . DS);
-define('CORE_TEST_CASES', CORE_TESTS . 'TestCase');
-define('TEST_APP', ROOT . DS . 'tests' . DS . 'test_app' . DS);
-define('LOG_ERROR', LOG_ERR);
-
-// Point app constants to the test app.
-define('APP', TEST_APP . DS);
-define('WWW_ROOT', TEST_APP . WEBROOT_DIR . DS);
-define('TESTS', TEST_APP . 'tests' . DS);
-define('CONFIG', TEST_APP . 'config' . DS);
-
-//@codingStandardsIgnoreStart
-@mkdir(LOGS);
-@mkdir(SESSIONS);
-@mkdir(CACHE);
-@mkdir(CACHE . 'views');
-@mkdir(CACHE . 'models');
-//@codingStandardsIgnoreEnd
+define('CONFIG', APP . 'config' . DS);
+define('CACHE', TMP);
+define('LOGS', TMP);
 
 require CAKE . 'Core/ClassLoader.php';
 
@@ -62,7 +45,8 @@ $loader->register();
 
 $loader->addNamespace('Cake\Test\Fixture', ROOT . '/vendor/cakephp/cakephp/tests/Fixture');
 $loader->addNamespace('TestApp', APP . 'src');
-$loader->addNamespace('PluginJs', TEST_APP . 'Plugin/PluginJs/src');
+$loader->addNamespace('TestPlugin', APP . 'Plugin/TestPlugin/src');
+$loader->addNamespace('Nested\TestPluginTwo', APP . 'Plugin/Nested/TestPluginTwo/src');
 
 require_once CORE_PATH . 'config' . DS . 'bootstrap.php';
 
@@ -83,9 +67,14 @@ Configure::write('App', [
     'jsBaseUrl' => 'js/',
     'cssBaseUrl' => 'css/',
     'paths' => [
-        'plugins' => [TEST_APP . 'Plugin' . DS],
+        'plugins' => [APP . 'Plugin' . DS],
         'templates' => [APP . 'Template' . DS],
     ],
+]);
+
+Configure::write('Acl', [
+    'cacheConfig' => 'tests',
+    'database' => 'test',
 ]);
 
 Cache::setConfig([

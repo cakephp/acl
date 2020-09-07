@@ -161,7 +161,7 @@ class AclShell extends Shell
         $identifier = $this->parseIdentifier($this->args[1]);
         $nodeId = $this->_getNodeId($class, $identifier);
         $entity = $this->Acl->{$class}->newEntity(['id' => $nodeId]);
-        $entity->isNew(false);
+        $entity->setNew(false);
 
         if (!$this->Acl->{$class}->delete($entity)) {
             $this->error(__d('cake_acl', 'Node Not Deleted') . __d('cake_acl', 'There was an error deleting the {0}. Check that the node exists.', [$class]) . "\n");

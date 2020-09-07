@@ -41,7 +41,7 @@ class IniAclTest extends TestCase
         $this->IniAcl = new IniAcl();
         $this->Acl = new AclComponent($Collection, [
             'adapter' => [
-                'config' => TEST_APP . 'config/acl',
+                'config' => APP . 'config/acl',
             ],
         ]);
     }

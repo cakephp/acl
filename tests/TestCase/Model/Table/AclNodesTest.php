@@ -365,7 +365,7 @@ class AclNodeTest extends TestCase
     public function testNodeActionAuthorize()
     {
         $this->deprecated(function () {
-            Plugin::load('TestPlugin', ['autoload' => true]);
+            Plugin::getCollection()->add(new \TestPlugin\Plugin());
         });
 
         $Aro = TableRegistry::getTableLocator()->get('DbAroTest');
@@ -383,7 +383,7 @@ class AclNodeTest extends TestCase
         $this->assertEquals($expected, $result[0]);
 
         $this->deprecated(function () {
-            Plugin::unload('TestPlugin');
+            Plugin::getCollection()->clear();
         });
     }
 }
