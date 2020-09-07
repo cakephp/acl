@@ -92,9 +92,9 @@ class AclShell extends Shell
                 TableRegistry::getTableLocator()->remove('Aros');
             } catch (\Cake\Database\Exception $e) {
                 $this->out(__d('cake_acl', 'Acl database tables not found. To create them, run:'));
-                $this->out();
+                $this->out('');
                 $this->out('  bin/cake Migrations.migrations migrate -p Acl');
-                $this->out();
+                $this->out('');
                 $this->_stop();
 
                 return;
