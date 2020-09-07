@@ -52,7 +52,7 @@ class DbAroTest extends ArosTable
             'through' => __NAMESPACE__ . '\DbPermissionTest',
             'className' => __NAMESPACE__ . '\DbAcoTest',
             'targetForeignKey' => 'id',
-            'foreignKey' => 'aco_id',
+            'foreignKey' => 'aro_id',
         ]);
     }
 }
@@ -104,11 +104,11 @@ class DbPermissionTest extends PermissionsTable
         $this->associations()->removeAll();
         $this->belongsTo('DbAroTest', [
             'className' => __NAMESPACE__ . '\DbAroTest',
-            'foreignKey' => 'aro_id',
+            'foreignKey' => 'id',
         ]);
         $this->belongsTo('DbAcoTest', [
             'className' => __NAMESPACE__ . '\DbAcoTest',
-            'foreignKey' => 'aco_id',
+            'foreignKey' => 'id',
         ]);
     }
 }
