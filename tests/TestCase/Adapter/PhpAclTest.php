@@ -35,7 +35,7 @@ class PhpAclTest extends TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp() :void
     {
         parent::setUp();
         Configure::write('Acl.classname', 'PhpAcl');
@@ -43,7 +43,7 @@ class PhpAclTest extends TestCase
         $this->PhpAcl = new PhpAcl();
         $this->Acl = new AclComponent($Collection, [
             'adapter' => [
-                'config' => TEST_APP . 'config/acl',
+                'config' => APP . 'config/acl',
             ],
         ]);
     }
@@ -294,11 +294,11 @@ class PhpAclTest extends TestCase
      * test that an invalid configuration throws exception
      *
      * @return void
-     * @expectedException Cake\Core\Exception\Exception
-     * @expectedExceptionMessage "roles" section not found in ACL configuration
      */
     public function testInvalidConfigWithAroMissing()
     {
+        $this->expectException(\Cake\Core\Exception\Exception::class);
+        $this->expectExceptionMessage('"roles" section not found in ACL configuration');
         $config = ['aco' => ['allow' => ['foo' => '']]];
         $this->PhpAcl->build($config);
     }
@@ -307,11 +307,11 @@ class PhpAclTest extends TestCase
      * test that an invalid config with missing acos
      *
      * @return void
-     * @expectedException Cake\Core\Exception\Exception
-     * @expectedExceptionMessage Neither "allow" nor "deny" rules were provided in ACL configuration.
      */
     public function testInvalidConfigWithAcosMissing()
     {
+        $this->expectException(\Cake\Core\Exception\Exception::class);
+        $this->expectExceptionMessage('Neither "allow" nor "deny" rules were provided in ACL configuration.');
         $config = [
             'roles' => ['Role/foo' => null],
         ];
@@ -345,11 +345,11 @@ class PhpAclTest extends TestCase
      * test that declaring cyclic dependencies should give an error when building the tree
      *
      * @return void
-     * @expectedException PhpUnit\Framework\Error\Error
-     * @expectedExceptionMessage cycle detected
      */
     public function testAroDeclarationContainsCycles()
     {
+        $this->expectException(\PHPUnit\Framework\Error\Error::class);
+        $this->expectExceptionMessage('cycle detected');
         $config = [
             'roles' => [
                 'Role/a' => null,

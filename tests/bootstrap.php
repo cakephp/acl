@@ -13,42 +13,30 @@
  */
 
 use Cake\Cache\Cache;
+use Cake\Chronos\Chronos;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use Cake\Log\Log;
 
 require_once 'vendor/autoload.php';
 
+if (!defined('DS')) {
+    define('DS', DIRECTORY_SEPARATOR);
+}
+
 define('ROOT', dirname(__DIR__));
+define('CAKE_CORE_INCLUDE_PATH', ROOT . DS . 'vendor' . DS . 'cakephp' . DS . 'cakephp');
+define('CORE_PATH', ROOT . DS . 'vendor' . DS . 'cakephp' . DS . 'cakephp' . DS);
+define('CAKE', CORE_PATH . 'src' . DS);
+define('TESTS', ROOT . DS . 'tests');
+define('APP', ROOT . DS . 'tests' . DS . 'test_app' . DS);
 define('APP_DIR', 'test_app');
 define('WEBROOT_DIR', 'webroot');
-
+define('WWW_ROOT', APP . 'webroot' . DS);
 define('TMP', sys_get_temp_dir() . DS);
-define('LOGS', TMP . 'logs' . DS);
-define('CACHE', TMP . 'cache' . DS);
-define('SESSIONS', TMP . 'sessions' . DS);
-
-define('CAKE_CORE_INCLUDE_PATH', ROOT . '/vendor/cakephp/cakephp');
-define('CORE_PATH', CAKE_CORE_INCLUDE_PATH . DS);
-define('CAKE', CORE_PATH . 'src' . DS);
-define('CORE_TESTS', CORE_PATH . 'tests' . DS);
-define('CORE_TEST_CASES', CORE_TESTS . 'TestCase');
-define('TEST_APP', ROOT . DS . 'tests' . DS . 'test_app' . DS);
-define('LOG_ERROR', LOG_ERR);
-
-// Point app constants to the test app.
-define('APP', TEST_APP . DS);
-define('WWW_ROOT', TEST_APP . WEBROOT_DIR . DS);
-define('TESTS', TEST_APP . 'tests' . DS);
-define('CONFIG', TEST_APP . 'config' . DS);
-
-//@codingStandardsIgnoreStart
-@mkdir(LOGS);
-@mkdir(SESSIONS);
-@mkdir(CACHE);
-@mkdir(CACHE . 'views');
-@mkdir(CACHE . 'models');
-//@codingStandardsIgnoreEnd
+define('CONFIG', APP . 'config' . DS);
+define('CACHE', TMP);
+define('LOGS', TMP);
 
 require CAKE . 'Core/ClassLoader.php';
 
@@ -57,7 +45,8 @@ $loader->register();
 
 $loader->addNamespace('Cake\Test\Fixture', ROOT . '/vendor/cakephp/cakephp/tests/Fixture');
 $loader->addNamespace('TestApp', APP . 'src');
-$loader->addNamespace('PluginJs', TEST_APP . 'Plugin/PluginJs/src');
+$loader->addNamespace('TestPlugin', APP . 'Plugin/TestPlugin/src');
+$loader->addNamespace('Nested\TestPluginTwo', APP . 'Plugin/Nested/TestPluginTwo/src');
 
 require_once CORE_PATH . 'config' . DS . 'bootstrap.php';
 
@@ -78,9 +67,14 @@ Configure::write('App', [
     'jsBaseUrl' => 'js/',
     'cssBaseUrl' => 'css/',
     'paths' => [
-        'plugins' => [TEST_APP . 'Plugin' . DS],
+        'plugins' => [APP . 'Plugin' . DS],
         'templates' => [APP . 'Template' . DS],
     ],
+]);
+
+Configure::write('Acl', [
+    'cacheConfig' => 'tests',
+    'database' => 'test',
 ]);
 
 Cache::setConfig([
@@ -97,21 +91,11 @@ Cache::setConfig([
 ]);
 
 // Ensure default test connection is defined
-if (!getenv('db_class')) {
-    putenv('db_class=Cake\Database\Driver\Sqlite');
-    putenv('db_dsn=sqlite::memory:');
+if (!getenv('db_dsn')) {
+    putenv('db_dsn=sqlite:///:memory:');
 }
 
-ConnectionManager::setConfig('test', [
-    'className' => 'Cake\Database\Connection',
-    'driver' => getenv('db_class'),
-    'dsn' => getenv('db_dsn'),
-    'database' => getenv('db_database'),
-    'username' => getenv('db_login'),
-    'password' => getenv('db_password'),
-    'timezone' => 'UTC',
-    'quoteIdentifiers' => getenv('quoteIdentifiers'),
-]);
+ConnectionManager::setConfig('test', ['url' => getenv('db_dsn')]);
 
 Configure::write('Session', [
     'defaults' => 'php',
@@ -130,19 +114,4 @@ Log::setConfig([
     ],
 ]);
 
-if (class_exists('Carbon\Carbon')) {
-    Carbon\Carbon::setTestNow(Carbon\Carbon::now());
-} else {
-    Cake\Chronos\Chronos::setTestNow(Cake\Chronos\Chronos::now());
-    Cake\Chronos\MutableDateTime::setTestNow(Cake\Chronos\MutableDateTime::now());
-    Cake\Chronos\Date::setTestNow(Cake\Chronos\Date::now());
-    Cake\Chronos\MutableDate::setTestNow(Cake\Chronos\MutableDate::now());
-}
-
-if (class_exists('PHPUnit_Runner_Version')) {
-    class_alias('PHPUnit_Framework_TestResult', 'PHPUnit\Framework\TestResult');
-    class_alias('PHPUnit_Framework_Error', 'PHPUnit\Framework\Error\Error');
-    class_alias('PHPUnit_Framework_Error_Warning', 'PHPUnit\Framework\Error\Warning');
-    class_alias('PHPUnit_Framework_Error_Notice', 'PHPUnit\Framework\Error\Notice');
-    class_alias('PHPUnit_Framework_ExpectationFailedException', 'PHPUnit\Framework\ExpectationFailedException');
-}
+Chronos::setTestNow(Chronos::now());

@@ -42,7 +42,7 @@ class AroTwoTest extends ArosTable
      * @param array $config Configuration array
      * @return void
      */
-    public function initialize(array $config)
+    public function initialize(array $config) :void
     {
         parent::initialize($config);
         $this->setAlias('AroTwoTest');
@@ -68,7 +68,7 @@ class AcoTwoTest extends AcosTable
      * @param array $config Configuration array
      * @return void
      */
-    public function initialize(array $config)
+    public function initialize(array $config) :void
     {
         parent::initialize($config);
         $this->setAlias('AcoTwoTest');
@@ -94,7 +94,7 @@ class PermissionTwoTest extends PermissionsTable
      * @param array $config Configuration array
      * @return void
      */
-    public function initialize(array $config)
+    public function initialize(array $config) :void
     {
         parent::initialize($config);
         $this->setAlias('PermissionTwoTest');
@@ -159,7 +159,7 @@ class DbAclTest extends TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp() :void
     {
         parent::setUp();
         Configure::write('Acl.classname', __NAMESPACE__ . '\DbAclTwoTest');
@@ -185,7 +185,7 @@ class DbAclTest extends TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown() :void
     {
         parent::tearDown();
         unset($this->Acl);
@@ -248,11 +248,11 @@ class DbAclTest extends TestCase
     /**
      * testDbAclAllow method
      *
-     * @expectedException PHPUnit\Framework\Error\Warning
      * @return void
      */
     public function testAllow()
     {
+        $this->expectException(\PHPUnit\Framework\Error\Warning::class);
         $this->assertFalse($this->Acl->check('Micheal', 'tpsReports', 'read'));
         $this->assertTrue($this->Acl->allow('Micheal', 'tpsReports', ['read', 'delete', 'update']));
         $this->assertTrue($this->Acl->check('Micheal', 'tpsReports', 'update'));
@@ -286,22 +286,22 @@ class DbAclTest extends TestCase
     /**
      * Test that allow() with an invalid permission name triggers an error.
      *
-     * @expectedException Exception
      * @return void
      */
     public function testAllowInvalidPermission()
     {
+        $this->expectException(\Exception::class);
         $this->Acl->allow('Micheal', 'tpsReports', 'derp');
     }
 
     /**
      * testAllowInvalidNode method
      *
-     * @expectedException PHPUnit\Framework\Error\Warning
      * @return void
      */
     public function testAllowInvalidNode()
     {
+        $this->expectException(\PHPUnit\Framework\Error\Warning::class);
         $this->Acl->allow('Homer', 'tpsReports', 'create');
     }
 
@@ -329,33 +329,33 @@ class DbAclTest extends TestCase
     /**
      * testCheckInvalidNode method
      *
-     * @expectedException PHPUnit\Framework\Error\Warning
      * @return void
      */
     public function testCheckInvalidNode()
     {
+        $this->expectException(\PHPUnit\Framework\Error\Warning::class);
         $this->assertFalse($this->Acl->check('WRONG', 'tpsReports', 'read'));
     }
 
     /**
      * testCheckInvalidPermission method
      *
-     * @expectedException PHPUnit\Framework\Error\Notice
      * @return void
      */
     public function testCheckInvalidPermission()
     {
+        $this->expectException(\PHPUnit\Framework\Error\Notice::class);
         $this->Acl->check('Lumbergh', 'smash', 'foobar');
     }
 
     /**
      * testCheckMissingPermission method
      *
-     * @expectedException PHPUnit\Framework\Error\Warning
      * @return void
      */
     public function testCheckMissingPermission()
     {
+        $this->expectException(\PHPUnit\Framework\Error\Warning::class);
         $this->Acl->check('users', 'NonExistent', 'read');
     }
 
@@ -380,11 +380,11 @@ class DbAclTest extends TestCase
     /**
      * testDbAclDeny method
      *
-     * @expectedException PHPUnit\Framework\Error\Warning
      * @return void
      */
     public function testDeny()
     {
+        $this->expectException(\PHPUnit\Framework\Error\Warning::class);
         $this->assertTrue($this->Acl->check('Micheal', 'smash', 'delete'));
         $this->Acl->deny('Micheal', 'smash', 'delete');
         $this->assertFalse($this->Acl->check('Micheal', 'smash', 'delete'));
@@ -456,11 +456,11 @@ class DbAclTest extends TestCase
     /**
      * testDbGrant method
      *
-     * @expectedException PHPUnit\Framework\Error\Warning
      * @return void
      */
     public function testGrant()
     {
+        $this->expectException(\PHPUnit\Framework\Error\Warning::class);
         $this->assertFalse($this->Acl->check('Samir', 'tpsReports', 'create'));
         $this->Acl->allow('Samir', 'tpsReports', 'create');
         $this->assertTrue($this->Acl->check('Samir', 'tpsReports', 'create'));
@@ -478,11 +478,11 @@ class DbAclTest extends TestCase
     /**
      * testDbRevoke method
      *
-     * @expectedException PHPUnit\Framework\Error\Warning
      * @return void
      */
     public function testRevoke()
     {
+        $this->expectException(\PHPUnit\Framework\Error\Warning::class);
         $this->assertTrue($this->Acl->check('Bobs', 'tpsReports', 'read'));
         $this->Acl->deny('Bobs', 'tpsReports', 'read');
         $this->assertFalse($this->Acl->check('Bobs', 'tpsReports', 'read'));

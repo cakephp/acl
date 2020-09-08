@@ -42,7 +42,7 @@ class AclPeople extends Table
      * @param array $config Configuration array
      * @return void
      */
-    public function initialize(array $config)
+    public function initialize(array $config) :void
     {
         $this->setTable('people');
         $this->setEntityClass(__NAMESPACE__ . '\AclPerson');
@@ -99,7 +99,7 @@ class AclUsers extends Table
      * @param array $config Configuration array
      * @return void
      */
-    public function initialize(array $config)
+    public function initialize(array $config) :void
     {
         $this->setTable('users');
         $this->setEntityClass(__NAMESPACE__ . '\AclUser');
@@ -132,7 +132,7 @@ class AclPosts extends Table
      * @param array $config Configuration array
      * @return void
      */
-    public function initialize(array $config)
+    public function initialize(array $config) :void
     {
         $this->setTable('posts');
         $this->setEntityClass(__NAMESPACE__ . '\AclPost');
@@ -193,7 +193,7 @@ class AclBehaviorTest extends TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp() :void
     {
         parent::setUp();
         Configure::write('Acl.database', 'test');
@@ -222,7 +222,7 @@ class AclBehaviorTest extends TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown() :void
     {
         parent::tearDown();
         unset($this->Aro, $this->Aco);

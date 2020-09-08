@@ -6,15 +6,9 @@ class CakePhpDbAcl extends AbstractMigration
 {
 
     /**
-     * Change Method.
-     *
-     * More information on this method is available here:
-     * http://docs.phinx.org/en/latest/migrations.html#the-change-method
-     *
-     * Uncomment this method if you would like to use it.
-     *
+     * Migrate Up.
      */
-    public function change()
+    public function up()
     {
         $table = $this->table('acos');
         $table->addColumn('parent_id', 'integer',['null'=>true])
@@ -49,17 +43,13 @@ class CakePhpDbAcl extends AbstractMigration
     }
 
     /**
-     * Migrate Up.
-     */
-    public function up()
-    {
-    }
-
-    /**
      * Migrate Down.
      */
     public function down()
     {
+        $this->table('aros_acos')->drop()->save();
+        $this->table('acos')->drop()->save();
+        $this->table('aros')->drop()->save();
     }
 
 }

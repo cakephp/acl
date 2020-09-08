@@ -15,7 +15,7 @@ class AclShellTest extends TestCase
         'app.ArosAcos',
     ];
 
-    public function setUp()
+    public function setUp() :void
     {
         parent::setUp();
         $this->io = $this->getMockBuilder('Cake\Console\ConsoleIo')

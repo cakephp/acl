@@ -43,7 +43,7 @@ class DbAroTest extends ArosTable
      * @param array $config Configuration array
      * @return void
      */
-    public function initialize(array $config)
+    public function initialize(array $config) :void
     {
         parent::initialize($config);
         $this->setAlias('DbAroTest');
@@ -52,7 +52,7 @@ class DbAroTest extends ArosTable
             'through' => __NAMESPACE__ . '\DbPermissionTest',
             'className' => __NAMESPACE__ . '\DbAcoTest',
             'targetForeignKey' => 'id',
-            'foreignKey' => 'aco_id',
+            'foreignKey' => 'aro_id',
         ]);
     }
 }
@@ -70,7 +70,7 @@ class DbAcoTest extends AcosTable
      * @param array $config Configuration array
      * @return void
      */
-    public function initialize(array $config)
+    public function initialize(array $config) :void
     {
         parent::initialize($config);
         $this->setAlias('DbAcoTest');
@@ -97,18 +97,18 @@ class DbPermissionTest extends PermissionsTable
      * @param array $config Configuration array
      * @return void
      */
-    public function initialize(array $config)
+    public function initialize(array $config) :void
     {
         parent::initialize($config);
         $this->setAlias('DbPermissionTest');
         $this->associations()->removeAll();
         $this->belongsTo('DbAroTest', [
             'className' => __NAMESPACE__ . '\DbAroTest',
-            'foreignKey' => 'aro_id',
+            'foreignKey' => 'id',
         ]);
         $this->belongsTo('DbAcoTest', [
             'className' => __NAMESPACE__ . '\DbAcoTest',
-            'foreignKey' => 'aco_id',
+            'foreignKey' => 'id',
         ]);
     }
 }
@@ -126,7 +126,7 @@ class DbAcoActionTest extends AcoActionsTable
      * @param array $config Configuration array
      * @return void
      */
-    public function initialize(array $config)
+    public function initialize(array $config) :void
     {
         $this->setTable('aco_actions');
         $this->belongsTo('DbAcoTest', [
@@ -191,7 +191,7 @@ class AclNodeTest extends TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp() :void
     {
         parent::setUp();
         Configure::write('Acl.classname', 'TestDbAcl');
@@ -365,7 +365,7 @@ class AclNodeTest extends TestCase
     public function testNodeActionAuthorize()
     {
         $this->deprecated(function () {
-            Plugin::load('TestPlugin', ['autoload' => true]);
+            Plugin::getCollection()->add(new \TestPlugin\Plugin());
         });
 
         $Aro = TableRegistry::getTableLocator()->get('DbAroTest');
@@ -383,7 +383,7 @@ class AclNodeTest extends TestCase
         $this->assertSame($expected, $result[0]);
 
         $this->deprecated(function () {
-            Plugin::unload('TestPlugin');
+            Plugin::getCollection()->clear();
         });
     }
 }

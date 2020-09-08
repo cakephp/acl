@@ -16,6 +16,7 @@
 namespace Acl\Shell;
 
 use Acl\Controller\Component\AclComponent;
+use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Controller\ComponentRegistry;
 use Cake\Controller\Controller;
@@ -58,7 +59,7 @@ class AclShell extends Shell
      *
      * @return void
      */
-    public function startup()
+    public function startup() :void
     {
         parent::startup();
         if (isset($this->params['connection'])) {
@@ -91,9 +92,9 @@ class AclShell extends Shell
                 TableRegistry::getTableLocator()->remove('Aros');
             } catch (\Cake\Database\Exception $e) {
                 $this->out(__d('cake_acl', 'Acl database tables not found. To create them, run:'));
-                $this->out();
+                $this->out('');
                 $this->out('  bin/cake Migrations.migrations migrate -p Acl');
-                $this->out();
+                $this->out('');
                 $this->_stop();
 
                 return;
@@ -160,7 +161,7 @@ class AclShell extends Shell
         $identifier = $this->parseIdentifier($this->args[1]);
         $nodeId = $this->_getNodeId($class, $identifier);
         $entity = $this->Acl->{$class}->newEntity(['id' => $nodeId]);
-        $entity->isNew(false);
+        $entity->setNew(false);
 
         if (!$this->Acl->{$class}->delete($entity)) {
             $this->error(__d('cake_acl', 'Node Not Deleted') . __d('cake_acl', 'There was an error deleting the {0}. Check that the node exists.', [$class]) . "\n");
@@ -368,7 +369,7 @@ class AclShell extends Shell
      *
      * @return ConsoleOptionParser
      */
-    public function getOptionParser()
+    public function getOptionParser() :ConsoleOptionParser
     {
         $parser = parent::getOptionParser();
 

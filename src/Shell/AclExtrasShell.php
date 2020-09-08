@@ -18,6 +18,7 @@ namespace Acl\Shell;
 
 use Acl\AclExtras;
 use Cake\Console\ConsoleIo;
+use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Database\Exception;
 use Cake\ORM\TableRegistry;
@@ -58,7 +59,7 @@ class AclExtrasShell extends Shell
      *
      * @return void
      */
-    public function startup()
+    public function startup() :void
     {
         parent::startup();
         $this->AclExtras->startup();
@@ -69,9 +70,9 @@ class AclExtrasShell extends Shell
                 TableRegistry::getTableLocator()->get('Aros')->getSchema();
             } catch (Exception $e) {
                 $this->out(__d('cake_acl', 'Acl database tables not found. To create them, run:'));
-                $this->out();
+                $this->out('');
                 $this->out('  bin/cake Migrations.migrations migrate -p Acl');
-                $this->out();
+                $this->out('');
                 $this->_stop();
             }
         }
@@ -102,7 +103,7 @@ class AclExtrasShell extends Shell
      *
      * @return \Cake\Console\ConsoleOptionParser
      */
-    public function getOptionParser()
+    public function getOptionParser() :ConsoleOptionParser
     {
         $parser = parent::getOptionParser();
 

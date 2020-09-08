@@ -31,16 +31,16 @@ use Cake\TestSuite\TestCase;
 class CachedDbAclTwoTest extends CachedDbAcl
 {
 
-    public $Permission = null;
+    //public $Permission = null;
 
     /**
      * construct method
      *
      */
-    public function __construct()
-    {
-        $this->_cacheConfig = 'tests';
-    }
+    // public function __construct()
+    // {
+    //     $this->_cacheConfig = 'tests';
+    // }
 
     /**
      * Pass through for cache keys
@@ -77,7 +77,7 @@ class CacheDbAclTest extends TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp() :void
     {
         parent::setUp();
         Configure::write('Acl.classname', __NAMESPACE__ . '\CachedDbAclTwoTest');
@@ -96,11 +96,11 @@ class CacheDbAclTest extends TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown() :void
     {
         parent::tearDown();
         unset($this->Acl);
-        Cache::clear(false, 'tests');
+        Cache::clear('tests');
         Cache::drop('tests');
     }
 
