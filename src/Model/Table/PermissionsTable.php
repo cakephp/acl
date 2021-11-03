@@ -103,7 +103,7 @@ class PermissionsTable extends AclNodesTable
         }
 
         $inherited = [];
-        $acoIDs = $acoPath->extract('id')->toArray();
+        $acoIDs = $acoPath->all()->extract('id')->toArray();
 
         $count = $aroPath->count();
         $aroPaths = $aroPath->toArray();
