@@ -80,7 +80,8 @@ class AclBehavior extends Behavior
             if (!TableRegistry::getTableLocator()->exists($alias)) {
                 $config = ['className' => $className];
             }
-            $model->hasMany($type, [
+
+            $model->hasMany($alias, [
                 'targetTable' => TableRegistry::getTableLocator()->get($alias, $config),
             ]);
         }
