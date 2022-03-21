@@ -39,13 +39,13 @@ class AcosTable extends AclNodesTable
         $this->addBehavior('Tree', ['type' => 'nested']);
 
         $this->belongsToMany('Aros', [
-            'through' => App::className('Acl.PermissionsTable', 'Model/Table'),
-            'className' => App::className('Acl.ArosTable', 'Model/Table'),
+            'through' => 'Acl.Permissions',
+            'className' => 'Acl.Aros',
         ]);
         $this->hasMany('AcoChildren', [
-            'className' => App::className('Acl.AcosTable', 'Model/Table'),
+            'className' => 'Acl.Acos',
             'foreignKey' => 'parent_id',
         ]);
-        $this->setEntityClass(App::className('Acl.Aco', 'Model/Entity'));
+        $this->setEntityClass('Acl.Aco');
     }
 }
