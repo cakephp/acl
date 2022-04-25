@@ -72,9 +72,9 @@ class AclBehavior extends Behavior
         }
         foreach ($types as $type) {
             $alias = Inflector::pluralize($type);
-            $className = App::className($alias . 'Table', 'Model/Table');
+            $className = App::className($alias, 'Model/Table', 'Table');
             if ($className == false) {
-                $className = App::className('Acl.' . $alias . 'Table', 'Model/Table');
+                $className = App::className('Acl.' . $alias, 'Model/Table', 'Table');
             }
             $config = [];
             if (!TableRegistry::getTableLocator()->exists($alias)) {
