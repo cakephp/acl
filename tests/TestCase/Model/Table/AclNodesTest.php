@@ -216,52 +216,52 @@ class AclNodeTest extends TestCase
         $Aco = TableRegistry::getTableLocator()->get('DbAcoTest');
 
         $result = $Aco->node('Controller1');
-        $result = $result->extract('id')->toArray();
+        $result = $result->all()->extract('id')->toArray();
         $expected = [2, 1];
         $this->assertSame($expected, $result);
 
         $result = $Aco->node('Controller1/action1');
-        $result = $result->extract('id')->toArray();
+        $result = $result->all()->extract('id')->toArray();
         $expected = [3, 2, 1];
         $this->assertSame($expected, $result);
 
         $result = $Aco->node('Controller2/action1');
-        $result = $result->extract('id')->toArray();
+        $result = $result->all()->extract('id')->toArray();
         $expected = [7, 6, 1];
         $this->assertSame($expected, $result);
 
         $result = $Aco->node('Controller1/action2');
-        $result = $result->extract('id')->toArray();
+        $result = $result->all()->extract('id')->toArray();
         $expected = [5, 2, 1];
         $this->assertSame($expected, $result);
 
         $result = $Aco->node('Controller1/action1/record1');
-        $result = $result->extract('id')->toArray();
+        $result = $result->all()->extract('id')->toArray();
         $expected = [4, 3, 2, 1];
         $this->assertSame($expected, $result);
 
         $result = $Aco->node('Controller2/action1/record1');
-        $result = $result->extract('id')->toArray();
+        $result = $result->all()->extract('id')->toArray();
         $expected = [8, 7, 6, 1];
         $this->assertSame($expected, $result);
 
         $result = $Aco->node(8);
-        $result = $result->extract('id')->toArray();
+        $result = $result->all()->extract('id')->toArray();
         $expected = [8, 7, 6, 1];
         $this->assertSame($expected, $result);
 
         $result = $Aco->node(7);
-        $result = $result->extract('id')->toArray();
+        $result = $result->all()->extract('id')->toArray();
         $expected = [7, 6, 1];
         $this->assertSame($expected, $result);
 
         $result = $Aco->node(4);
-        $result = $result->extract('id')->toArray();
+        $result = $result->all()->extract('id')->toArray();
         $expected = [4, 3, 2, 1];
         $this->assertSame($expected, $result);
 
         $result = $Aco->node(3);
-        $result = $result->extract('id')->toArray();
+        $result = $result->all()->extract('id')->toArray();
         $expected = [3, 2, 1];
         $this->assertSame($expected, $result);
 
@@ -295,12 +295,12 @@ class AclNodeTest extends TestCase
         $Aro = TableRegistry::getTableLocator()->get('DbAroTest');
         $Aro->setEntityClass(__NAMESPACE__ . '\DbAroUserTest');
         Configure::write('DbAclbindMode', 'string');
-        $result = $Aro->node(['DbAroTest' => ['id' => '1', 'foreign_key' => '1']])->extract('id')->toArray();
+        $result = $Aro->node(['DbAroTest' => ['id' => '1', 'foreign_key' => '1']])->all()->extract('id')->toArray();
         $expected = [3, 2, 1];
         $this->assertSame($expected, $result);
 
         Configure::write('DbAclbindMode', 'array');
-        $result = $Aro->node(['DbAroTest' => ['id' => 4, 'foreign_key' => 2]])->extract('id')->toArray();
+        $result = $Aro->node(['DbAroTest' => ['id' => 4, 'foreign_key' => 2]])->all()->extract('id')->toArray();
         $expected = [4];
         $this->assertSame($expected, $result);
     }
@@ -315,12 +315,12 @@ class AclNodeTest extends TestCase
         $Aro = TableRegistry::getTableLocator()->get('DbAroTest');
         $Model = new DbAroUserTest(['id' => 1]);
         $Model->setSource('AuthUser');
-        $result = $Aro->node($Model)->extract('id')->toArray();
+        $result = $Aro->node($Model)->all()->extract('id')->toArray();
         $expected = [3, 2, 1];
         $this->assertSame($expected, $result);
 
         $Model->id = 2;
-        $result = $Aro->node($Model)->extract('id')->toArray();
+        $result = $Aro->node($Model)->all()->extract('id')->toArray();
         $expected = [4, 2, 1];
         $this->assertSame($expected, $result);
     }
@@ -378,7 +378,7 @@ class AclNodeTest extends TestCase
         $this->assertSame($expected, $result);
 
         $node = $Aro->node(['TestPlugin.TestPluginAuthUser' => ['id' => 1, 'user' => 'mariano']]);
-        $result = $node->extract('id')->toArray();
+        $result = $node->all()->extract('id')->toArray();
         $expected = $aro->id;
         $this->assertSame($expected, $result[0]);
 
