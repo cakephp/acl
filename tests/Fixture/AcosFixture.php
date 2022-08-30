@@ -25,22 +25,6 @@ class AcosFixture extends TestFixture
 {
 
     /**
-     * fields property
-     *
-     * @var array
-     */
-    public $fields = [
-        'id' => ['type' => 'integer'],
-        'parent_id' => ['type' => 'integer', 'length' => 10, 'null' => true],
-        'model' => ['type' => 'string', 'null' => true],
-        'foreign_key' => ['type' => 'integer', 'length' => 10, 'null' => true],
-        'alias' => ['type' => 'string', 'default' => ''],
-        'lft' => ['type' => 'integer', 'length' => 10, 'null' => true],
-        'rght' => ['type' => 'integer', 'length' => 10, 'null' => true],
-        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]],
-    ];
-
-    /**
      * records property
      *
      * @var array

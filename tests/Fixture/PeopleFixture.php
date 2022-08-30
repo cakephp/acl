@@ -24,24 +24,6 @@ class PeopleFixture extends TestFixture
 {
 
     /**
-     * fields property
-     *
-     * @var array
-     */
-    public $fields = [
-        'id' => ['type' => 'integer', 'null' => false],
-        'name' => ['type' => 'string', 'null' => false, 'length' => 32],
-        'mother_id' => ['type' => 'integer', 'null' => false],
-        'father_id' => ['type' => 'integer', 'null' => false],
-        '_constraints' => [
-            'PRIMARY' => ['type' => 'primary', 'columns' => ['id']],
-        ],
-        '_indexes' => [
-            'mother_id' => ['type' => 'index', 'columns' => ['mother_id', 'father_id']],
-        ],
-    ];
-
-    /**
      * records property
      *
      * @var array

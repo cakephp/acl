@@ -17,6 +17,7 @@ use Cake\Chronos\Chronos;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use Cake\Log\Log;
+use Cake\TestSuite\Fixture\SchemaLoader;
 
 require_once 'vendor/autoload.php';
 
@@ -115,3 +116,10 @@ Log::setConfig([
 ]);
 
 Chronos::setTestNow(Chronos::now());
+
+// Create test database schema
+if (env('FIXTURE_SCHEMA_METADATA')) {
+
+    $loader = new SchemaLoader();
+    $loader->loadInternalFile(env('FIXTURE_SCHEMA_METADATA'));
+}

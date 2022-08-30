@@ -1,7 +1,13 @@
 <?php
 
-\Cake\Routing\Router::plugin('TestPlugin', function ($routes) {
-    $routes->prefix('admin', function ($routes) {
-        $routes->fallbacks('DashedRoute');
+use Cake\Routing\RouteBuilder;
+
+return static function (RouteBuilder $routes) {
+
+    $routes->plugin('TestPlugin', function ($routes) {
+        $routes->prefix('admin', function ($routes) {
+            $routes->fallbacks('DashedRoute');
+        });
     });
-});
+};
+
