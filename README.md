@@ -8,7 +8,7 @@ A plugin for managing ACL in CakePHP applications.
 
 ## Installing via composer
 
-You can install this plugin into your CakePHP application using [composer](http://getcomposer.org).
+You can install this plugin into your CakePHP application using [composer](https://getcomposer.org).
 
 The recommended way to install composer packages is:
 
@@ -62,7 +62,7 @@ public function parentNode() {
 ## Running tests
 
 Assuming you have PHPUnit installed system wide using one of the methods stated
-[here](http://phpunit.de/manual/current/en/installation.html), you can run the
+[here](https://phpunit.de/manual/current/en/installation.html), you can run the
 tests for the Acl plugin by doing the following:
 
 1. Copy `phpunit.xml.dist` to `phpunit.xml`
