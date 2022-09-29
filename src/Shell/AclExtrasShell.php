@@ -9,9 +9,9 @@
  * Redistributions of files must retain the above copyright notice.
  *
  * @copyright Copyright 2008-2013, Mark Story.
- * @link http://mark-story.com
+ * @link https://mark-story.com
  * @author Mark Story <mark@mark-story.com>
- * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ * @license https://www.opensource.org/licenses/mit-license.php The MIT License
  */
 
 namespace Acl\Shell;
