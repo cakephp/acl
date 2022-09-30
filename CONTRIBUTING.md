@@ -51,7 +51,7 @@ chance of keeping on top of things.
 
 ## Test cases and codesniffer
 
-CakePHP tests requires [PHPUnit](http://www.phpunit.de/manual/current/en/installation.html)
+CakePHP tests requires [PHPUnit](https://www.phpunit.de/manual/current/en/installation.html)
 3.5 or higher. To run the test cases locally use the following command:
 
     phpunit --stderr tests/TestCase/
@@ -73,7 +73,7 @@ for the sniff and phpcs.
 
 # Additional Resources
 
-* [CakePHP coding standards](http://book.cakephp.org/3.0/en/contributing/cakephp-coding-conventions.html)
+* [CakePHP coding standards](https://book.cakephp.org/3.0/en/contributing/cakephp-coding-conventions.html)
 * [Existing issues](https://github.com/cakephp/cakephp/issues)
 * [Development Roadmaps](https://github.com/cakephp/cakephp/wiki#roadmaps)
 * [General GitHub documentation](https://help.github.com/)
