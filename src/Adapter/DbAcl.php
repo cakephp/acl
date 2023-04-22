@@ -23,7 +23,6 @@ use Acl\Model\Table\PermissionsTable;
 use Acl\Model\Table\ArosTable;
 use Acl\Model\Table\AcosTable;
 
-
 /**
  * DbAcl implements an ACL control system in the database. ARO's and ACO's are
  * structured into trees and a linking table is used to define permissions. You
