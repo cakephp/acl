@@ -27,6 +27,8 @@ use Cake\Utility\Hash;
  */
 class PermissionsTable extends AclNodesTable
 {
+    private Table $Aro;
+    private Table $Aco;
 
     /**
      * {@inheritDoc}
