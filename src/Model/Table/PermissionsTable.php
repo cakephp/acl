@@ -20,6 +20,8 @@ use Cake\Core\Configure;
 use Cake\Core\Exception\Exception;
 use Cake\ORM\Table;
 use Cake\Utility\Hash;
+use Acl\Model\Table\ArosTable;
+use Acl\Model\Table\AcosTable;
 
 /**
  * Permissions linking AROs with ACOs
@@ -27,6 +29,8 @@ use Cake\Utility\Hash;
  */
 class PermissionsTable extends AclNodesTable
 {
+    private ArosTable $Aro;
+    private AcosTable $Aco;
 
     /**
      * {@inheritDoc}

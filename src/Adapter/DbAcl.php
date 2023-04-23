@@ -19,6 +19,9 @@ use Acl\AclInterface;
 use Cake\Controller\Component;
 use Cake\Core\App;
 use Cake\ORM\TableRegistry;
+use Acl\Model\Table\PermissionsTable;
+use Acl\Model\Table\ArosTable;
+use Acl\Model\Table\AcosTable;
 
 /**
  * DbAcl implements an ACL control system in the database. ARO's and ACO's are
@@ -40,6 +43,9 @@ use Cake\ORM\TableRegistry;
  */
 class DbAcl implements AclInterface
 {
+    private PermissionsTable $Permission;
+    private ArosTable $Aro;
+    private AcosTable $Aco;
 
     /**
      * Constructor
