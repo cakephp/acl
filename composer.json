@@ -1,5 +1,5 @@
 {
-    "name": "itnovum/acl",
+    "name": "cakephp/acl",
     "description": "Acl Plugin for CakePHP framework",
     "type": "cakephp-plugin",
     "keywords": [
