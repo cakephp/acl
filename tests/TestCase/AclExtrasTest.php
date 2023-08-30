@@ -13,9 +13,9 @@
  * Redistributions of files must retain the above copyright notice.
  *
  * @copyright Copyright 2008-2009, Mark Story.
- * @link http://mark-story.com
+ * @link https://mark-story.com
  * @author Mark Story <mark@mark-story.com>
- * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ * @license https://www.opensource.org/licenses/mit-license.php The MIT License
  */
 
 namespace Acl\Test\TestCase;
@@ -368,12 +368,12 @@ class AclExtrasTest extends TestCase
      */
     public function testUpdateWithPlugins()
     {
-        $this->deprecated(function () {
-            Plugin::getCollection()->clear();
-            Plugin::getCollection()->add(new \TestPlugin\Plugin());
-            Plugin::getCollection()->add(new \Nested\TestPluginTwo\Plugin());
-            //Plugin::routes();
-        });
+
+        $this->clearPlugins();
+        $this->loadPlugins([
+            new \TestPlugin\Plugin(),
+            new \Nested\TestPluginTwo\Plugin()
+        ]);
         $this->_clean();
 
         $this->Task->expects($this->atLeast(3))
@@ -433,10 +433,9 @@ class AclExtrasTest extends TestCase
      */
     public function testSyncWithNestedPlugin()
     {
-        $this->deprecated(function () {
-            Plugin::getCollection()->clear();
-            Plugin::getCollection()->add(new \Nested\TestPluginTwo\Plugin());
-        });
+        $this->clearPlugins();
+        $this->loadPlugins([new \Nested\TestPluginTwo\Plugin()]);
+
         $this->_clean();
 
         $this->Task->expects($this->atLeast(2))

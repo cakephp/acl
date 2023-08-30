@@ -1,16 +1,16 @@
 <?php
 
 /**
- * CakePHP :  Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * CakePHP :  Rapid Development Framework (https://cakephp.org)
+ * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
  * Licensed under The MIT License
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP Project
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * @link          https://cakephp.org CakePHP Project
+ * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
 
 namespace Acl\Model\Behavior;
@@ -29,7 +29,7 @@ use Cake\Utility\Inflector;
  *
  * Enables objects to easily tie into an ACL system
  *
- * @link http://book.cakephp.org/2.0/en/core-libraries/behaviors/acl.html
+ * @link https://book.cakephp.org/2.0/en/core-libraries/behaviors/acl.html
  */
 class AclBehavior extends Behavior
 {
@@ -97,7 +97,7 @@ class AclBehavior extends Behavior
      * @param string|array|Model $ref Array with 'model' and 'foreign_key', model object, or string value
      * @param string $type Pluralized! Only needed when Acl is set up as 'both', specify 'Aros' or 'Acos' to get the correct node
      * @return \Cake\ORM\Query
-     * @link http://book.cakephp.org/2.0/en/core-libraries/behaviors/acl.html#node
+     * @link https://book.cakephp.org/2.0/en/core-libraries/behaviors/acl.html#node
      * @throws \Cake\Core\Exception\Exception
      */
     public function node($ref = null, $type = null)

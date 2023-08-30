@@ -1,16 +1,16 @@
 <?php
 
 /**
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
+ * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
  * Licensed under The MIT License
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * @link          https://cakephp.org CakePHP(tm) Project
+ * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
 
 namespace Acl\Model\Table;
@@ -20,6 +20,8 @@ use Cake\Core\Configure;
 use Cake\Core\Exception\Exception;
 use Cake\ORM\Table;
 use Cake\Utility\Hash;
+use Acl\Model\Table\ArosTable;
+use Acl\Model\Table\AcosTable;
 
 /**
  * Permissions linking AROs with ACOs
@@ -27,6 +29,8 @@ use Cake\Utility\Hash;
  */
 class PermissionsTable extends AclNodesTable
 {
+    private ArosTable $Aro;
+    private AcosTable $Aco;
 
     /**
      * {@inheritDoc}
