@@ -34,7 +34,7 @@ class AcoActionsTable extends Table
     public function initialize(array $config) :void
     {
         $this->belongsTo('Acos', [
-            'className' => App::className('Acl.AcosTable', 'Model/Table'),
+            'className' => 'Acl.Acos'
         ]);
     }
 }

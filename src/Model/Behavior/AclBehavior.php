@@ -72,15 +72,16 @@ class AclBehavior extends Behavior
         }
         foreach ($types as $type) {
             $alias = Inflector::pluralize($type);
-            $className = App::className($alias . 'Table', 'Model/Table');
+            $className = App::className($alias, 'Model/Table', 'Table');
             if ($className == false) {
-                $className = App::className('Acl.' . $alias . 'Table', 'Model/Table');
+                $className = App::className('Acl.' . $alias, 'Model/Table', 'Table');
             }
             $config = [];
             if (!TableRegistry::getTableLocator()->exists($alias)) {
                 $config = ['className' => $className];
             }
-            $model->hasMany($type, [
+
+            $model->hasMany($alias, [
                 'targetTable' => TableRegistry::getTableLocator()->get($alias, $config),
             ]);
         }
@@ -94,7 +95,7 @@ class AclBehavior extends Behavior
      * Retrieves the Aro/Aco node for this model
      *
      * @param string|array|Model $ref Array with 'model' and 'foreign_key', model object, or string value
-     * @param string $type Only needed when Acl is set up as 'both', specify 'Aro' or 'Aco' to get the correct node
+     * @param string $type Pluralized! Only needed when Acl is set up as 'both', specify 'Aros' or 'Acos' to get the correct node
      * @return \Cake\ORM\Query
      * @link https://book.cakephp.org/2.0/en/core-libraries/behaviors/acl.html#node
      * @throws \Cake\Core\Exception\Exception
@@ -113,7 +114,12 @@ class AclBehavior extends Behavior
             throw new Exception\Exception(__d('cake_dev', 'ref parameter must be a string or an Entity'));
         }
 
-        return $this->_table->{$type}->node($ref);
+        if(property_exists($this->_table, $type)){
+            return $this->_table->{$type}->node($ref);
+        }else{
+            $type = Inflector::pluralize($type);
+            return $this->_table->{$type}->node($ref);
+        }
     }
 
     /**
@@ -131,6 +137,7 @@ class AclBehavior extends Behavior
             $types = [$types];
         }
         foreach ($types as $type) {
+            $type = Inflector::pluralize($type);
             $parent = $entity->parentNode();
             if (!empty($parent)) {
                 $parent = $this->node($parent, $type)->first();
@@ -171,6 +178,7 @@ class AclBehavior extends Behavior
             $types = [$types];
         }
         foreach ($types as $type) {
+            $type = Inflector::pluralize($type);
             $node = $this->node($entity, $type)->toArray();
             if (!empty($node)) {
                 $event->getSubject()->{$type}->delete($node[0]);
