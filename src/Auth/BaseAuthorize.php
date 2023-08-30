@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
@@ -16,7 +17,6 @@
 namespace Acl\Auth;
 
 use Cake\Auth\BaseAuthorize as ParentAuthorize;
-use Cake\Controller\ComponentRegistry;
 use Cake\Http\ServerRequest;
 use Cake\Utility\Inflector;
 
@@ -25,7 +25,6 @@ use Cake\Utility\Inflector;
  */
 abstract class BaseAuthorize extends ParentAuthorize
 {
-
     /**
      * Default config for authorize objects.
      *

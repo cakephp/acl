@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
@@ -21,17 +22,15 @@ use Cake\TestSuite\TestCase;
 
 /**
  * Class ActionsAuthorizeTest
- *
  */
 class ActionsAuthorizeTest extends TestCase
 {
-
     /**
      * setUp
      *
      * @return void
      */
-    public function setUp() :void
+    public function setUp(): void
     {
         parent::setUp();
         $this->controller = $this->getMockBuilder('Cake\Controller\Controller')

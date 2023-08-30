@@ -19,11 +19,9 @@ use Cake\TestSuite\Fixture\TestFixture;
 
 /**
  * Short description for class.
- *
  */
 class ArosFixture extends TestFixture
 {
-
     /**
      * records property
      *

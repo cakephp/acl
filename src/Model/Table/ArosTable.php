@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
@@ -15,23 +16,20 @@
 
 namespace Acl\Model\Table;
 
-use Acl\Model\Table\AclNodesTable;
 use Cake\Core\App;
 
 /**
  * Access Request Object
- *
  */
 class ArosTable extends AclNodesTable
 {
-
     /**
      * {@inheritDoc}
      *
      * @param array $config Config
      * @return void
      */
-    public function initialize(array $config) :void
+    public function initialize(array $config): void
     {
         parent::initialize($config);
         $this->setAlias('Aros');

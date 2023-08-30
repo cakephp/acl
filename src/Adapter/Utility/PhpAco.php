@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * PHP configuration based Access Control Object
@@ -19,11 +20,9 @@ namespace Acl\Adapter\Utility;
 
 /**
  * Access Control Object
- *
  */
 class PhpAco
 {
-
     /**
      * holds internal ACO representation
      *
@@ -71,7 +70,7 @@ class PhpAco
         $stack = [[$root, 0]];
 
         while (!empty($stack)) {
-            list($root, $level) = array_pop($stack);
+            [$root, $level] = array_pop($stack);
 
             if (empty($path[$level])) {
                 $path[$level] = [];

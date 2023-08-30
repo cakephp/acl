@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
@@ -19,24 +20,20 @@ use Acl\Controller\Component\AclComponent;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Controller\ComponentRegistry;
-use Cake\Controller\Controller;
 use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
-use Cake\Utility\Hash;
 
 /**
  * Shell for ACL management. This console is known to have issues with zend.ze1_compatibility_mode
  * being enabled. Be sure to turn it off when using this shell.
- *
  */
 class AclShell extends Shell
 {
-
     /**
      * Contains instance of AclComponent
      *
-     * @var AclComponent
+     * @var \Acl\Controller\Component\AclComponent
      */
     public $Acl;
 
@@ -59,7 +56,7 @@ class AclShell extends Shell
      *
      * @return void
      */
-    public function startup() :void
+    public function startup(): void
     {
         parent::startup();
         if (isset($this->params['connection'])) {
@@ -137,15 +134,15 @@ class AclShell extends Shell
         if (is_string($data) && $data !== '/') {
             $data = ['alias' => $data];
         } elseif (is_string($data)) {
-            $this->abort(__d('cake_acl', '/ can not be used as an alias!') . __d('cake_acl', "	/ is the root, please supply a sub alias"));
+            $this->abort(__d('cake_acl', '/ can not be used as an alias!') . __d('cake_acl', '  / is the root, please supply a sub alias'));
         }
 
         $data['parent_id'] = $parent;
         $entity = $this->Acl->{$class}->newEntity($data);
         if ($this->Acl->{$class}->save($entity)) {
-            $this->out(__d('cake_acl', "<success>New {0}</success> {1} created.", [$class, $this->args[2]]), 2);
+            $this->out(__d('cake_acl', '<success>New {0}</success> {1} created.', [$class, $this->args[2]]), 2);
         } else {
-            $this->err(__d('cake_acl', "There was a problem creating a new {0} {1}.", [$class, $this->args[2]]));
+            $this->err(__d('cake_acl', 'There was a problem creating a new {0} {1}.', [$class, $this->args[2]]));
         }
     }
 
@@ -207,7 +204,7 @@ class AclShell extends Shell
 
         if (empty($nodes) || $nodes->count() === 0) {
             $this->abort(
-                __d('cake_acl', "Supplied Node {0} not found", [$this->args[1]]),
+                __d('cake_acl', 'Supplied Node {0} not found', [$this->args[1]]),
                 __d('cake_acl', 'No tree returned.')
             );
         }
@@ -231,9 +228,9 @@ class AclShell extends Shell
     {
         $indent = str_repeat('  ', $indent);
         if ($node['alias']) {
-            $this->out($indent . "[" . $node['id'] . "] " . $node['alias']);
+            $this->out($indent . '[' . $node['id'] . '] ' . $node['alias']);
         } else {
-            $this->out($indent . "[" . $node['id'] . "] " . $node['model'] . '.' . $node['foreign_key']);
+            $this->out($indent . '[' . $node['id'] . '] ' . $node['model'] . '.' . $node['foreign_key']);
         }
     }
 
@@ -367,9 +364,9 @@ class AclShell extends Shell
     /**
      * Gets the option parser instance and configures it.
      *
-     * @return ConsoleOptionParser
+     * @return \Cake\Console\ConsoleOptionParser
      */
-    public function getOptionParser() :ConsoleOptionParser
+    public function getOptionParser(): ConsoleOptionParser
     {
         $parser = parent::getOptionParser();
 
@@ -430,8 +427,8 @@ class AclShell extends Shell
             'help' => __d('cake_acl', 'Print out the path to an ACL node.'),
             'parser' => [
                 'description' => [
-                    __d('cake_acl', "Returns the path to the ACL object specified by <node>."),
-                    __d('cake_acl', "This command is useful in determining the inheritance of permissions for a certain object in the tree."),
+                    __d('cake_acl', 'Returns the path to the ACL object specified by <node>.'),
+                    __d('cake_acl', 'This command is useful in determining the inheritance of permissions for a certain object in the tree.'),
                 ],
                 'arguments' => [
                     'type' => $type,
@@ -481,7 +478,7 @@ class AclShell extends Shell
             'help' => __d('cake_acl', 'Inherit an ARO\'s parent permissions.'),
             'parser' => [
                 'description' => [
-                    __d('cake_acl', "Use this command to force a child ARO object to inherit its permissions settings from its parent."),
+                    __d('cake_acl', 'Use this command to force a child ARO object to inherit its permissions settings from its parent.'),
                 ],
                 'arguments' => [
                     'aro' => ['help' => __d('cake_acl', 'ARO to have permissions inherit.'), 'required' => true],
@@ -493,9 +490,9 @@ class AclShell extends Shell
             'help' => __d('cake_acl', 'View a tree or a single node\'s subtree.'),
             'parser' => [
                 'description' => [
-                    __d('cake_acl', "The view command will return the ARO or ACO tree."),
-                    __d('cake_acl', "The optional node parameter allows you to return"),
-                    __d('cake_acl', "only a portion of the requested tree."),
+                    __d('cake_acl', 'The view command will return the ARO or ACO tree.'),
+                    __d('cake_acl', 'The optional node parameter allows you to return'),
+                    __d('cake_acl', 'only a portion of the requested tree.'),
                 ],
                 'arguments' => [
                     'type' => $type,
@@ -510,7 +507,7 @@ class AclShell extends Shell
                 '',
                 ' - <alias> - The node will be given a string alias (or path, in the case of <parent>)',
                 "   i.e. 'John'. When used with <parent>, this takes the form of an alias path,",
-                "   i.e. <group>/<subgroup>/<parent>.",
+                '   i.e. <group>/<subgroup>/<parent>.',
                 '',
                 "To add a node at the root level, enter 'root' or '/' as the <parent> parameter.",
             ]
@@ -622,7 +619,7 @@ class AclShell extends Shell
         }
         $vars = [];
         $class = ucwords($type);
-        $vars['secondary_id'] = (strtolower($class) === 'aro') ? 'foreign_key' : 'object_id';
+        $vars['secondary_id'] = strtolower($class) === 'aro' ? 'foreign_key' : 'object_id';
         $vars['data_name'] = $type;
         $vars['table_name'] = $type . 's';
         $vars['class'] = $class;

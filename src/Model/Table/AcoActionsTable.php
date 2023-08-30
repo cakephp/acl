@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
@@ -15,26 +16,23 @@
 
 namespace Acl\Model\Table;
 
-use Cake\Core\App;
 use Cake\ORM\Table;
 
 /**
  * Action for Access Control Object
- *
  */
 class AcoActionsTable extends Table
 {
-
     /**
      * {@inheritDoc}
      *
      * @param array $config Configuration
      * @return void
      */
-    public function initialize(array $config) :void
+    public function initialize(array $config): void
     {
         $this->belongsTo('Acos', [
-            'className' => 'Acl.Acos'
+            'className' => 'Acl.Acos',
         ]);
     }
 }

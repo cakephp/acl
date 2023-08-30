@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * CakePHP : Rapid Development Framework (https://cakephp.org)
@@ -15,34 +16,27 @@
 
 namespace Cake\Acl\Test\TestCase\Model\Behavior;
 
-use Acl\Model\Behavior\AclBehavior;
 use Acl\Model\Entity\Aco;
 use Acl\Model\Entity\Aro;
-use Acl\Model\Table\AclNodesTable;
-use Acl\Model\Table\AcosTable;
-use Acl\Model\Table\ArosTable;
 use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\ORM\Entity;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
-use Cake\TestSuite\Fixture\TestModel;
 use Cake\TestSuite\TestCase;
 
 /**
  * Test Person class - self joined model
- *
  */
 class AclPeople extends Table
 {
-
     /**
      * initialize
      *
      * @param array $config Configuration array
      * @return void
      */
-    public function initialize(array $config) :void
+    public function initialize(array $config): void
     {
         $this->setTable('people');
         $this->setEntityClass(__NAMESPACE__ . '\AclPerson');
@@ -60,7 +54,6 @@ class AclPeople extends Table
 
 class AclPerson extends Entity
 {
-
     /**
      * parentNode method
      *
@@ -88,18 +81,16 @@ class AclPerson extends Entity
 
 /**
  * AclUsers class
- *
  */
 class AclUsers extends Table
 {
-
     /**
      * initialize
      *
      * @param array $config Configuration array
      * @return void
      */
-    public function initialize(array $config) :void
+    public function initialize(array $config): void
     {
         $this->setTable('users');
         $this->setEntityClass(__NAMESPACE__ . '\AclUser');
@@ -109,7 +100,6 @@ class AclUsers extends Table
 
 class AclUser extends Entity
 {
-
     /**
      * parentNode
      *
@@ -125,14 +115,13 @@ class AclUser extends Entity
  */
 class AclPosts extends Table
 {
-
     /**
      * initialize
      *
      * @param array $config Configuration array
      * @return void
      */
-    public function initialize(array $config) :void
+    public function initialize(array $config): void
     {
         $this->setTable('posts');
         $this->setEntityClass(__NAMESPACE__ . '\AclPost');
@@ -142,7 +131,6 @@ class AclPosts extends Table
 
 class AclPost extends Entity
 {
-
     /**
      * parentNode
      *
@@ -159,7 +147,6 @@ class AclPost extends Entity
  */
 class AclBehaviorTest extends TestCase
 {
-
     /**
      * Aco property
      *
@@ -193,7 +180,7 @@ class AclBehaviorTest extends TestCase
      *
      * @return void
      */
-    public function setUp() :void
+    public function setUp(): void
     {
         parent::setUp();
         Configure::write('Acl.database', 'test');
@@ -222,7 +209,7 @@ class AclBehaviorTest extends TestCase
      *
      * @return void
      */
-    public function tearDown() :void
+    public function tearDown(): void
     {
         parent::tearDown();
         unset($this->Aro, $this->Aco);

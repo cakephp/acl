@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * Acl Extras Shell.
@@ -28,7 +29,6 @@ use Cake\ORM\TableRegistry;
  */
 class AclExtrasShell extends Shell
 {
-
     /**
      * Contains arguments parsed from the command line.
      *
@@ -39,7 +39,7 @@ class AclExtrasShell extends Shell
     /**
      * AclExtras instance
      *
-     * @var AclExtras
+     * @var \Acl\AclExtras
      */
     public $AclExtras;
 
@@ -48,7 +48,7 @@ class AclExtrasShell extends Shell
      *
      * @param \Cake\Console\ConsoleIo $io An io instance.
      */
-    public function __construct(ConsoleIo $io = null)
+    public function __construct(?ConsoleIo $io = null)
     {
         parent::__construct($io);
         $this->AclExtras = new AclExtras();
@@ -59,7 +59,7 @@ class AclExtrasShell extends Shell
      *
      * @return void
      */
-    public function startup() :void
+    public function startup(): void
     {
         parent::startup();
         $this->AclExtras->startup();
@@ -103,7 +103,7 @@ class AclExtrasShell extends Shell
      *
      * @return \Cake\Console\ConsoleOptionParser
      */
-    public function getOptionParser() :ConsoleOptionParser
+    public function getOptionParser(): ConsoleOptionParser
     {
         $parser = parent::getOptionParser();
 

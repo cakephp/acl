@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * CakePHP :  Rapid Development Framework (https://cakephp.org)
@@ -33,7 +34,6 @@ use Cake\Utility\Inflector;
  */
 class AclBehavior extends Behavior
 {
-
     /**
      * Table instance
      */
@@ -49,7 +49,7 @@ class AclBehavior extends Behavior
     /**
      * Sets up the configuration for the model, and loads ACL models if they haven't been already
      *
-     * @param Table $model Table instance being attached
+     * @param \Cake\ORM\Table $model Table instance being attached
      * @param array $config Configuration
      * @return void
      */
@@ -94,7 +94,7 @@ class AclBehavior extends Behavior
     /**
      * Retrieves the Aro/Aco node for this model
      *
-     * @param string|array|Model $ref Array with 'model' and 'foreign_key', model object, or string value
+     * @param string|array|\Acl\Model\Behavior\Model $ref Array with 'model' and 'foreign_key', model object, or string value
      * @param string $type Pluralized! Only needed when Acl is set up as 'both', specify 'Aros' or 'Acos' to get the correct node
      * @return \Cake\ORM\Query
      * @link https://book.cakephp.org/2.0/en/core-libraries/behaviors/acl.html#node
@@ -114,10 +114,11 @@ class AclBehavior extends Behavior
             throw new Exception\Exception(__d('cake_dev', 'ref parameter must be a string or an Entity'));
         }
 
-        if(property_exists($this->_table, $type)){
+        if (property_exists($this->_table, $type)) {
             return $this->_table->{$type}->node($ref);
-        }else{
+        } else {
             $type = Inflector::pluralize($type);
+
             return $this->_table->{$type}->node($ref);
         }
     }
@@ -125,8 +126,8 @@ class AclBehavior extends Behavior
     /**
      * Creates a new ARO/ACO node bound to this record
      *
-     * @param Event $event The afterSave event that was fired
-     * @param Entity $entity The entity being saved
+     * @param \Cake\Event\Event $event The afterSave event that was fired
+     * @param \Cake\ORM\Entity $entity The entity being saved
      * @return void
      */
     public function afterSave(Event $event, Entity $entity)
@@ -143,7 +144,7 @@ class AclBehavior extends Behavior
                 $parent = $this->node($parent, $type)->first();
             }
             $data = [
-                'parent_id' => isset($parent->id) ? $parent->id : null,
+                'parent_id' => $parent->id ?? null,
                 'model' => $model->getAlias(),
                 'foreign_key' => $entity->id,
             ];
@@ -154,7 +155,7 @@ class AclBehavior extends Behavior
 
             if (!$entity->isNew()) {
                 $node = $this->node($entity, $type)->first();
-                $data['id'] = isset($node->id) ? $node->id : null;
+                $data['id'] = $node->id ?? null;
                 $newData = $model->{$type}->patchEntity($node, $data);
             } else {
                 $newData = $model->{$type}->newEntity($data);
@@ -167,8 +168,8 @@ class AclBehavior extends Behavior
     /**
      * Destroys the ARO/ACO node bound to the deleted record
      *
-     * @param Event $event The afterDelete event that was fired
-     * @param Entity $entity The entity being deleted
+     * @param \Cake\Event\Event $event The afterDelete event that was fired
+     * @param \Cake\ORM\Entity $entity The entity being deleted
      * @return void
      */
     public function afterDelete(Event $event, Entity $entity)

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * PHP configuration based AclInterface implementation
@@ -23,30 +24,26 @@ use Acl\Adapter\Utility\PhpAro;
 use Cake\Controller\Component;
 use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\Core\Exception\Exception;
-use Cake\Utility\Hash;
-use Cake\Utility\Inflector;
 
 /**
  * PhpAcl implements an access control system using a plain PHP configuration file.
  * An example file can be found in app/Config/acl.php
- *
  */
 class PhpAcl implements AclInterface
 {
-
     /**
      * Constant for deny
      *
      * @var bool
      */
-    const DENY = false;
+    public const DENY = false;
 
     /**
      * Constant for allow
      *
      * @var bool
      */
-    const ALLOW = true;
+    public const ALLOW = true;
 
     /**
      * Options:
@@ -60,14 +57,14 @@ class PhpAcl implements AclInterface
     /**
      * Aro Object
      *
-     * @var PhpAro
+     * @var \Acl\Adapter\Utility\PhpAro
      */
     public $Aro = null;
 
     /**
      * Aco Object
      *
-     * @var PhpAco
+     * @var \Acl\Adapter\Utility\PhpAco
      */
     public $Aco = null;
 
@@ -87,7 +84,7 @@ class PhpAcl implements AclInterface
     /**
      * Initialize method
      *
-     * @param Component $Component Component instance
+     * @param \Cake\Controller\Component $Component Component instance
      * @return void
      */
     public function initialize(Component $Component)
@@ -139,7 +136,7 @@ class PhpAcl implements AclInterface
      * @param string $action Action (defaults to *)
      * @return bool Success
      */
-    public function allow($aro, $aco, $action = "*")
+    public function allow($aro, $aco, $action = '*')
     {
         return $this->Aco->access($this->Aro->resolve($aro), $aco, $action, 'allow');
     }
@@ -152,7 +149,7 @@ class PhpAcl implements AclInterface
      * @param string $action Action (defaults to *)
      * @return bool Success
      */
-    public function deny($aro, $aco, $action = "*")
+    public function deny($aro, $aco, $action = '*')
     {
         return $this->Aco->access($this->Aro->resolve($aro), $aco, $action, 'deny');
     }
@@ -165,7 +162,7 @@ class PhpAcl implements AclInterface
      * @param string $action Action (defaults to *)
      * @return bool Success
      */
-    public function inherit($aro, $aco, $action = "*")
+    public function inherit($aro, $aco, $action = '*')
     {
         return false;
     }
@@ -179,12 +176,12 @@ class PhpAcl implements AclInterface
      * @param string $action Action
      * @return bool true if access is granted, false otherwise
      */
-    public function check($aro, $aco, $action = "*")
+    public function check($aro, $aco, $action = '*')
     {
         $allow = $this->options['policy'];
         $prioritizedAros = $this->Aro->roles($aro);
 
-        if ($action && $action !== "*") {
+        if ($action && $action !== '*') {
             $aco .= '/' . $action;
         }
 

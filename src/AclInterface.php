@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
@@ -20,11 +21,9 @@ use Cake\Controller\Component;
 /**
  * Access Control List interface.
  * Implementing classes are used by AclComponent to perform ACL checks in Cake.
- *
  */
 interface AclInterface
 {
-
     /**
      * Empty method to be overridden in subclasses
      *
@@ -33,7 +32,7 @@ interface AclInterface
      * @param string $action Action (defaults to *)
      * @return bool Success
      */
-    public function check($aro, $aco, $action = "*");
+    public function check($aro, $aco, $action = '*');
 
     /**
      * Allow methods are used to grant an ARO access to an ACO.
@@ -43,7 +42,7 @@ interface AclInterface
      * @param string $action Action (defaults to *)
      * @return bool Success
      */
-    public function allow($aro, $aco, $action = "*");
+    public function allow($aro, $aco, $action = '*');
 
     /**
      * Deny methods are used to remove permission from an ARO to access an ACO.
@@ -53,7 +52,7 @@ interface AclInterface
      * @param string $action Action (defaults to *)
      * @return bool Success
      */
-    public function deny($aro, $aco, $action = "*");
+    public function deny($aro, $aco, $action = '*');
 
     /**
      * Inherit methods modify the permission for an ARO to be that of its parent object.
@@ -63,12 +62,12 @@ interface AclInterface
      * @param string $action Action (defaults to *)
      * @return bool Success
      */
-    public function inherit($aro, $aco, $action = "*");
+    public function inherit($aro, $aco, $action = '*');
 
     /**
      * Initialization method for the Acl implementation
      *
-     * @param Component $component Component instance.
+     * @param \Cake\Controller\Component $component Component instance.
      * @return void
      */
     public function initialize(Component $component);

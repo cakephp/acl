@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * CakePHP(tm) Tests <https://book.cakephp.org/2.0/en/development/testing.html>
@@ -22,17 +23,15 @@ use Cake\TestSuite\TestCase;
 
 /**
  * Test Case for AclComponent
- *
  */
 class AclComponentTest extends TestCase
 {
-
     /**
      * setUp method
      *
      * @return void
      */
-    public function setUp() :void
+    public function setUp(): void
     {
         parent::setUp();
         if (!class_exists('MockAclImplementation', false)) {
@@ -50,7 +49,7 @@ class AclComponentTest extends TestCase
      *
      * @return void
      */
-    public function tearDown() :void
+    public function tearDown(): void
     {
         parent::tearDown();
         unset($this->Acl);
