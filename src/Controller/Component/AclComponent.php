@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
@@ -20,10 +21,7 @@ use Cake\Controller\Component;
 use Cake\Controller\ComponentRegistry;
 use Cake\Core\App;
 use Cake\Core\Configure;
-use Cake\Core\Configure\Engine\IniConfig;
 use Cake\Core\Exception\Exception;
-use Cake\Utility\ClassRegistry;
-use Cake\Utility\Inflector;
 
 /**
  * Access Control List factory class.
@@ -36,11 +34,10 @@ use Cake\Utility\Inflector;
  */
 class AclComponent extends Component
 {
-
     /**
      * Instance of an ACL class
      *
-     * @var AclInterface
+     * @var \Acl\AclInterface
      */
     protected $_Instance = null;
 
@@ -61,7 +58,7 @@ class AclComponent extends Component
     /**
      * Constructor. Will return an instance of the correct ACL class as defined in `Configure::read('Acl.classname')`
      *
-     * @param ComponentRegistry $collection A ComponentRegistry
+     * @param \Cake\Controller\ComponentRegistry $collection A ComponentRegistry
      * @param array $config Array of configuration settings
      * @throws \Cake\Core\Exception\Exception when Acl.classname could not be loaded.
      */
@@ -86,8 +83,8 @@ class AclComponent extends Component
      *
      * Will call the initialize method on the adapter if setting a new one.
      *
-     * @param AclInterface|string $adapter Instance of AclInterface or a string name of the class to use. (optional)
-     * @return AclInterface|void either null, or the adapter implementation.
+     * @param \Acl\AclInterface|string $adapter Instance of AclInterface or a string name of the class to use. (optional)
+     * @return \Acl\AclInterface|void either null, or the adapter implementation.
      * @throws \Cake\Core\Exception\Exception when the given class is not an instance of AclInterface
      */
     public function adapter($adapter = null)
@@ -112,12 +109,12 @@ class AclComponent extends Component
      * Pass-thru function for ACL check instance. Check methods
      * are used to check whether or not an ARO can access an ACO
      *
-     * @param array|string|Model $aro ARO The requesting object identifier. See `AclNode::node()` for possible formats
-     * @param array|string|Model $aco ACO The controlled object identifier. See `AclNode::node()` for possible formats
+     * @param array|string|\Acl\Controller\Component\Model $aro ARO The requesting object identifier. See `AclNode::node()` for possible formats
+     * @param array|string|\Acl\Controller\Component\Model $aco ACO The controlled object identifier. See `AclNode::node()` for possible formats
      * @param string $action Action (defaults to *)
      * @return bool Success
      */
-    public function check($aro, $aco, $action = "*")
+    public function check($aro, $aco, $action = '*')
     {
         return $this->_Instance->check($aro, $aco, $action);
     }
@@ -126,12 +123,12 @@ class AclComponent extends Component
      * Pass-thru function for ACL allow instance. Allow methods
      * are used to grant an ARO access to an ACO.
      *
-     * @param array|string|Model $aro ARO The requesting object identifier. See `AclNode::node()` for possible formats
-     * @param array|string|Model $aco ACO The controlled object identifier. See `AclNode::node()` for possible formats
+     * @param array|string|\Acl\Controller\Component\Model $aro ARO The requesting object identifier. See `AclNode::node()` for possible formats
+     * @param array|string|\Acl\Controller\Component\Model $aco ACO The controlled object identifier. See `AclNode::node()` for possible formats
      * @param string $action Action (defaults to *)
      * @return bool Success
      */
-    public function allow($aro, $aco, $action = "*")
+    public function allow($aro, $aco, $action = '*')
     {
         return $this->_Instance->allow($aro, $aco, $action);
     }
@@ -140,12 +137,12 @@ class AclComponent extends Component
      * Pass-thru function for ACL deny instance. Deny methods
      * are used to remove permission from an ARO to access an ACO.
      *
-     * @param array|string|Model $aro ARO The requesting object identifier. See `AclNode::node()` for possible formats
-     * @param array|string|Model $aco ACO The controlled object identifier. See `AclNode::node()` for possible formats
+     * @param array|string|\Acl\Controller\Component\Model $aro ARO The requesting object identifier. See `AclNode::node()` for possible formats
+     * @param array|string|\Acl\Controller\Component\Model $aco ACO The controlled object identifier. See `AclNode::node()` for possible formats
      * @param string $action Action (defaults to *)
      * @return bool Success
      */
-    public function deny($aro, $aco, $action = "*")
+    public function deny($aro, $aco, $action = '*')
     {
         return $this->_Instance->deny($aro, $aco, $action);
     }
@@ -154,12 +151,12 @@ class AclComponent extends Component
      * Pass-thru function for ACL inherit instance. Inherit methods
      * modify the permission for an ARO to be that of its parent object.
      *
-     * @param array|string|Model $aro ARO The requesting object identifier. See `AclNode::node()` for possible formats
-     * @param array|string|Model $aco ACO The controlled object identifier. See `AclNode::node()` for possible formats
+     * @param array|string|\Acl\Controller\Component\Model $aro ARO The requesting object identifier. See `AclNode::node()` for possible formats
+     * @param array|string|\Acl\Controller\Component\Model $aco ACO The controlled object identifier. See `AclNode::node()` for possible formats
      * @param string $action Action (defaults to *)
      * @return bool Success
      */
-    public function inherit($aro, $aco, $action = "*")
+    public function inherit($aro, $aco, $action = '*')
     {
         return $this->_Instance->inherit($aro, $aco, $action);
     }

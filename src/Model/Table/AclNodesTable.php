@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
@@ -20,23 +21,20 @@ use Cake\Core\Exception;
 use Cake\Database\Expression\IdentifierExpression;
 use Cake\Datasource\ConnectionManager;
 use Cake\ORM\Entity;
-use Cake\ORM\Query;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 
 /**
  * ACL Nodes
- *
  */
 class AclNodesTable extends Table
 {
-
     /**
      * {@inheritDoc}
      *
      * @return void
      */
-    public static function defaultConnectionName() :string
+    public static function defaultConnectionName(): string
     {
         return Configure::read('Acl.database');
     }
@@ -44,8 +42,8 @@ class AclNodesTable extends Table
     /**
      * Retrieves the Aro/Aco node for this model
      *
-     * @param string|array|Table $ref Array with 'model' and 'foreign_key', model object, or string value
-     * @return array|Query|false Node found in database
+     * @param string|array|\Cake\ORM\Table $ref Array with 'model' and 'foreign_key', model object, or string value
+     * @return array|\Cake\ORM\Query|false Node found in database
      * @throws \Cake\Core\Exception\Exception when binding to a model that doesn't exist.
      */
     public function node($ref = null)
@@ -115,11 +113,11 @@ class AclNodesTable extends Table
                 return false;
             }
         } elseif (is_object($ref) && $ref instanceof Entity) {
-            list(, $alias) = pluginSplit($ref->getSource());
+            [, $alias] = pluginSplit($ref->getSource());
             $ref = ['model' => $alias, 'foreign_key' => $ref->id];
         } elseif (is_array($ref) && !(isset($ref['model']) && isset($ref['foreign_key']))) {
             $name = key($ref);
-            list(, $alias) = pluginSplit($name);
+            [, $alias] = pluginSplit($name);
 
             if (TableRegistry::getTableLocator()->exists($name)) {
                 $bindTable = TableRegistry::getTableLocator()->get($name);
@@ -136,7 +134,7 @@ class AclNodesTable extends Table
             }
 
             if (empty($entity)) {
-                throw new Exception\Exception(__d('cake_dev', "Entity class {0} not found in AclNode::node() when trying to bind {1} object", [$type, $this->getAlias()]));
+                throw new Exception\Exception(__d('cake_dev', 'Entity class {0} not found in AclNode::node() when trying to bind {1} object', [$type, $this->getAlias()]));
             }
 
             $tmpRef = null;

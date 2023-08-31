@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
@@ -23,17 +24,15 @@ use Cake\TestSuite\TestCase;
 
 /**
  * Class CrudAuthorizeTest
- *
  */
 class CrudAuthorizeTest extends TestCase
 {
-
     /**
      * setup
      *
      * @return void
      */
-    public function setUp() :void
+    public function setUp(): void
     {
         parent::setUp();
         Configure::write('Routing.prefixes', []);

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * PHP configuration based Access Request Object
@@ -22,18 +23,16 @@ use Cake\Utility\Inflector;
 
 /**
  * Access Request Object
- *
  */
 class PhpAro
 {
-
     /**
      * role to resolve to when a provided ARO is not listed in
      * the internal tree
      *
      * @var string
      */
-    const DEFAULT_ROLE = 'Role/default';
+    public const DEFAULT_ROLE = 'Role/default';
 
     /**
      * map external identifiers. E.g. if
@@ -100,7 +99,7 @@ class PhpAro
         $stack = [[$aro, 0]];
 
         while (!empty($stack)) {
-            list($element, $depth) = array_pop($stack);
+            [$element, $depth] = array_pop($stack);
             $aros[$depth][] = $element;
 
             foreach ($this->_tree as $node => $children) {
@@ -123,7 +122,7 @@ class PhpAro
     public function resolve($aro)
     {
         foreach ($this->map as $aroGroup => $map) {
-            list($model, $field) = explode('/', $map, 2);
+            [$model, $field] = explode('/', $map, 2);
             $mapped = '';
 
             if (is_array($aro)) {
@@ -140,7 +139,7 @@ class PhpAro
                 if (strpos($aro, '/') === false) {
                     $mapped = $aroGroup . '/' . $aro;
                 } else {
-                    list($aroModel, $aroValue) = explode('/', $aro, 2);
+                    [$aroModel, $aroValue] = explode('/', $aro, 2);
 
                     $aroModel = Inflector::camelize($aroModel);
 

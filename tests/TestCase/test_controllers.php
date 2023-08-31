@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Acl\Controller;
 
@@ -6,7 +7,6 @@ use Cake\Controller\Controller;
 
 class CommentsController extends Controller
 {
-
     public function add()
     {
     }
@@ -26,7 +26,6 @@ class CommentsController extends Controller
 
 class PostsController extends Controller
 {
-
     public function index()
     {
     }
@@ -42,7 +41,6 @@ class PostsController extends Controller
 
 class BigLongNamesController extends Controller
 {
-
     public function index()
     {
     }
@@ -62,7 +60,6 @@ class BigLongNamesController extends Controller
 
 abstract class AbstractController extends Controller
 {
-
     public function index()
     {
     }
@@ -82,7 +79,6 @@ abstract class AbstractController extends Controller
 
 class ConcreteController extends AbstractController
 {
-
     public function index()
     {
     }

@@ -1,7 +1,7 @@
 <?php
+declare(strict_types=1);
 
 /**
- *
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
@@ -34,11 +34,10 @@ use Cake\Http\ServerRequest;
  */
 class CrudAuthorize extends BaseAuthorize
 {
-
     /**
      * Sets up additional actionMap values that match the configured `Routing.prefixes`.
      *
-     * @param ComponentRegistry $registry The component registry from the controller.
+     * @param \Cake\Controller\ComponentRegistry $registry The component registry from the controller.
      * @param array $config An array of config. This class does not use any config.
      */
     public function __construct(ComponentRegistry $registry, $config = [])

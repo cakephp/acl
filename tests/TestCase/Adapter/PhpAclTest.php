@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
@@ -16,7 +17,6 @@
 namespace Acl\Test\TestCase\Adapter;
 
 use Acl\Adapter\PhpAcl;
-use Acl\Adapter\Utility\PhpAco;
 use Acl\Adapter\Utility\PhpAro;
 use Acl\Controller\Component\AclComponent;
 use Cake\Controller\ComponentRegistry;
@@ -25,17 +25,15 @@ use Cake\TestSuite\TestCase;
 
 /**
  * Test case for the PhpAcl implementation
- *
  */
 class PhpAclTest extends TestCase
 {
-
     /**
      * Setup
      *
      * @return void
      */
-    public function setUp() :void
+    public function setUp(): void
     {
         parent::setUp();
         Configure::write('Acl.classname', 'PhpAcl');

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
@@ -15,17 +16,10 @@
 
 namespace Acl\Model\Table;
 
-use Cake\Core\App;
-use Cake\Core\Configure;
 use Cake\Core\Exception\Exception;
-use Cake\ORM\Table;
-use Cake\Utility\Hash;
-use Acl\Model\Table\ArosTable;
-use Acl\Model\Table\AcosTable;
 
 /**
  * Permissions linking AROs with ACOs
- *
  */
 class PermissionsTable extends AclNodesTable
 {
@@ -38,15 +32,15 @@ class PermissionsTable extends AclNodesTable
      * @param array $config Configuration
      * @return void
      */
-    public function initialize(array $config) :void
+    public function initialize(array $config): void
     {
         $this->setAlias('Permissions');
         $this->setTable('aros_acos');
         $this->belongsTo('Aros', [
-            'className' => 'Acl.Aros'
+            'className' => 'Acl.Aros',
         ]);
         $this->belongsTo('Acos', [
-            'className' => 'Acl.Acos'
+            'className' => 'Acl.Acos',
         ]);
         $this->Aro = $this->Aros->getTarget();
         $this->Aco = $this->Acos->getTarget();
@@ -101,7 +95,7 @@ class PermissionsTable extends AclNodesTable
         }
 
         if ($action !== '*' && !in_array('_' . $action, $permKeys)) {
-            trigger_error(__d('cake_dev', "ACO permissions key {0} does not exist in {1}", $action, 'DbAcl::check()'), E_USER_NOTICE);
+            trigger_error(__d('cake_dev', 'ACO permissions key {0} does not exist in {1}', $action, 'DbAcl::check()'), E_USER_NOTICE);
 
             return false;
         }
@@ -204,7 +198,7 @@ class PermissionsTable extends AclNodesTable
                 $save[$action] = $value;
             }
         }
-        list($save['aro_id'], $save['aco_id']) = [$perms['aro'], $perms['aco']];
+        [$save['aro_id'], $save['aco_id']] = [$perms['aro'], $perms['aco']];
 
         if ($perms['link'] && !empty($perms['link'][$alias])) {
             $save['id'] = $perms['link'][$alias][0]['id'];
@@ -215,7 +209,7 @@ class PermissionsTable extends AclNodesTable
         $entityClass = $this->getEntityClass();
         $entity = new $entityClass($save);
 
-        return ($this->save($entity) !== false);
+        return $this->save($entity) !== false;
     }
 
     /**
@@ -274,4 +268,3 @@ class PermissionsTable extends AclNodesTable
         return $newKeys;
     }
 }
-

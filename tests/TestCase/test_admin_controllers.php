@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Acl\Controller\Admin;
 
@@ -6,7 +7,6 @@ use Cake\Controller\Controller;
 
 class PostsController extends Controller
 {
-
     public function index()
     {
     }
@@ -22,7 +22,6 @@ class PostsController extends Controller
 
 class BigLongNamesController extends Controller
 {
-
     public function index()
     {
     }

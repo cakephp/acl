@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * Acl Extras Shell.
@@ -21,7 +22,6 @@
 namespace Acl\Test\TestCase;
 
 use Cake\Core\Configure;
-use Cake\Core\Plugin;
 use Cake\Datasource\ConnectionManager;
 use Cake\TestSuite\TestCase;
 
@@ -34,11 +34,9 @@ include dirname(__FILE__) . DS . 'test_plugin_admin_controllers.php';
 
 /**
  * AclExtras Shell Test case
- *
  */
 class AclExtrasTest extends TestCase
 {
-
     public $fixtures = [
         'app.Acos',
         'app.Aros',
@@ -50,7 +48,7 @@ class AclExtrasTest extends TestCase
      *
      * @return void
      */
-    public function setUp() :void
+    public function setUp(): void
     {
         parent::setUp();
         Configure::write('Acl.classname', 'DbAcl');
@@ -66,7 +64,7 @@ class AclExtrasTest extends TestCase
      *
      * @return void
      */
-    public function tearDown() :void
+    public function tearDown(): void
     {
         parent::tearDown();
         unset($this->Task);
@@ -372,7 +370,7 @@ class AclExtrasTest extends TestCase
         $this->clearPlugins();
         $this->loadPlugins([
             new \TestPlugin\Plugin(),
-            new \Nested\TestPluginTwo\Plugin()
+            new \Nested\TestPluginTwo\Plugin(),
         ]);
         $this->_clean();
 

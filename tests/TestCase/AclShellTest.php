@@ -1,8 +1,8 @@
 <?php
+declare(strict_types=1);
 
 namespace Acl\Test\TestCase;
 
-use Acl\Shell\AclShell;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
@@ -15,7 +15,7 @@ class AclShellTest extends TestCase
         'app.ArosAcos',
     ];
 
-    public function setUp() :void
+    public function setUp(): void
     {
         parent::setUp();
         $this->io = $this->getMockBuilder('Cake\Console\ConsoleIo')

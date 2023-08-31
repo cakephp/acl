@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
@@ -17,7 +18,6 @@ namespace Acl\Adapter;
 
 use Acl\AclInterface;
 use Cake\Cache\Cache;
-use Cake\Controller\Component;
 use Cake\Core\Configure;
 use Cake\ORM\Entity;
 use Cake\ORM\TableRegistry;
@@ -31,12 +31,10 @@ use Cake\Utility\Text;
  */
 class CachedDbAcl extends DbAcl implements AclInterface
 {
-
     protected $_cacheConfig = 'default';
 
     /**
      * Constructor
-     *
      */
     public function __construct()
     {
@@ -50,7 +48,7 @@ class CachedDbAcl extends DbAcl implements AclInterface
     /**
      * {{@inheritDoc}}
      */
-    public function check($aro, $aco, $action = "*")
+    public function check($aro, $aco, $action = '*')
     {
         $key = $this->_getCacheKey($aro, $aco, $action);
 
@@ -64,7 +62,7 @@ class CachedDbAcl extends DbAcl implements AclInterface
     /**
      * {{@inheritDoc}}
      */
-    public function allow($aro, $aco, $actions = "*", $value = 1)
+    public function allow($aro, $aco, $actions = '*', $value = 1)
     {
         Cache::clear($this->_cacheConfig);
 
@@ -74,8 +72,8 @@ class CachedDbAcl extends DbAcl implements AclInterface
     /**
      * Generates a string cache key for the ARO, ACO pair
      *
-     * @param string|array|Entity $aro The requesting object identifier.
-     * @param string|array|Entity $aco The controlled object identifier.
+     * @param string|array|\Cake\ORM\Entity $aro The requesting object identifier.
+     * @param string|array|\Cake\ORM\Entity $aco The controlled object identifier.
      * @param string $action Action
      * @return string
      */
@@ -87,7 +85,7 @@ class CachedDbAcl extends DbAcl implements AclInterface
     /**
      * Generates a key string to use for the cache
      *
-     * @param string|array|Entity $ref Array with 'model' and 'foreign_key', model object, or string value
+     * @param string|array|\Cake\ORM\Entity $ref Array with 'model' and 'foreign_key', model object, or string value
      * @return string
      */
     protected function _getNodeCacheKey($ref)
@@ -100,7 +98,7 @@ class CachedDbAcl extends DbAcl implements AclInterface
             return $ref->getSource() . '_' . $ref->id;
         } elseif (is_array($ref) && !(isset($ref['model']) && isset($ref['foreign_key']))) {
             $name = key($ref);
-            list(, $alias) = pluginSplit($name);
+            [, $alias] = pluginSplit($name);
 
             $bindTable = TableRegistry::getTableLocator()->get($name);
             $entityClass = $bindTable->getEntityClass();
@@ -113,7 +111,7 @@ class CachedDbAcl extends DbAcl implements AclInterface
                 throw new Exception\Exception(
                     __d(
                         'cake_dev',
-                        "Entity class {0} not found in CachedDbAcl::_getNodeCacheKey() when trying to bind {1} object",
+                        'Entity class {0} not found in CachedDbAcl::_getNodeCacheKey() when trying to bind {1} object',
                         [$type, $this->alias()]
                     )
                 );

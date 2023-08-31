@@ -22,7 +22,6 @@ use Cake\TestSuite\Fixture\TestFixture;
  */
 class PeopleFixture extends TestFixture
 {
-
     /**
      * records property
      *

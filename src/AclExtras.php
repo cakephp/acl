@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * Acl Extras.
@@ -34,7 +35,6 @@ use ReflectionException;
  */
 class AclExtras
 {
-
     /**
      * Contains instance of AclComponent
      *
@@ -91,10 +91,14 @@ class AclExtras
      */
     protected $foundACOs = [];
 
-    /** @var \Cake\Controller\Controller */
+    /**
+     * @var \Cake\Controller\Controller
+     */
     protected $controller;
 
-    /** @var \Cake\Console\Shell */
+    /**
+     * @var \Cake\Console\Shell
+     */
     protected $Shell;
 
     /**
@@ -178,7 +182,7 @@ class AclExtras
         } else {
             $plugin = $params['plugin'];
             if (!Plugin::loaded($plugin)) {
-                $this->err(__d('cake_acl', "<error>Plugin {0} not found or not activated.</error>", [$plugin]));
+                $this->err(__d('cake_acl', '<error>Plugin {0} not found or not activated.</error>', [$plugin]));
 
                 return false;
             }
@@ -236,7 +240,7 @@ class AclExtras
      * @param string $plugin The name of the plugin to alias
      * @return string
      */
-    protected function _pluginAlias(string $plugin) :string
+    protected function _pluginAlias(string $plugin): string
     {
         return preg_replace('/\//', '\\', Inflector::camelize($plugin));
     }
@@ -355,7 +359,7 @@ class AclExtras
             $dir = new Folder($path[0]);
             $controllers = $dir->find('.*Controller\.php');
         } else {
-            $path = Plugin::classPath($plugin) . 'Controller' . DS. (empty($prefix) ? '' : DS . Inflector::camelize($prefix));
+            $path = Plugin::classPath($plugin) . 'Controller' . DS . (empty($prefix) ? '' : DS . Inflector::camelize($prefix));
             $dir = new Folder($path);
             $controllers = $dir->find('.*Controller\.php');
         }

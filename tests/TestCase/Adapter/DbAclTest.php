@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
@@ -19,30 +20,26 @@ use Acl\Adapter\DbAcl;
 use Acl\Controller\Component\AclComponent;
 use Acl\Model\Entity\Aco;
 use Acl\Model\Entity\Aro;
-use Acl\Model\Table\AclNodesTable;
 use Acl\Model\Table\AcosTable;
 use Acl\Model\Table\ArosTable;
 use Acl\Model\Table\PermissionsTable;
 use Cake\Controller\ComponentRegistry;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
-use Cake\TestSuite\Fixture\TestModel;
 use Cake\TestSuite\TestCase;
 
 /**
  * AroTwoTest class
- *
  */
 class AroTwoTest extends ArosTable
 {
-
     /**
      * initialize
      *
      * @param array $config Configuration array
      * @return void
      */
-    public function initialize(array $config) :void
+    public function initialize(array $config): void
     {
         parent::initialize($config);
         $this->setAlias('AroTwoTest');
@@ -57,18 +54,16 @@ class AroTwoTest extends ArosTable
 
 /**
  * AcoTwoTest class
- *
  */
 class AcoTwoTest extends AcosTable
 {
-
     /**
      * initialize
      *
      * @param array $config Configuration array
      * @return void
      */
-    public function initialize(array $config) :void
+    public function initialize(array $config): void
     {
         parent::initialize($config);
         $this->setAlias('AcoTwoTest');
@@ -83,18 +78,16 @@ class AcoTwoTest extends AcosTable
 
 /**
  * PermissionTwoTest class
- *
  */
 class PermissionTwoTest extends PermissionsTable
 {
-
     /**
      * initialize
      *
      * @param array $config Configuration array
      * @return void
      */
-    public function initialize(array $config) :void
+    public function initialize(array $config): void
     {
         parent::initialize($config);
         $this->setAlias('PermissionTwoTest');
@@ -114,14 +107,11 @@ class PermissionTwoTest extends PermissionsTable
 
 /**
  * DbAclTwoTest class
- *
  */
 class DbAclTwoTest extends DbAcl
 {
-
     /**
      * construct method
-     *
      */
     public function __construct()
     {
@@ -138,11 +128,9 @@ class DbAclTwoTest extends DbAcl
 
 /**
  * Test case for AclComponent using the DbAcl implementation.
- *
  */
 class DbAclTest extends TestCase
 {
-
     /**
      * fixtures property
      *
@@ -159,7 +147,7 @@ class DbAclTest extends TestCase
      *
      * @return void
      */
-    public function setUp() :void
+    public function setUp(): void
     {
         parent::setUp();
         Configure::write('Acl.classname', __NAMESPACE__ . '\DbAclTwoTest');
@@ -185,7 +173,7 @@ class DbAclTest extends TestCase
      *
      * @return void
      */
-    public function tearDown() :void
+    public function tearDown(): void
     {
         parent::tearDown();
         unset($this->Acl);
