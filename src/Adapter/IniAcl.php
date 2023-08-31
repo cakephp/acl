@@ -46,6 +46,13 @@ class IniAcl implements AclInterface
     protected $_defaultConfig = [];
 
     /**
+     * Active config for this class
+     *
+     * @var array
+     */
+    private $options = [];
+
+    /**
      * Constructor
      *
      * Sets a few default settings up.

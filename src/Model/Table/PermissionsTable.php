@@ -33,6 +33,11 @@ class PermissionsTable extends AclNodesTable
     private AcosTable $Aco;
 
     /**
+     * @var int
+     */
+    private $id;
+
+    /**
      * {@inheritDoc}
      *
      * @param array $config Configuration
@@ -204,7 +209,7 @@ class PermissionsTable extends AclNodesTable
                 $save[$action] = $value;
             }
         }
-        list($save['aro_id'], $save['aco_id']) = [$perms['aro'], $perms['aco']];
+        [$save['aro_id'], $save['aco_id']] = [$perms['aro'], $perms['aco']];
 
         if ($perms['link'] && !empty($perms['link'][$alias])) {
             $save['id'] = $perms['link'][$alias][0]['id'];

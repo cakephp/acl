@@ -43,6 +43,13 @@ class AclExtras
     public $Acl;
 
     /**
+     * Aco object
+     *
+     * @var string
+     */
+    public $Aco;
+
+    /**
      * Contains arguments parsed from the command line.
      *
      * @var array
