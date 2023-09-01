@@ -27,6 +27,11 @@ class PermissionsTable extends AclNodesTable
     private AcosTable $Aco;
 
     /**
+     * @var int
+     */
+    private $id;
+
+    /**
      * {@inheritDoc}
      *
      * @param array $config Configuration
