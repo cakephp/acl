@@ -4,6 +4,10 @@
 [![Coverage Status](https://img.shields.io/codecov/c/github/cakephp/acl.svg?style=flat-square)](https://codecov.io/github/cakephp/acl)
 [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.txt)
 
+> ℹ️ **The ACL Plugin is not actively maintained by the CakePHP core team.** ℹ️ PR's to fix problems are welcome.
+>
+> As a modern alternative please check out the [Authentication](https://github.com/cakephp/authentication) and [Authorization](https://github.com/cakephp/authorization) plugins.
+
 A plugin for managing ACL in CakePHP applications.
 
 ## Installing via composer
