@@ -43,9 +43,9 @@ use Cake\ORM\TableRegistry;
  */
 class DbAcl implements AclInterface
 {
-    private PermissionsTable $Permission;
-    private ArosTable $Aro;
-    private AcosTable $Aco;
+    protected PermissionsTable $Permission;
+    protected ArosTable $Aro;
+    protected AcosTable $Aco;
 
     /**
      * Constructor
